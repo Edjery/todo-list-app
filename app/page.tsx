@@ -1,3 +1,10 @@
+import NavigationBar from "./NavigationBar";
+
 export default function Home() {
-  return <main>Hello World</main>;
+  return (
+    <main>
+      <NavigationBar />
+      <div>Hello World</div>
+    </main>
+  );
 }

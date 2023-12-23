@@ -1,6 +1,12 @@
 "use client"; // Find a way to remove this later
 
-import { AppBar, IconButton, Toolbar, Typography } from "../lib/MUI-v4";
+import {
+  AppBar,
+  Container,
+  IconButton,
+  Toolbar,
+  Typography,
+} from "../lib/MUI-v4";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useState } from "react";
 import Sidebar from "./SideBarContents";
@@ -18,18 +24,16 @@ const NavigationBar = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <Container className="bg-[#998767]">
         <Toolbar>
-          <IconButton
-            aria-label="open drawer"
-            onClick={openSideBar}
-            color="inherit"
-          >
-            <MenuIcon />
+          <IconButton aria-label="open drawer" onClick={openSideBar}>
+            <MenuIcon className="text-white" />
           </IconButton>
-          <Typography variant="h6">TODOLIST</Typography>
+          <Typography variant="h6" className="text-white">
+            TODOLIST
+          </Typography>
         </Toolbar>
-      </AppBar>
+      </Container>
       <Sidebar open={open} handleDrawerClose={closeSideBar} />
     </>
   );

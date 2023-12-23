@@ -41,7 +41,6 @@ const SideBarContents = ({ open, handleDrawerClose }: Props) => {
       </Container>
       <Divider />
       <ItemList items={items} />
-
       <Divider />
     </Drawer>
   );

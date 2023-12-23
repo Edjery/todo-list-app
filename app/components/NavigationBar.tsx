@@ -1,4 +1,4 @@
-"use client";
+"use client"; // Find a way to remove this later
 
 import { AppBar, IconButton, Toolbar, Typography } from "../lib/MUI-v4";
 import MenuIcon from "@material-ui/icons/Menu";

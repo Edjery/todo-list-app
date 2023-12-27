@@ -24,7 +24,7 @@ const NavigationBar = () => {
 
   return (
     <>
-      <Container className="bg-[#998767]">
+      <Container maxWidth="xl" className="bg-[#998767]">
         <Toolbar>
           <IconButton aria-label="open drawer" onClick={openSideBar}>
             <MenuIcon className="text-white" />

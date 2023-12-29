@@ -1,19 +1,14 @@
 "use client";
-import React from "react";
-import {
-  Typography,
-  Checkbox,
-  Container,
-  Box,
-  IconButton,
-} from "../lib/MUI-core-v4";
+
 import EditIcon from "@material-ui/icons/Edit";
 import todolistDummy from "../data/todolist-dummy";
-
-interface Props {
-  Title: string;
-  Tasks: { taskTitle: string; status: boolean };
-}
+import {
+  Box,
+  Checkbox,
+  Container,
+  IconButton,
+  Typography,
+} from "../lib/MUI-core-v4";
 
 const TaskListCard = () => {
   const { results: taskList } = todolistDummy;

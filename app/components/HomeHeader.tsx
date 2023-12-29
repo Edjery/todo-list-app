@@ -3,7 +3,7 @@
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import SearchIcon from "@material-ui/icons/Search";
 import SortIcon from "@material-ui/icons/Sort";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import todolistDummy from "../data/todolist-dummy";
 import {
   Box,

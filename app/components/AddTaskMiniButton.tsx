@@ -1,8 +1,7 @@
 "use client";
 
-import { Box, IconButton } from "../lib/MUI-core-v4";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import React from "react";
+import { Box, IconButton } from "../lib/MUI-core-v4";
 
 const AddTaskMiniButton = () => {
   return (

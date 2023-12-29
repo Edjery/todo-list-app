@@ -1,14 +1,7 @@
 "use client"; // Find a way to remove this later
 
-import {
-  AppBar,
-  Container,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "../lib/MUI-core-v4";
-import MenuIcon from "@material-ui/icons/Menu";
 import { useState } from "react";
+import { Container, Toolbar, Typography } from "../lib/MUI-core-v4";
 import Sidebar from "./SideBarContents";
 
 const NavigationBar = () => {

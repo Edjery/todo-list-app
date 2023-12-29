@@ -1,5 +1,4 @@
 import { Container } from "../lib/MUI-core-v4";
-import AddTaskFooter from "./AddTaskFooter";
 import AddTaskInputs from "./AddTaskInputs";
 import AddTaskScheduleButtons from "./AddTaskScheduleButtons";
 import GroupTaskCheckBox from "./GroupTaskCheckBox";

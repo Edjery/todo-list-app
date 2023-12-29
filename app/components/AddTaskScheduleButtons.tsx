@@ -1,7 +1,7 @@
+import { Box } from "../lib/MUI-core-v4";
 import DialogBox from "./DialogBox";
 import GroupTaskToggleButton from "./GroupTaskToggleButton";
 import TaskToggleButton from "./TaskToggleButton";
-import { Box } from "../lib/MUI-core-v4";
 
 const AddTaskScheduleButtons = () => {
   return (

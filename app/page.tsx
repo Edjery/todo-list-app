@@ -1,8 +1,7 @@
-import NavigationBar from "./components/NavigationBar";
-import HomeHeader from "./components/HomeHeader";
-import TaskListCard from "./components/TaskListCard";
 import AddTaskMiniButton from "./components/AddTaskMiniButton";
-import PopupForm from "./components/PopupForm";
+import HomeHeader from "./components/HomeHeader";
+import NavigationBar from "./components/NavigationBar";
+import TaskListCard from "./components/TaskListCard";
 
 export default function Home() {
   return (
@@ -11,7 +10,6 @@ export default function Home() {
       <HomeHeader />
       <TaskListCard />
       <AddTaskMiniButton />
-      <PopupForm />
     </main>
   );
 }

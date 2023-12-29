@@ -26,9 +26,9 @@ const NavigationBar = () => {
     <>
       <Container maxWidth="xl" className="bg-[#998767]">
         <Toolbar>
-          <IconButton aria-label="open drawer" onClick={openSideBar}>
+          {/* <IconButton aria-label="open drawer" onClick={openSideBar}>
             <MenuIcon className="text-white" />
-          </IconButton>
+          </IconButton> */}
           <Typography variant="h6" className="text-white">
             TODOLIST
           </Typography>

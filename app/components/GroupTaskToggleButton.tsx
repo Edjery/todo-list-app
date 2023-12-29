@@ -1,16 +1,14 @@
-import { useState } from "react";
 import { ToggleButton, ToggleButtonGroup } from "../lib/MUI-lab-v4";
 
-const GroupTaskToggleButton = () => {
-  const [value, setValue] = useState<string>("Today");
-  const handleValue = (
+interface Props {
+  value: string;
+  handleValue: (
     event: React.MouseEvent<HTMLElement>,
     newValue: string | null
-  ) => {
-    if (newValue !== null) {
-      setValue(newValue);
-    }
-  };
+  ) => void;
+}
+
+const GroupTaskToggleButton = ({ value, handleValue }: Props) => {
   return (
     <>
       <ToggleButtonGroup value={value} exclusive onChange={handleValue}>

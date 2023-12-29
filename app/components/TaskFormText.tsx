@@ -4,7 +4,7 @@ interface Props {
   placeholder: string;
 }
 
-const AddTaskInputs = ({ placeholder }: Props) => {
+const TaskFormText = ({ placeholder }: Props) => {
   return (
     <Box className="mt-2">
       <TextField placeholder={placeholder} fullWidth />
@@ -12,4 +12,4 @@ const AddTaskInputs = ({ placeholder }: Props) => {
   );
 };
 
-export default AddTaskInputs;
+export default TaskFormText;

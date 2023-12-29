@@ -17,7 +17,7 @@ import {
   Toolbar,
   Typography,
 } from "../lib/MUI-core-v4";
-import AddTaskForm from "./AddTaskForm";
+import TaskForm from "./TaskForm";
 
 const HomeHeader = () => {
   const [formOpen, setFormOpen] = useState(false);
@@ -56,7 +56,7 @@ const HomeHeader = () => {
           </IconButton>
           <Dialog open={formOpen} onClose={handleChange} maxWidth="lg">
             <DialogContent>
-              <AddTaskForm />
+              <TaskForm />
             </DialogContent>
             <Box>
               <Box component="div" className="flex justify-between m-5">

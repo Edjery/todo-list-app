@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemIcon, ListItemText } from "../lib/MUI-v4";
+import { List, ListItem, ListItemIcon, ListItemText } from "../lib/MUI-core-v4";
 
 export interface Item {
   label: string;

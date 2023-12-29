@@ -1,6 +1,6 @@
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import InboxIcon from "@material-ui/icons/Inbox";
-import { Container, Divider, Drawer, IconButton } from "../lib/MUI-v4";
+import { Container, Divider, Drawer, IconButton } from "../lib/MUI-core-v4";
 import ItemList, { Item } from "./ItemList";
 
 interface Props {

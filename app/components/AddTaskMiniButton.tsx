@@ -1,10 +1,10 @@
 "use client";
 
-import { Box, IconButton } from "../lib/MUI-v4";
+import { Box, IconButton } from "../lib/MUI-core-v4";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import React from "react";
 
-const AddTaskButton = () => {
+const AddTaskMiniButton = () => {
   return (
     <Box className="bottom-4 right-4 fixed">
       <IconButton>
@@ -14,4 +14,4 @@ const AddTaskButton = () => {
   );
 };
 
-export default AddTaskButton;
+export default AddTaskMiniButton;

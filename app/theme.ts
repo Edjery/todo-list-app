@@ -1,5 +1,5 @@
 import { createContext } from "vm";
-import { createTheme } from "./lib/MUI-v4";
+import { createTheme } from "./lib/MUI-core-v4";
 import { useMemo, useState } from "react";
 
 export const tokens = (mode: string) => ({

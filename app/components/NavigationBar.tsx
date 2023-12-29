@@ -6,7 +6,7 @@ import {
   IconButton,
   Toolbar,
   Typography,
-} from "../lib/MUI-v4";
+} from "../lib/MUI-core-v4";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useState } from "react";
 import Sidebar from "./SideBarContents";

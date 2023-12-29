@@ -6,7 +6,7 @@ import {
   Container,
   Box,
   IconButton,
-} from "../lib/MUI-v4";
+} from "../lib/MUI-core-v4";
 import EditIcon from "@material-ui/icons/Edit";
 import todolistDummy from "../data/todolist-dummy";
 

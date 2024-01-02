@@ -1,12 +1,17 @@
-import { useState } from "react";
 import { Box } from "../lib/MUI-core-v4";
-import DialogBox from "./DialogBox";
 import GroupTaskCheckBox from "./GroupTaskCheckBox";
 import GroupTaskToggleButton from "./GroupTaskToggleButton";
 import TaskToggleButton from "./TaskToggleButton";
 
-const AddTaskScheduleButtons = () => {
-  const [value, setValue] = useState<string>("Today");
+interface Props {
+  schedValue: string;
+  handleSchedValue: (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: string | null
+  ) => void;
+}
+
+const AddTaskScheduleButtons = ({ schedValue, handleSchedValue }: Props) => {
   const intervals = ["Daily", "Monthly", "Weekly", "Monthly", "Yearly"];
   const days = [
     "Sunday",
@@ -18,24 +23,17 @@ const AddTaskScheduleButtons = () => {
     "Sunday",
   ];
 
-  const handleValue = (
-    event: React.MouseEvent<HTMLElement>,
-    newValue: string | null
-  ) => {
-    if (newValue !== null) {
-      setValue(newValue);
-    }
-  };
-
   return (
     <>
-      <Box component="div" className="flex justify-center mt-5">
-        <DialogBox />
+      <Box component="div" className="flex justify-center my-5">
+        <GroupTaskToggleButton
+          schedValue={schedValue}
+          handleSchedValue={handleSchedValue}
+        />
         <TaskToggleButton />
-        <GroupTaskToggleButton value={value} handleValue={handleValue} />
       </Box>
 
-      {value === "Custom" && (
+      {schedValue === "Custom" && (
         <Box>
           <GroupTaskCheckBox list={intervals} />
           <GroupTaskCheckBox list={days} />

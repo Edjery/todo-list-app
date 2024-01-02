@@ -4,35 +4,20 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import SearchIcon from "@material-ui/icons/Search";
 import SortIcon from "@material-ui/icons/Sort";
 import { useState } from "react";
-import todolistDummy from "../data/todolist-dummy";
 import {
   Box,
-  Button,
   Container,
-  Dialog,
-  DialogContent,
-  FormControl,
   IconButton,
-  Select,
   Toolbar,
   Typography,
 } from "../lib/MUI-core-v4";
-import TaskForm from "./TaskForm";
+import AddTaskModal from "./AddTaskModal";
 
 const HomeHeader = () => {
-  const [formOpen, setFormOpen] = useState(false);
+  const [formOpen, setFormOpen] = useState<boolean>(false);
 
   const handleChange = () => {
     setFormOpen(!formOpen);
-  };
-
-  const [state, setState] = useState<string | unknown>("");
-  const { results: taskList } = todolistDummy;
-
-  const handleChoices = (
-    event: React.ChangeEvent<{ value: string | unknown }>
-  ) => {
-    setState(event.target.value);
   };
 
   return (
@@ -54,38 +39,7 @@ const HomeHeader = () => {
               </Typography>
             </Box>
           </IconButton>
-          <Dialog open={formOpen} onClose={handleChange} maxWidth="lg">
-            <DialogContent>
-              <TaskForm />
-            </DialogContent>
-            <Box>
-              <Box component="div" className="flex justify-between m-5">
-                <Button variant="outlined" onClick={handleChange}>
-                  Cancel
-                </Button>
-                <Box component="div" className="flex">
-                  <Box className="mr-10">
-                    <FormControl variant="outlined">
-                      <Select native value={state} onChange={handleChoices}>
-                        {taskList.map((taskListItem) => (
-                          <option value={taskListItem.Title}>
-                            {taskListItem.Title}
-                          </option>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Box>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleChange}
-                  >
-                    Add Task
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-          </Dialog>
+          <AddTaskModal formOpen={formOpen} handleChange={handleChange} />
         </Box>
 
         <IconButton>

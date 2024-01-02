@@ -6,9 +6,10 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Typography,
 } from "../lib/MUI-core-v4";
 
-const DialogBox = () => {
+const DateDialogBox = () => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState<string>();
 
@@ -16,7 +17,7 @@ const DialogBox = () => {
     setOpen(!open);
   };
 
-  const handleTextInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleDateInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
   };
 
@@ -32,15 +33,15 @@ const DialogBox = () => {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleChange}>
+      <Typography variant="inherit" onClick={handleChange}>
         {input ? formatDate(input) : "Due Date"}
-      </Button>
+      </Typography>
       <Dialog open={open} onClose={handleChange}>
         <DialogTitle>Fill the form</DialogTitle>
         <DialogContent>
           <TextField
             type="date"
-            onChange={handleTextInputChange}
+            onChange={handleDateInputChange}
             value={input}
           />
         </DialogContent>
@@ -57,4 +58,4 @@ const DialogBox = () => {
   );
 };
 
-export default DialogBox;
+export default DateDialogBox;

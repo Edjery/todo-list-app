@@ -1,18 +1,26 @@
 import { ToggleButton, ToggleButtonGroup } from "../lib/MUI-lab-v4";
+import DateDialogBox from "./DateDialogBox";
 
 interface Props {
-  value: string;
-  handleValue: (
+  schedValue: string;
+  handleSchedValue: (
     event: React.MouseEvent<HTMLElement>,
     newValue: string | null
   ) => void;
 }
 
-const GroupTaskToggleButton = ({ value, handleValue }: Props) => {
+const GroupTaskToggleButton = ({ schedValue, handleSchedValue }: Props) => {
   return (
     <>
-      <ToggleButtonGroup value={value} exclusive onChange={handleValue}>
+      <ToggleButtonGroup
+        value={schedValue}
+        exclusive
+        onChange={handleSchedValue}
+      >
         <ToggleButton value="Today">Just Today</ToggleButton>
+        <ToggleButton value="Date">
+          <DateDialogBox />
+        </ToggleButton>
         <ToggleButton value="Custom">Custom Schedule</ToggleButton>
       </ToggleButtonGroup>
     </>

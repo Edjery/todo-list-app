@@ -1,4 +1,3 @@
-import { useState } from "react";
 import todolistDummy from "../data/todolist-dummy";
 import {
   Box,
@@ -13,28 +12,31 @@ import TaskForm from "./TaskForm";
 interface Props {
   formOpen: boolean;
   handleChange: () => void;
-}
 
-const AddTaskModal = ({ formOpen, handleChange }: Props) => {
-  const [state, setState] = useState<string | unknown>("");
-  const { results: taskList } = todolistDummy;
-
-  const handleChoices = (
+  list: string | unknown;
+  handleChoices: (
     event: React.ChangeEvent<{ value: string | unknown }>
-  ) => {
-    setState(event.target.value);
-  };
+  ) => void;
 
-  const [schedValue, setSchedValue] = useState<string>("Today");
+  handleCreateTask: () => void;
 
-  const handleSchedValue = (
+  schedValue: string;
+  handleSchedValue: (
     event: React.MouseEvent<HTMLElement>,
     newValue: string | null
-  ) => {
-    if (newValue !== null) {
-      setSchedValue(newValue);
-    }
-  };
+  ) => void;
+}
+
+const AddTaskModal = ({
+  formOpen,
+  handleChange,
+  list,
+  handleChoices,
+  handleCreateTask,
+  schedValue,
+  handleSchedValue,
+}: Props) => {
+  const { results: taskList } = todolistDummy;
 
   return (
     <Dialog open={formOpen} onClose={handleChange} maxWidth="lg">
@@ -51,7 +53,8 @@ const AddTaskModal = ({ formOpen, handleChange }: Props) => {
               <Box>
                 <Box className="mr-10">
                   <FormControl variant="outlined">
-                    <Select native value={state} onChange={handleChoices}>
+                    <Select native value={list} onChange={handleChoices}>
+                      <option value="addNewList">New List</option>
                       {taskList.map((taskListItem) => (
                         <option value={taskListItem.Title}>
                           {taskListItem.Title}
@@ -63,7 +66,11 @@ const AddTaskModal = ({ formOpen, handleChange }: Props) => {
               </Box>
             )}
 
-            <Button variant="contained" color="primary" onClick={handleChange}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleCreateTask}
+            >
               Add Task
             </Button>
           </Box>

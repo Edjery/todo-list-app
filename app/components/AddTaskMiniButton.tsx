@@ -3,9 +3,13 @@
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { Box, IconButton } from "../lib/MUI-core-v4";
 
-const AddTaskMiniButton = () => {
+interface Props {
+  handleChange: () => void;
+}
+
+const AddTaskMiniButton = ({ handleChange }: Props) => {
   return (
-    <Box className="bottom-4 right-4 fixed">
+    <Box className="bottom-4 right-4 fixed" onClick={handleChange}>
       <IconButton>
         <AddCircleIcon className="text-[#998767]" fontSize="large" />
       </IconButton>

@@ -64,7 +64,7 @@ export default {
       ],
     },
     {
-      Title: "New List",
+      Title: "List 1",
       Tasks: [
         {
           taskTitle: "Check Email",

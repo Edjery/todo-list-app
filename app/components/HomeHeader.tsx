@@ -11,13 +11,61 @@ import {
   Toolbar,
   Typography,
 } from "../lib/MUI-core-v4";
+import AddNewList from "./AddNewList";
+import AddTaskMiniButton from "./AddTaskMiniButton";
 import AddTaskModal from "./AddTaskModal";
+import AddedNewTaskAlert from "./AddedNewTaskAlert";
 
 const HomeHeader = () => {
   const [formOpen, setFormOpen] = useState<boolean>(false);
+  const [list, setList] = useState<string | unknown>("addNewList");
+  const [createdTask, setCreatedTask] = useState<string | unknown>();
+  const [schedValue, setSchedValue] = useState<string>("Today");
+  const [listForm, setListForm] = useState(false);
 
   const handleChange = () => {
     setFormOpen(!formOpen);
+  };
+
+  const handleChoices = (
+    event: React.ChangeEvent<{ value: string | unknown }>
+  ) => {
+    setList(event.target.value);
+  };
+
+  const handleSchedValue = (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: string | null
+  ) => {
+    if (newValue !== null) {
+      setSchedValue(newValue);
+    }
+  };
+
+  const handleCreateTask = () => {
+    setCreatedTask(list);
+    if (schedValue === "Today") {
+      setCreatedTask(schedValue);
+      setFormOpen(!formOpen);
+    } else if (list === "addNewList") {
+      setListForm(true);
+      return;
+    } else setFormOpen(!formOpen);
+    setAlertOpen(!alertOpen);
+  };
+
+  const handleListFormConfirm = () => {
+    setListForm(false);
+    setFormOpen(!formOpen);
+    setAlertOpen(!alertOpen);
+  };
+  const handleListFormCancel = () => {
+    setListForm(false);
+  };
+
+  const [alertOpen, setAlertOpen] = useState(false);
+  const handleAlert = () => {
+    setAlertOpen(!alertOpen);
   };
 
   return (
@@ -39,13 +87,29 @@ const HomeHeader = () => {
               </Typography>
             </Box>
           </IconButton>
-          <AddTaskModal formOpen={formOpen} handleChange={handleChange} />
+          <AddTaskModal
+            formOpen={formOpen}
+            handleChange={handleChange}
+            list={list}
+            handleChoices={handleChoices}
+            handleCreateTask={handleCreateTask}
+            schedValue={schedValue}
+            handleSchedValue={handleSchedValue}
+          />
+          <AddNewList
+            listForm={listForm}
+            handleListFormConfirm={handleListFormConfirm}
+            handleListFormCancel={handleListFormCancel}
+          />
+
+          <AddedNewTaskAlert alertOpen={alertOpen} handleAlert={handleAlert} />
         </Box>
 
         <IconButton>
           <SortIcon />
         </IconButton>
       </Toolbar>
+      <AddTaskMiniButton handleChange={handleChange} />
     </Container>
   );
 };

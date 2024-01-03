@@ -3,7 +3,7 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-} from "../lib/MUI-core-v4";
+} from "../../lib/MUI-core-v4";
 
 interface Props {
   list: string[];
@@ -17,6 +17,7 @@ const GroupTaskCheckBox = ({ list }: Props) => {
           <FormControlLabel
             control={<Checkbox color="primary" />}
             label={listItem}
+            value={listItem}
           />
         </FormControl>
       ))}

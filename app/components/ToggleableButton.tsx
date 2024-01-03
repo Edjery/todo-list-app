@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { ToggleButton } from "../lib/MUI-lab-v4";
 
-const TaskToggleButton = () => {
+interface Props {
+  label: string;
+}
+
+const ToggleableButton = ({ label }: Props) => {
   const [checked, setChecked] = useState(false);
   const handleChange = () => {
     setChecked(!checked);
@@ -10,10 +14,10 @@ const TaskToggleButton = () => {
   return (
     <>
       <ToggleButton selected={checked} onChange={handleChange}>
-        Priority
+        {label}
       </ToggleButton>
     </>
   );
 };
 
-export default TaskToggleButton;
+export default ToggleableButton;

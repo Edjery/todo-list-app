@@ -1,4 +1,4 @@
-import { Box, TextareaAutosize } from "../lib/MUI-core-v4";
+import { Box, TextareaAutosize } from "../../lib/MUI-core-v4";
 
 interface Props {
   placeholder: string;

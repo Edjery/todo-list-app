@@ -9,7 +9,7 @@ import {
   Typography,
 } from "../../lib/MUI-core-v4";
 
-const DateDialogBox = () => {
+const AddDateModal = () => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState<string>();
 
@@ -58,4 +58,4 @@ const DateDialogBox = () => {
   );
 };
 
-export default DateDialogBox;
+export default AddDateModal;

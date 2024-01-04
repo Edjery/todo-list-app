@@ -1,37 +1,48 @@
-import { Box, Button, Dialog, DialogContent } from "../../lib/MUI-core-v4";
-import TaskFormText from "./TaskFormText";
+import { useState } from "react";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  TextField,
+} from "../../lib/MUI-core-v4";
 
 interface Props {
   listFormState: boolean;
-  setListFormState: (value: boolean) => void;
-  handleAlert: () => void;
-  handleTaskFormState: () => void;
+  listFormConfirm: () => void;
+  handleListName: (value: string) => void;
+  hideListForm: () => void;
 }
 
 const AddNewListModal = ({
   listFormState,
-  setListFormState,
-  handleAlert,
-  handleTaskFormState,
+  handleListName,
+  listFormConfirm,
+  hideListForm,
 }: Props) => {
-  const listFormClose = () => {
-    setListFormState(false);
-  };
+  const [listName, setListName] = useState("");
 
-  const listFormConfirm = () => {
-    listFormClose();
-    handleTaskFormState();
-    handleAlert();
+  const handleListNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setListName(value);
+    handleListName(value);
   };
 
   return (
-    <Dialog open={listFormState} onClose={listFormClose} maxWidth="lg">
+    <Dialog open={listFormState} onClose={hideListForm} maxWidth="lg">
       <DialogContent>
-        <TaskFormText placeholder="List Name"></TaskFormText>
+        <Box className="mt-2">
+          <TextField
+            placeholder="List Name"
+            fullWidth
+            value={listName}
+            onChange={handleListNameChange}
+          />
+        </Box>
       </DialogContent>
       <Box>
         <Box component="div" className="flex justify-between m-5">
-          <Button variant="outlined" onClick={listFormClose}>
+          <Button variant="outlined" onClick={hideListForm}>
             Cancel
           </Button>
           <Box component="div" className="flex">

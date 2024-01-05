@@ -9,7 +9,11 @@ import {
   Typography,
 } from "../../lib/MUI-core-v4";
 
-const AddDateModal = () => {
+interface Props {
+  onChange: (value: string) => void;
+}
+
+const AddDateModal = ({ onChange }: Props) => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState<string>();
 
@@ -18,7 +22,10 @@ const AddDateModal = () => {
   };
 
   const handleDateInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
+    const value = event.target.value;
+    setInput(value);
+    onChange(formatDate(value));
+    console.log(formatDate(value));
   };
 
   const formatDate = (inputDateString: string) => {

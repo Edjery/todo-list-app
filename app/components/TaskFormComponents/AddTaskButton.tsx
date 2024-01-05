@@ -1,8 +1,8 @@
+import { useAlertState } from "@/app/hooks/addTaskUseStateHandlers";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { Box, IconButton, Typography } from "../../lib/MUI-core-v4";
-import AddTaskModal from "./AddTaskModal";
 import PopupAlert from "../PopupAlert";
-import { useState } from "react";
+import AddTaskModal from "./AddTaskModal";
 
 interface Props {
   taskFormState: boolean;
@@ -10,10 +10,8 @@ interface Props {
 }
 
 const AddTaskButton = ({ taskFormState, handleTaskFormState }: Props) => {
-  const [alertState, setAlertState] = useState(false);
-  const handleAlert = () => {
-    setAlertState(!alertState);
-  };
+  const { alertState, handleAlertState } = useAlertState();
+
   return (
     <Box className="mx-32">
       <IconButton color="primary" size="small" onClick={handleTaskFormState}>
@@ -27,12 +25,12 @@ const AddTaskButton = ({ taskFormState, handleTaskFormState }: Props) => {
       <AddTaskModal
         taskFormState={taskFormState}
         handleTaskFormState={handleTaskFormState}
-        handleAlert={handleAlert}
+        handleAlertState={handleAlertState}
       />
       <PopupAlert
         alertMessage="Task has been successfully created"
         alertState={alertState}
-        handleAlert={handleAlert}
+        handleAlertState={handleAlertState}
       />
     </Box>
   );

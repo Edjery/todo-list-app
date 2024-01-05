@@ -1,5 +1,29 @@
 import { ChangeEvent, useState } from "react";
 
+export const useTaskFormState = (initialValue: boolean = false) => {
+  const [taskFormState, setTaskFormState] = useState(initialValue);
+
+  const handleTaskFormState = () => {
+    const newValue = !taskFormState;
+    setTaskFormState(newValue);
+    return newValue;
+  };
+
+  return { taskFormState, setTaskFormState, handleTaskFormState };
+};
+
+export const useAlertState = (initialValue: boolean = false) => {
+  const [alertState, setAlertState] = useState(initialValue);
+
+  const handleAlertState = () => {
+    const newValue = !alertState;
+    setAlertState(newValue);
+    return newValue;
+  };
+
+  return { alertState, setAlertState, handleAlertState };
+};
+
 export const useCustomSchedule = () => {
   const [checkedIntervalItems, setCheckedIntervalItems] = useState<string[]>(
     []

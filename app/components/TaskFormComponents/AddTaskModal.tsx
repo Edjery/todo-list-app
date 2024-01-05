@@ -4,7 +4,8 @@ import {
   usePriority,
   useScheduleValueAndHandlers,
   useTaskListChoice,
-} from "@/app/hooks/useStateAndHandlers";
+} from "@/app/hooks/addTaskUseStateHandlers";
+import addTaskSchema from "@/app/schemas/addTaskSchema";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { Field, Form, Formik } from "formik";
 import todolistDummy from "../../data/todolist-dummy";
@@ -23,7 +24,6 @@ import {
 import ToggleableButton from "../ToggleableButton";
 import AddDateModal from "./AddDateModal";
 import GroupTaskCheckBox from "./GroupTaskCheckBox";
-import addTaskSchema from "@/app/schemas/addTaskSchema";
 
 const defaultScheduleValue = "Today";
 const defaultPriorityValue = false;
@@ -56,13 +56,13 @@ const days = [
 interface Props {
   taskFormState: boolean;
   handleTaskFormState: () => void;
-  handleAlert: () => void;
+  handleAlertState: () => void;
 }
 
 const AddTaskModal = ({
   taskFormState,
   handleTaskFormState,
-  handleAlert,
+  handleAlertState,
 }: Props) => {
   const { scheduleValue, setScheduleValue } =
     useScheduleValueAndHandlers(defaultScheduleValue);
@@ -81,7 +81,7 @@ const AddTaskModal = ({
         onSubmit={(values) => {
           console.log(values);
           handleTaskFormState();
-          handleAlert();
+          handleAlertState();
         }}
       >
         {({ setFieldValue, isSubmitting, errors, touched }) => (

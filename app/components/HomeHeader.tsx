@@ -2,16 +2,13 @@
 
 import SearchIcon from "@material-ui/icons/Search";
 import SortIcon from "@material-ui/icons/Sort";
+import { useTaskFormState } from "../hooks/addTaskUseStateHandlers";
 import { Container, IconButton, Toolbar } from "../lib/MUI-core-v4";
-import AddTaskButton from "./TaskFormComponents/AddTaskButton";
 import AddTaskMiniButton from "./AddTaskMiniButton";
-import { useState } from "react";
+import AddTaskButton from "./TaskFormComponents/AddTaskButton";
 
 const HomeHeader = () => {
-  const [taskFormState, setTaskFormState] = useState(false);
-  const handleTaskFormState = () => {
-    setTaskFormState(!taskFormState);
-  };
+  const { taskFormState, handleTaskFormState } = useTaskFormState();
 
   return (
     <Container maxWidth="md">

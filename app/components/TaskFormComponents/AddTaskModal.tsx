@@ -23,6 +23,7 @@ import {
 import ToggleableButton from "../ToggleableButton";
 import AddDateModal from "./AddDateModal";
 import GroupTaskCheckBox from "./GroupTaskCheckBox";
+import addTaskSchema from "@/app/schemas/addTaskSchema";
 
 const defaultScheduleValue = "Today";
 const defaultPriorityValue = false;
@@ -76,13 +77,14 @@ const AddTaskModal = ({
     <Dialog open={taskFormState} onClose={handleTaskFormState} maxWidth="lg">
       <Formik
         initialValues={initialValues}
+        validationSchema={addTaskSchema}
         onSubmit={(values) => {
           console.log(values);
           handleTaskFormState();
           handleAlert();
         }}
       >
-        {({ isSubmitting, setFieldValue }) => (
+        {({ setFieldValue, isSubmitting, errors, touched }) => (
           <Form>
             <DialogContent>
               <Container maxWidth="md" className="p-4">
@@ -93,6 +95,12 @@ const AddTaskModal = ({
                     placeholder="Task Name"
                     as={TextField}
                     fullWidth
+                    error={errors.taskTitle && touched.taskTitle ? true : false}
+                    helperText={
+                      errors.taskTitle && touched.taskTitle
+                        ? errors.taskTitle
+                        : ""
+                    }
                   />
                 </Box>
                 <Box className="mt-2">
@@ -121,7 +129,7 @@ const AddTaskModal = ({
                     <ToggleButton value="Today">Just Today</ToggleButton>
                     <ToggleButton value="Date">
                       <AddDateModal
-                        onChange={async (value) => {
+                        onChange={(value) => {
                           const newValue = handleDueDate(value);
                           setFieldValue("date", newValue);
                         }}

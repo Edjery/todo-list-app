@@ -5,7 +5,7 @@ export default {
       Tasks: [
         {
           taskTitle: "Check Email",
-          status: false,
+          status: true,
         },
         {
           taskTitle: "Buy groceries",

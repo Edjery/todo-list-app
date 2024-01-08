@@ -1,11 +1,14 @@
 "use client"; // Temporary
 
 import SearchIcon from "@material-ui/icons/Search";
-import SortIcon from "@material-ui/icons/Sort";
-import { useTaskFormState } from "../hooks/addTaskUseStateHandlers";
+import {
+  useFilterModalState,
+  useTaskFormState,
+} from "../hooks/addTaskUseStateHandlers";
 import { Container, IconButton, Toolbar } from "../lib/MUI-core-v4";
 import AddTaskMiniButton from "./AddTaskMiniButton";
 import AddTaskButton from "./TaskFormComponents/AddTaskButton";
+import FilterButton from "./FilterButton";
 
 const HomeHeader = () => {
   const { taskFormState, handleTaskFormState } = useTaskFormState();
@@ -22,9 +25,7 @@ const HomeHeader = () => {
           handleTaskFormState={handleTaskFormState}
         />
 
-        <IconButton>
-          <SortIcon />
-        </IconButton>
+        <FilterButton />
       </Toolbar>
       <AddTaskMiniButton handleTaskFormState={handleTaskFormState} />
     </Container>

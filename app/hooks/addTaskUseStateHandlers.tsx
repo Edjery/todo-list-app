@@ -101,3 +101,61 @@ export const useTaskListChoice = (initialValue: string) => {
 
   return { taskListChoice, setTaskListChoice, handleTaskListChoice };
 };
+
+export const useFilterModalState = (initialValue: boolean = false) => {
+  const [filterModalState, setFilterModalState] = useState(initialValue);
+  const [modalAnchor, setModalAnchor] = useState<null | HTMLElement>(null);
+
+  const handleFilterModalState = () => {
+    const newValue = !filterModalState;
+    setFilterModalState(newValue);
+    return newValue;
+  };
+
+  const handleModalAnchor = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setModalAnchor(event.currentTarget);
+  };
+
+  const handleModalAnchorClose = () => {
+    setModalAnchor(null);
+  };
+
+  return {
+    filterModalState,
+    setFilterModalState,
+    handleFilterModalState,
+    modalAnchor,
+    setModalAnchor,
+    handleModalAnchor,
+    handleModalAnchorClose,
+  };
+};
+
+export const useFilterValue = (initialValue: string) => {
+  const [filterValue, setFilterValue] = useState<string | unknown>(
+    initialValue
+  );
+
+  const handleFilterValue = (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: string
+  ) => {
+    setFilterValue(newValue);
+    return newValue;
+  };
+
+  return { filterValue, setFilterValue, handleFilterValue };
+};
+
+export const useAnchor = () => {
+  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+
+  const openModal = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchor(event.currentTarget);
+  };
+
+  const closeModal = () => {
+    setAnchor(null);
+  };
+  return { anchor, openModal, closeModal };
+};

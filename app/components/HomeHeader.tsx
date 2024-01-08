@@ -1,14 +1,11 @@
 "use client"; // Temporary
 
-import SearchIcon from "@material-ui/icons/Search";
-import {
-  useFilterModalState,
-  useTaskFormState,
-} from "../hooks/addTaskUseStateHandlers";
-import { Container, IconButton, Toolbar } from "../lib/MUI-core-v4";
+import { useTaskFormState } from "../hooks/addTaskUseStateHandlers";
+import { Container, Toolbar } from "../lib/MUI-core-v4";
 import AddTaskMiniButton from "./AddTaskMiniButton";
-import AddTaskButton from "./TaskFormComponents/AddTaskButton";
 import FilterButton from "./FilterButton";
+import SeachButton from "./SeachButton";
+import AddTaskButton from "./TaskFormComponents/AddTaskButton";
 
 const HomeHeader = () => {
   const { taskFormState, handleTaskFormState } = useTaskFormState();
@@ -16,9 +13,10 @@ const HomeHeader = () => {
   return (
     <Container maxWidth="md">
       <Toolbar className="flex justify-center mt-10 shadow-md rounded-full">
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
+        <SeachButton
+        // taskFormState={taskFormState}
+        // handleTaskFormState={handleTaskFormState}
+        />
 
         <AddTaskButton
           taskFormState={taskFormState}

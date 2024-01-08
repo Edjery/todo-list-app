@@ -15,13 +15,17 @@ const GroupTaskCheckBox = ({ list, onChange }: Props) => {
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    if (event.target.checked) {
-      setCheckedItems([...checkedItems, value]);
+    const { value, checked } = event.target;
+    let updatedItems: string[];
+
+    if (checked) {
+      updatedItems = [...checkedItems, value];
     } else {
-      setCheckedItems(checkedItems.filter((item) => item !== value));
+      updatedItems = checkedItems.filter((item) => item !== value);
     }
-    onChange([...checkedItems, value]);
+
+    setCheckedItems(updatedItems);
+    onChange(updatedItems);
   };
 
   return (

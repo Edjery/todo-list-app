@@ -34,8 +34,21 @@ const initialValues = {
   taskDescription: undefined,
   schedule: defaultScheduleValue,
   dueDate: undefined,
-  intervals: undefined,
-  days: undefined,
+  RecurringTimeInterval: [
+    { choice: "Daily", status: false },
+    { choice: "Weekly", status: false },
+    { choice: "Monthly", status: false },
+    { choice: "Yearly", status: false },
+  ],
+  DaysOfTheWeek: [
+    { choice: "Sunday", status: false },
+    { choice: "Monday", status: false },
+    { choice: "Tuesday", status: false },
+    { choice: "Wednesday", status: false },
+    { choice: "Thursday", status: false },
+    { choice: "Friday", status: false },
+    { choice: "Saturday", status: false },
+  ],
   priority: defaultPriorityValue,
   taskList: undefined,
   tags: undefined,
@@ -52,6 +65,20 @@ const days = [
   "Friday",
   "Saturday",
 ];
+
+const changeObjectValue = (
+  newValue: string[],
+  prevValue: { choice: string; status: boolean }[]
+) => {
+  for (let object of prevValue) {
+    for (let index in newValue) {
+      if (object.choice === newValue[index]) {
+        object.status = true;
+      }
+    }
+  }
+  return prevValue;
+};
 
 interface Props {
   taskFormState: boolean;
@@ -84,7 +111,7 @@ const AddTaskModal = ({
           handleAlertState();
         }}
       >
-        {({ setFieldValue, isSubmitting, errors, touched }) => (
+        {({ setFieldValue, isSubmitting, errors, touched, values }) => (
           <Form>
             <DialogContent>
               <Container maxWidth="md" className="p-4">
@@ -152,14 +179,25 @@ const AddTaskModal = ({
                       list={intervals}
                       onChange={(items) => {
                         const newValue = handleCheckedIntervals(items);
-                        setFieldValue("intervals", newValue);
+                        const recurringTimeInterval = changeObjectValue(
+                          newValue,
+                          values.RecurringTimeInterval
+                        );
+                        setFieldValue(
+                          "RecurringTimeInterval",
+                          recurringTimeInterval
+                        );
                       }}
                     />
                     <GroupTaskCheckBox
                       list={days}
                       onChange={(items) => {
                         const newValue = handleCheckedDays(items);
-                        setFieldValue("days", newValue);
+                        const daysOfTheWeek = changeObjectValue(
+                          newValue,
+                          values.DaysOfTheWeek
+                        );
+                        setFieldValue("DaysOfTheWeek", daysOfTheWeek);
                       }}
                     />
                   </Box>

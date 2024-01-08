@@ -16,7 +16,7 @@ const ToggleableButton = ({ label, onChange }: Props) => {
   };
 
   return (
-    <ToggleButton selected={checked} onChange={handleChange}>
+    <ToggleButton selected={checked} onChange={handleChange} value={checked}>
       {label}
     </ToggleButton>
   );

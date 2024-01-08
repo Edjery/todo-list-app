@@ -30,10 +30,10 @@ const defaultPriorityValue = false;
 const defaultTaskListChoice = "New List";
 
 const initialValues = {
-  taskTitle: undefined,
-  taskDescription: undefined,
+  taskTitle: "",
+  taskDescription: "",
   schedule: defaultScheduleValue,
-  dueDate: undefined,
+  dueDate: "",
   RecurringTimeInterval: [
     { choice: "Daily", status: false },
     { choice: "Weekly", status: false },
@@ -50,8 +50,8 @@ const initialValues = {
     { choice: "Saturday", status: false },
   ],
   priority: defaultPriorityValue,
-  taskList: undefined,
-  tags: undefined,
+  taskList: "",
+  tags: "",
 };
 
 const { results: taskList } = todolistDummy;
@@ -136,7 +136,6 @@ const AddTaskModal = ({
                     placeholder="Task Description (Optional)"
                     as={TextareaAutosize}
                     className="size-full"
-                    fullWidth
                   />
                 </Box>
                 <Box component="div" className="flex justify-center my-5">
@@ -208,7 +207,6 @@ const AddTaskModal = ({
                     placeholder="#Tags (Optional)"
                     as={TextareaAutosize}
                     className="size-full"
-                    fullWidth
                   />
                 </Box>
               </Container>
@@ -230,7 +228,6 @@ const AddTaskModal = ({
                             name="taskList"
                             placeholder="list name"
                             as={TextField}
-                            fullWidth
                           />
                         )}
                       </Box>

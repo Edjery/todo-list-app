@@ -1,5 +1,3 @@
-"use client";
-
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { Box, IconButton } from "../lib/MUI-core-v4";
 

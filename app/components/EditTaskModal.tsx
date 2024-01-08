@@ -111,7 +111,7 @@ const EditTaskModal = ({
       initialValues.taskList = item;
       setTaskListChoice(item);
     }
-  }, [taskId, todolistDummy.results]);
+  }, [setTaskListChoice, taskId]);
 
   return (
     <Dialog open={editState} onClose={handleEditState} maxWidth="lg">

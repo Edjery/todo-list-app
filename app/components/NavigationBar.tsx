@@ -1,4 +1,4 @@
-"use client"; // Find a way to remove this later
+"use client";
 
 import { useState } from "react";
 import { Container, Toolbar, Typography } from "../lib/MUI-core-v4";

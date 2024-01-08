@@ -6,7 +6,7 @@ import searchSchema from "../schemas/searchSchema";
 
 const initialValues = { search: "" };
 
-const SeachButton = () => {
+const SearchButton = () => {
   const [open, setOpen] = useState(false);
   const handleState = () => {
     setOpen(!open);
@@ -60,4 +60,4 @@ const SeachButton = () => {
   );
 };
 
-export default SeachButton;
+export default SearchButton;

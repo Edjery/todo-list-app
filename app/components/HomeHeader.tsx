@@ -13,10 +13,7 @@ const HomeHeader = () => {
   return (
     <Container maxWidth="md">
       <Toolbar className="flex justify-center mt-10 shadow-md rounded-full">
-        <SeachButton
-        // taskFormState={taskFormState}
-        // handleTaskFormState={handleTaskFormState}
-        />
+        <SeachButton />
 
         <AddTaskButton
           taskFormState={taskFormState}

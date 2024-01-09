@@ -7,11 +7,11 @@ import Sidebar from "./SideBarContents";
 const NavigationBar = () => {
   const [open, setOpen] = useState(false);
 
-  const openSideBar = () => {
+  const onSidebarOpen = () => {
     setOpen(true);
   };
 
-  const closeSideBar = () => {
+  const onSidebarClose = () => {
     setOpen(false);
   };
 
@@ -27,7 +27,7 @@ const NavigationBar = () => {
           </Typography>
         </Toolbar>
       </Container>
-      <Sidebar open={open} handleDrawerClose={closeSideBar} />
+      <Sidebar open={open} onClose={onSidebarClose} />
     </>
   );
 };

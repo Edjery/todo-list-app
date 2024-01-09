@@ -1,14 +1,14 @@
 "use client";
 
-import { useTaskFormState } from "../hooks/addTaskUseStateHandlers";
-import { Container, Toolbar } from "../lib/MUI-core-v4";
+import { useTaskFormState } from "../../hooks/addTaskUseStateHandlers";
+import { Container, Toolbar } from "../../lib/MUI-core-v4";
 import AddTaskMiniButton from "./AddTaskMiniButton";
 import FilterButton from "./FilterButton";
 import SearchButton from "./SearchButton";
-import AddTaskButton from "./TaskFormComponents/AddTaskButton";
+import AddTaskButton from "./AddTaskButton";
 
 const HomeHeader = () => {
-  const { taskFormState, handleTaskFormState } = useTaskFormState();
+  const { taskFormOpen, onTaskFormOpen, onTaskFormClose } = useTaskFormState();
 
   return (
     <Container maxWidth="md">
@@ -16,13 +16,14 @@ const HomeHeader = () => {
         <SearchButton />
 
         <AddTaskButton
-          taskFormState={taskFormState}
-          handleTaskFormState={handleTaskFormState}
+          taskFormOpen={taskFormOpen}
+          onTaskFormOpen={onTaskFormOpen}
+          onTaskFormClose={onTaskFormClose}
         />
 
         <FilterButton />
       </Toolbar>
-      <AddTaskMiniButton handleTaskFormState={handleTaskFormState} />
+      <AddTaskMiniButton onTaskFormOpen={onTaskFormOpen} />
     </Container>
   );
 };

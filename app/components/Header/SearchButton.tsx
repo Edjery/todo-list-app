@@ -1,29 +1,39 @@
 import SearchIcon from "@material-ui/icons/Search";
-import { useState } from "react";
-import { Box, Button, Dialog, IconButton, TextField } from "../lib/MUI-core-v4";
 import { Field, Form, Formik } from "formik";
-import searchSchema from "../schemas/searchSchema";
+import { useState } from "react";
+import {
+  Box,
+  Button,
+  Dialog,
+  IconButton,
+  TextField,
+} from "../../lib/MUI-core-v4";
+import searchSchema from "../../schemas/searchSchema";
 
 const initialValues = { search: "" };
 
 const SearchButton = () => {
   const [open, setOpen] = useState(false);
-  const handleState = () => {
-    setOpen(!open);
+  const onOpen = () => {
+    setOpen(true);
   };
+  const onClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Box>
-      <IconButton onClick={handleState}>
+      <IconButton onClick={onOpen}>
         <SearchIcon />
       </IconButton>
 
-      <Dialog open={open} onClose={handleState} maxWidth="lg">
+      <Dialog open={open} onClose={onClose} maxWidth="lg">
         <Formik
           initialValues={initialValues}
           validationSchema={searchSchema}
           onSubmit={(values) => {
             console.log(values);
-            handleState();
+            onClose();
           }}
         >
           {({ isSubmitting, errors, touched }) => (

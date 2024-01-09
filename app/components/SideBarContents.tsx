@@ -1,14 +1,14 @@
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import InboxIcon from "@material-ui/icons/Inbox";
 import { Container, Divider, Drawer, IconButton } from "../lib/MUI-core-v4";
-import ItemList, { Item } from "./ItemList";
+import ItemList, { Item } from "./common/ItemList";
 
 interface Props {
   open: boolean;
-  handleDrawerClose: () => void;
+  onClose: () => void;
 }
 
-const SideBarContents = ({ open, handleDrawerClose }: Props) => {
+const SideBarContents = ({ open, onClose }: Props) => {
   const items: Item[] = [
     {
       label: "Home Page",
@@ -35,7 +35,7 @@ const SideBarContents = ({ open, handleDrawerClose }: Props) => {
   return (
     <Drawer anchor="left" open={open}>
       <Container>
-        <IconButton onClick={handleDrawerClose}>
+        <IconButton onClick={onClose}>
           <ChevronLeftIcon />
         </IconButton>
       </Container>

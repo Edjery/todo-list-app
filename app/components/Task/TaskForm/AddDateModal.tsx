@@ -7,7 +7,19 @@ import {
   DialogTitle,
   TextField,
   Typography,
-} from "../../lib/MUI-core-v4";
+} from "../../../lib/MUI-core-v4";
+
+const defaultInput = "";
+
+const formatDate = (inputDateString: string) => {
+  const date = new Date(inputDateString);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
+  return date.toLocaleDateString("en-US", options);
+};
 
 interface Props {
   onChange: (value: string) => void;
@@ -15,35 +27,27 @@ interface Props {
 
 const AddDateModal = ({ onChange }: Props) => {
   const [open, setOpen] = useState(false);
-  const [input, setInput] = useState<string>();
+  const [input, setInput] = useState<string>(defaultInput);
 
-  const handleChange = () => {
-    setOpen(!open);
+  const onOpen = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
   };
 
   const handleDateInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setInput(value);
     onChange(formatDate(value));
-    console.log(formatDate(value));
-  };
-
-  const formatDate = (inputDateString: string) => {
-    const date = new Date(inputDateString);
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    };
-    return date.toLocaleDateString("en-US", options);
   };
 
   return (
     <>
-      <Typography variant="inherit" onClick={handleChange}>
+      <Typography variant="inherit" onClick={onOpen}>
         {input ? formatDate(input) : "Due Date"}
       </Typography>
-      <Dialog open={open} onClose={handleChange}>
+      <Dialog open={open} onClose={onClose}>
         <DialogTitle>Fill the form</DialogTitle>
         <DialogContent>
           <TextField
@@ -53,11 +57,17 @@ const AddDateModal = ({ onChange }: Props) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleChange} color="primary">
+          <Button
+            onClick={() => {
+              onClose;
+              setInput(defaultInput);
+            }}
+            color="primary"
+          >
             Cancel
           </Button>
-          <Button onClick={handleChange} color="primary">
-            Ok
+          <Button onClick={onClose} color="primary">
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>

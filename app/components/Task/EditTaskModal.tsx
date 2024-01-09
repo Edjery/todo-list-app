@@ -5,11 +5,11 @@ import {
   useScheduleValueAndHandlers,
   useTaskListChoice,
 } from "@/app/hooks/addTaskUseStateHandlers";
+import { ToggleButton, ToggleButtonGroup } from "@/app/lib/MUI-lab-v4";
 import addTaskSchema from "@/app/schemas/addTaskSchema";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { Field, Form, Formik } from "formik";
 import { useEffect } from "react";
-import todolistDummy from "../data/todolist-dummy";
+import todolistDummy from "../../data/todolist-dummy";
 import {
   Box,
   Button,
@@ -21,10 +21,10 @@ import {
   Select,
   TextField,
   TextareaAutosize,
-} from "../lib/MUI-core-v4";
-import AddDateModal from "./TaskFormComponents/AddDateModal";
-import GroupTaskCheckBox from "./TaskFormComponents/GroupTaskCheckBox";
-import ToggleableButton from "./ToggleableButton";
+} from "../../lib/MUI-core-v4";
+import ToggleableButton from "../common/ToggleableButton";
+import AddDateModal from "./TaskForm/AddDateModal";
+import TaskCheckboxGroup from "./TaskForm/TaskCheckboxGroup";
 
 const defaultScheduleValue = "Today";
 const defaultPriorityValue = false;
@@ -84,15 +84,15 @@ const changeObjectValue = (
 
 interface Props {
   editState: boolean;
-  handleEditState: () => void;
-  handleAlertState: () => void;
+  onEditClose: () => void;
+  onAlertOpen: () => void;
   taskId?: { taskId: number; taskListId: number };
 }
 
 const EditTaskModal = ({
   editState,
-  handleEditState,
-  handleAlertState,
+  onEditClose,
+  onAlertOpen,
   taskId,
 }: Props) => {
   const { scheduleValue, setScheduleValue } =
@@ -114,14 +114,14 @@ const EditTaskModal = ({
   }, [setTaskListChoice, taskId]);
 
   return (
-    <Dialog open={editState} onClose={handleEditState} maxWidth="lg">
+    <Dialog open={editState} onClose={onEditClose} maxWidth="lg">
       <Formik
         initialValues={initialValues}
         validationSchema={addTaskSchema}
         onSubmit={(values) => {
           console.log(values);
-          handleEditState();
-          handleAlertState();
+          onEditClose();
+          onAlertOpen();
         }}
       >
         {({ setFieldValue, isSubmitting, errors, touched, values }) => (
@@ -161,8 +161,8 @@ const EditTaskModal = ({
                       newValue: string | null
                     ) => {
                       if (newValue !== null) {
-                        setFieldValue("schedule", newValue);
                         setScheduleValue(newValue);
+                        setFieldValue("schedule", newValue);
                       }
                     }}
                   >
@@ -188,7 +188,7 @@ const EditTaskModal = ({
 
                 {scheduleValue === "Custom" && (
                   <Box>
-                    <GroupTaskCheckBox
+                    <TaskCheckboxGroup
                       list={intervals}
                       onChange={(items) => {
                         const newValue = handleCheckedIntervals(items);
@@ -202,7 +202,7 @@ const EditTaskModal = ({
                         );
                       }}
                     />
-                    <GroupTaskCheckBox
+                    <TaskCheckboxGroup
                       list={days}
                       onChange={(items) => {
                         const newValue = handleCheckedDays(items);
@@ -229,7 +229,7 @@ const EditTaskModal = ({
 
             <Box>
               <Box component="div" className="flex justify-between m-5">
-                <Button variant="outlined" onClick={handleEditState}>
+                <Button variant="outlined" onClick={onEditClose}>
                   Cancel
                 </Button>
 

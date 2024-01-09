@@ -1,4 +1,4 @@
-import HomeHeader from "./components/HomeHeader";
+import HomeHeader from "./components/Header/HomeHeader";
 import NavigationBar from "./components/NavigationBar";
 import TaskListCard from "./components/TaskListCard";
 

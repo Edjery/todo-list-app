@@ -11,8 +11,8 @@ import {
   IconButton,
   Typography,
 } from "../lib/MUI-core-v4";
-import EditTaskModal from "./EditTaskModal";
-import PopupAlert from "./PopupAlert";
+import EditTaskModal from "./Task/EditTaskModal";
+import PopupAlert from "./common/PopupAlert";
 
 const initialValues = {
   taskTitle: undefined,
@@ -108,13 +108,16 @@ const taskList = [
 ];
 
 const TaskListCard = () => {
-  const { alertState, handleAlertState } = useAlertState();
+  const { alertOpen: alertState, onAlertOpen, onAlertClose } = useAlertState();
   const [taskListData, setTaskListData] = useState(taskList);
-  const [editState, setEditState] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [taskId, setTaskId] = useState({ taskListId: 0, taskId: 0 });
 
-  const handleEditState = () => {
-    setEditState(!editState);
+  const onEditOpen = () => {
+    setEditOpen(true);
+  };
+  const onEditClose = () => {
+    setEditOpen(false);
   };
 
   const handleCheckboxChange = (
@@ -155,7 +158,7 @@ const TaskListCard = () => {
               <IconButton
                 className="justify-self-end"
                 onClick={() => {
-                  handleEditState();
+                  onEditOpen();
                   setTaskId({
                     taskListId: taskListItemIndex,
                     taskId: taskIndex,
@@ -170,15 +173,15 @@ const TaskListCard = () => {
       ))}
       <Box>
         <EditTaskModal
-          editState={editState}
-          handleEditState={handleEditState}
-          handleAlertState={handleAlertState}
+          editState={editOpen}
+          onEditClose={onEditClose}
+          onAlertOpen={onAlertOpen}
           taskId={taskId}
         />
         <PopupAlert
           alertMessage="Task has been successfully edited"
-          alertState={alertState}
-          handleAlertState={handleAlertState}
+          alertOpen={alertState}
+          onAlertClose={onAlertClose}
         />
       </Box>
     </Container>

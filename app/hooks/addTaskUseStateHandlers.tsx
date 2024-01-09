@@ -1,27 +1,31 @@
 import { ChangeEvent, useState } from "react";
 
 export const useTaskFormState = (initialValue: boolean = false) => {
-  const [taskFormState, setTaskFormState] = useState(initialValue);
+  const [taskFormOpen, setTaskFormOpen] = useState(initialValue);
 
-  const handleTaskFormState = () => {
-    const newValue = !taskFormState;
-    setTaskFormState(newValue);
-    return newValue;
+  const onTaskFormOpen = () => {
+    setTaskFormOpen(true);
   };
 
-  return { taskFormState, setTaskFormState, handleTaskFormState };
+  const onTaskFormClose = () => {
+    setTaskFormOpen(false);
+  };
+
+  return { taskFormOpen, setTaskFormOpen, onTaskFormOpen, onTaskFormClose };
 };
 
 export const useAlertState = (initialValue: boolean = false) => {
-  const [alertState, setAlertState] = useState(initialValue);
+  const [alertOpen, setAlertOpen] = useState(initialValue);
 
-  const handleAlertState = () => {
-    const newValue = !alertState;
-    setAlertState(newValue);
-    return newValue;
+  const onAlertOpen = () => {
+    setAlertOpen(false);
   };
 
-  return { alertState, setAlertState, handleAlertState };
+  const onAlertClose = () => {
+    setAlertOpen(false);
+  };
+
+  return { alertOpen, setAlertOpen, onAlertOpen, onAlertClose };
 };
 
 export const useCustomSchedule = () => {
@@ -80,6 +84,7 @@ export const useScheduleValueAndHandlers = (initialValue: string = "Today") => {
   ) => {
     if (newValue !== null) {
       setScheduleValue(newValue);
+      return newValue;
     }
   };
 
@@ -102,60 +107,31 @@ export const useTaskListChoice = (initialValue: string) => {
   return { taskListChoice, setTaskListChoice, handleTaskListChoice };
 };
 
-export const useFilterModalState = (initialValue: boolean = false) => {
-  const [filterModalState, setFilterModalState] = useState(initialValue);
-  const [modalAnchor, setModalAnchor] = useState<null | HTMLElement>(null);
-
-  const handleFilterModalState = () => {
-    const newValue = !filterModalState;
-    setFilterModalState(newValue);
-    return newValue;
-  };
-
-  const handleModalAnchor = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setModalAnchor(event.currentTarget);
-  };
-
-  const handleModalAnchorClose = () => {
-    setModalAnchor(null);
-  };
-
-  return {
-    filterModalState,
-    setFilterModalState,
-    handleFilterModalState,
-    modalAnchor,
-    setModalAnchor,
-    handleModalAnchor,
-    handleModalAnchorClose,
-  };
-};
-
 export const useFilterValue = (initialValue: string) => {
   const [filterValue, setFilterValue] = useState<string | unknown>(
     initialValue
   );
 
-  const handleFilterValue = (
+  const onFilterChange = (
     event: React.MouseEvent<HTMLElement>,
     newValue: string
   ) => {
     setFilterValue(newValue);
-    return newValue;
   };
 
-  return { filterValue, setFilterValue, handleFilterValue };
+  return { filterValue, setFilterValue, onFilterChange };
 };
 
 export const useAnchor = () => {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
 
-  const openModal = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onModalOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchor(event.currentTarget);
   };
 
-  const closeModal = () => {
+  const onModalClose = () => {
     setAnchor(null);
   };
-  return { anchor, openModal, closeModal };
+
+  return { anchor, onModalOpen, onModalClose };
 };

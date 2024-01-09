@@ -1,20 +1,25 @@
 import { useAlertState } from "@/app/hooks/addTaskUseStateHandlers";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { Box, IconButton, Typography } from "../../lib/MUI-core-v4";
-import PopupAlert from "../PopupAlert";
-import AddTaskModal from "./AddTaskModal";
+import PopupAlert from "../common/PopupAlert";
+import AddTaskModal from "../Task/AddTaskModal";
 
 interface Props {
-  taskFormState: boolean;
-  handleTaskFormState: () => void;
+  taskFormOpen: boolean;
+  onTaskFormOpen: () => void;
+  onTaskFormClose: () => void;
 }
 
-const AddTaskButton = ({ taskFormState, handleTaskFormState }: Props) => {
-  const { alertState, handleAlertState } = useAlertState();
+const AddTaskButton = ({
+  taskFormOpen,
+  onTaskFormOpen,
+  onTaskFormClose,
+}: Props) => {
+  const { alertOpen, onAlertOpen, onAlertClose } = useAlertState();
 
   return (
     <Box className="mx-32">
-      <IconButton color="primary" size="small" onClick={handleTaskFormState}>
+      <IconButton color="primary" size="small" onClick={onTaskFormOpen}>
         <Box className="flex px-5 bg-[#998767] rounded-full shadow-md py-1">
           <AddCircleIcon className="mr-3 text-white self-center" />
           <Typography variant="h6" className="text-white self-center inline">
@@ -22,15 +27,16 @@ const AddTaskButton = ({ taskFormState, handleTaskFormState }: Props) => {
           </Typography>
         </Box>
       </IconButton>
+
       <AddTaskModal
-        taskFormState={taskFormState}
-        handleTaskFormState={handleTaskFormState}
-        handleAlertState={handleAlertState}
+        taskFormOpen={taskFormOpen}
+        onTaskFormClose={onTaskFormClose}
+        onAlertOpen={onAlertOpen}
       />
       <PopupAlert
         alertMessage="Task has been successfully created"
-        alertState={alertState}
-        handleAlertState={handleAlertState}
+        alertOpen={alertOpen}
+        onAlertClose={onAlertClose}
       />
     </Box>
   );

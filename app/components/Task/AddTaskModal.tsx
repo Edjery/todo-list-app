@@ -5,8 +5,8 @@ import {
   useScheduleValueAndHandlers,
   useTaskListChoice,
 } from "@/app/hooks/addTaskUseStateHandlers";
+import { ToggleButton, ToggleButtonGroup } from "@/app/lib/MUI-lab-v4";
 import addTaskSchema from "@/app/schemas/addTaskSchema";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { Field, Form, Formik } from "formik";
 import todolistDummy from "../../data/todolist-dummy";
 import {
@@ -21,9 +21,9 @@ import {
   TextField,
   TextareaAutosize,
 } from "../../lib/MUI-core-v4";
-import ToggleableButton from "../ToggleableButton";
-import AddDateModal from "./AddDateModal";
-import GroupTaskCheckBox from "./GroupTaskCheckBox";
+import ToggleableButton from "../common/ToggleableButton";
+import AddDateModal from "./TaskForm/AddDateModal";
+import TaskCheckboxGroup from "./TaskForm/TaskCheckboxGroup";
 
 const defaultScheduleValue = "Today";
 const defaultPriorityValue = false;
@@ -81,15 +81,15 @@ const changeObjectValue = (
 };
 
 interface Props {
-  taskFormState: boolean;
-  handleTaskFormState: () => void;
-  handleAlertState: () => void;
+  taskFormOpen: boolean;
+  onTaskFormClose: () => void;
+  onAlertOpen: () => void;
 }
 
 const AddTaskModal = ({
-  taskFormState,
-  handleTaskFormState,
-  handleAlertState,
+  taskFormOpen,
+  onTaskFormClose,
+  onAlertOpen,
 }: Props) => {
   const { scheduleValue, setScheduleValue } =
     useScheduleValueAndHandlers(defaultScheduleValue);
@@ -101,14 +101,14 @@ const AddTaskModal = ({
   );
 
   return (
-    <Dialog open={taskFormState} onClose={handleTaskFormState} maxWidth="lg">
+    <Dialog open={taskFormOpen} onClose={onTaskFormClose} maxWidth="lg">
       <Formik
         initialValues={initialValues}
         validationSchema={addTaskSchema}
         onSubmit={(values) => {
           console.log(values);
-          handleTaskFormState();
-          handleAlertState();
+          onTaskFormClose();
+          onAlertOpen();
         }}
       >
         {({ setFieldValue, isSubmitting, errors, touched, values }) => (
@@ -147,8 +147,8 @@ const AddTaskModal = ({
                       newValue: string | null
                     ) => {
                       if (newValue !== null) {
-                        setFieldValue("schedule", newValue);
                         setScheduleValue(newValue);
+                        setFieldValue("schedule", newValue);
                       }
                     }}
                   >
@@ -174,7 +174,7 @@ const AddTaskModal = ({
 
                 {scheduleValue === "Custom" && (
                   <Box>
-                    <GroupTaskCheckBox
+                    <TaskCheckboxGroup
                       list={intervals}
                       onChange={(items) => {
                         const newValue = handleCheckedIntervals(items);
@@ -188,7 +188,7 @@ const AddTaskModal = ({
                         );
                       }}
                     />
-                    <GroupTaskCheckBox
+                    <TaskCheckboxGroup
                       list={days}
                       onChange={(items) => {
                         const newValue = handleCheckedDays(items);
@@ -214,7 +214,7 @@ const AddTaskModal = ({
 
             <Box>
               <Box component="div" className="flex justify-between m-5">
-                <Button variant="outlined" onClick={handleTaskFormState}>
+                <Button variant="outlined" onClick={onTaskFormClose}>
                   Cancel
                 </Button>
 

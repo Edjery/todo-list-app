@@ -4,27 +4,27 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-} from "../../lib/MUI-core-v4";
+} from "../../../lib/MUI-core-v4";
 
 interface Props {
   list: string[];
   onChange: (checkedItems: string[]) => void;
 }
 
-const GroupTaskCheckBox = ({ list, onChange }: Props) => {
-  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+const TaskCheckboxGroup = ({ list, onChange }: Props) => {
+  const [items, setItems] = useState<string[]>([]);
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     let updatedItems: string[];
 
     if (checked) {
-      updatedItems = [...checkedItems, value];
+      updatedItems = [...items, value];
     } else {
-      updatedItems = checkedItems.filter((item) => item !== value);
+      updatedItems = items.filter((item) => item !== value);
     }
 
-    setCheckedItems(updatedItems);
+    setItems(updatedItems);
     onChange(updatedItems);
   };
 
@@ -36,8 +36,8 @@ const GroupTaskCheckBox = ({ list, onChange }: Props) => {
             control={
               <Checkbox
                 color="primary"
-                onChange={handleCheckboxChange}
-                checked={checkedItems.includes(listItem)}
+                onChange={onCheckboxChange}
+                checked={items.includes(listItem)}
                 value={listItem}
               />
             }
@@ -49,4 +49,4 @@ const GroupTaskCheckBox = ({ list, onChange }: Props) => {
   );
 };
 
-export default GroupTaskCheckBox;
+export default TaskCheckboxGroup;

@@ -2,7 +2,10 @@
 
 import EditIcon from "@material-ui/icons/Edit";
 import { useState } from "react";
-import { useAlertState } from "../hooks/addTaskUseStateHandlers";
+import {
+  useAlertState,
+  useTaskFormState,
+} from "../hooks/addTaskUseStateHandlers";
 import {
   Box,
   Checkbox,
@@ -106,19 +109,13 @@ const taskList = [
     ],
   },
 ];
+const popupAlertMessage = "Task has been successfully edited";
 
 const TaskList = () => {
-  const { alertOpen: alertState, onAlertOpen, onAlertClose } = useAlertState();
+  const { taskFormOpen, onTaskFormOpen, onTaskFormClose } = useTaskFormState();
+  const { alertOpen, onAlertOpen, onAlertClose } = useAlertState();
   const [taskListData, setTaskListData] = useState(taskList);
-  const [editOpen, setEditOpen] = useState(false);
   const [taskId, setTaskId] = useState({ taskListId: 0, taskId: 0 });
-
-  const onEditOpen = () => {
-    setEditOpen(true);
-  };
-  const onEditClose = () => {
-    setEditOpen(false);
-  };
 
   const handleCheckboxChange = (
     taskListItemIndex: number,
@@ -158,7 +155,7 @@ const TaskList = () => {
               <IconButton
                 className="justify-self-end"
                 onClick={() => {
-                  onEditOpen();
+                  onTaskFormOpen();
                   setTaskId({
                     taskListId: taskListItemIndex,
                     taskId: taskIndex,
@@ -173,14 +170,14 @@ const TaskList = () => {
       ))}
       <Box>
         <TaskForm
-          formOpen={editOpen}
-          onFormClose={onEditClose}
+          formOpen={taskFormOpen}
+          onFormClose={onTaskFormClose}
           onAlertOpen={onAlertOpen}
           taskId={taskId}
         />
         <PopupAlert
-          message="Task has been successfully edited"
-          open={alertState}
+          message={popupAlertMessage}
+          open={alertOpen}
           close={onAlertClose}
         />
       </Box>

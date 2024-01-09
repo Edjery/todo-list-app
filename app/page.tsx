@@ -1,13 +1,13 @@
-import HomeHeader from "./components/Header/HomeHeader";
 import NavigationBar from "./components/NavigationBar";
-import TaskListCard from "./components/TaskListCard";
+import TaskFormWrapper from "./components/Task/TaskFormWrapper";
+import TaskList from "./components/TaskList";
 
 export default function Home() {
   return (
     <main>
       <NavigationBar />
-      <HomeHeader />
-      <TaskListCard />
+      <TaskFormWrapper />
+      <TaskList />
     </main>
   );
 }

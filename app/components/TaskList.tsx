@@ -11,7 +11,7 @@ import {
   IconButton,
   Typography,
 } from "../lib/MUI-core-v4";
-import EditTaskModal from "./Task/EditTaskModal";
+import TaskForm from "./Task/TaskForm";
 import PopupAlert from "./common/PopupAlert";
 
 const initialValues = {
@@ -107,7 +107,7 @@ const taskList = [
   },
 ];
 
-const TaskListCard = () => {
+const TaskList = () => {
   const { alertOpen: alertState, onAlertOpen, onAlertClose } = useAlertState();
   const [taskListData, setTaskListData] = useState(taskList);
   const [editOpen, setEditOpen] = useState(false);
@@ -172,20 +172,20 @@ const TaskListCard = () => {
         </div>
       ))}
       <Box>
-        <EditTaskModal
-          editState={editOpen}
-          onEditClose={onEditClose}
+        <TaskForm
+          formOpen={editOpen}
+          onFormClose={onEditClose}
           onAlertOpen={onAlertOpen}
           taskId={taskId}
         />
         <PopupAlert
-          alertMessage="Task has been successfully edited"
-          alertOpen={alertState}
-          onAlertClose={onAlertClose}
+          message="Task has been successfully edited"
+          open={alertState}
+          close={onAlertClose}
         />
       </Box>
     </Container>
   );
 };
 
-export default TaskListCard;
+export default TaskList;

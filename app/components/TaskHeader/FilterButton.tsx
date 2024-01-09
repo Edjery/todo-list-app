@@ -4,8 +4,8 @@ import { Box, IconButton, Menu } from "../../lib/MUI-core-v4";
 import { ToggleButton, ToggleButtonGroup } from "../../lib/MUI-lab-v4";
 
 const FilterButton = () => {
-  const defualtFilterList = "Default";
   const filterList = ["Default", "Date Created", "Name"];
+  const defualtFilterList = filterList[0];
 
   const { anchor, onModalOpen, onModalClose } = useAnchor();
   const { filterValue, onFilterChange } = useFilterValue(defualtFilterList);

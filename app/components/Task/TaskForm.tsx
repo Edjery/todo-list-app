@@ -1,3 +1,4 @@
+import todolistDummy from "@/app/data/todolist-dummy";
 import {
   useCustomSchedule,
   useDueDate,
@@ -5,10 +6,6 @@ import {
   useScheduleValueAndHandlers,
   useTaskListChoice,
 } from "@/app/hooks/addTaskUseStateHandlers";
-import { ToggleButton, ToggleButtonGroup } from "@/app/lib/MUI-lab-v4";
-import addTaskSchema from "@/app/schemas/addTaskSchema";
-import { Field, Form, Formik } from "formik";
-import todolistDummy from "../../data/todolist-dummy";
 import {
   Box,
   Button,
@@ -20,9 +17,13 @@ import {
   Select,
   TextField,
   TextareaAutosize,
-} from "../../lib/MUI-core-v4";
+} from "@/app/lib/MUI-core-v4";
+import { ToggleButton, ToggleButtonGroup } from "@/app/lib/MUI-lab-v4";
+import addTaskSchema from "@/app/schemas/addTaskSchema";
+import { Field, Form, Formik } from "formik";
+import React, { useEffect } from "react";
 import ToggleableButton from "../common/ToggleableButton";
-import AddDateModal from "./TaskForm/AddDateModal";
+import DueDateModal from "./TaskForm/DueDateModal";
 import TaskCheckboxGroup from "./TaskForm/TaskCheckboxGroup";
 
 const defaultScheduleValue = "Today";
@@ -81,33 +82,39 @@ const changeObjectValue = (
 };
 
 interface Props {
-  taskFormOpen: boolean;
-  onTaskFormClose: () => void;
+  formOpen: boolean;
+  onFormClose: () => void;
   onAlertOpen: () => void;
+  taskId?: { taskId: number; taskListId: number };
 }
 
-const AddTaskModal = ({
-  taskFormOpen,
-  onTaskFormClose,
-  onAlertOpen,
-}: Props) => {
+const TaskForm = ({ formOpen, onFormClose, onAlertOpen, taskId }: Props) => {
   const { scheduleValue, setScheduleValue } =
     useScheduleValueAndHandlers(defaultScheduleValue);
   const { handleCheckedIntervals, handleCheckedDays } = useCustomSchedule();
   const { handleDueDate } = useDueDate();
   const { togglePriority } = usePriority(defaultPriorityValue);
-  const { taskListChoice, handleTaskListChoice } = useTaskListChoice(
-    defaultTaskListChoice
-  );
+  const { taskListChoice, setTaskListChoice, handleTaskListChoice } =
+    useTaskListChoice(defaultTaskListChoice);
+
+  useEffect(() => {
+    if (taskId) {
+      initialValues.taskTitle =
+        todolistDummy.results[taskId.taskListId].Tasks[taskId.taskId].taskTitle;
+      const item = todolistDummy.results[taskId.taskListId].Title;
+      initialValues.taskList = item;
+      setTaskListChoice(item);
+    }
+  }, [setTaskListChoice, taskId]);
 
   return (
-    <Dialog open={taskFormOpen} onClose={onTaskFormClose} maxWidth="lg">
+    <Dialog open={formOpen} onClose={onFormClose} maxWidth="lg">
       <Formik
         initialValues={initialValues}
         validationSchema={addTaskSchema}
         onSubmit={(values) => {
           console.log(values);
-          onTaskFormClose();
+          onFormClose();
           onAlertOpen();
         }}
       >
@@ -154,7 +161,7 @@ const AddTaskModal = ({
                   >
                     <ToggleButton value="Today">Just Today</ToggleButton>
                     <ToggleButton value="Date">
-                      <AddDateModal
+                      <DueDateModal
                         onChange={(value) => {
                           const newValue = handleDueDate(value);
                           setFieldValue("date", newValue);
@@ -214,7 +221,7 @@ const AddTaskModal = ({
 
             <Box>
               <Box component="div" className="flex justify-between m-5">
-                <Button variant="outlined" onClick={onTaskFormClose}>
+                <Button variant="outlined" onClick={onFormClose}>
                   Cancel
                 </Button>
 
@@ -266,7 +273,7 @@ const AddTaskModal = ({
                     color="primary"
                     disabled={isSubmitting}
                   >
-                    Add Task
+                    {taskId ? "Edit Task" : "Add Task"}
                   </Button>
                 </Box>
               </Box>
@@ -278,4 +285,4 @@ const AddTaskModal = ({
   );
 };
 
-export default AddTaskModal;
+export default TaskForm;

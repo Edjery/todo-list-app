@@ -1,5 +1,16 @@
 import { ChangeEvent, useState } from "react";
 
+export const useSearchState = (initialValue: boolean = false) => {
+  const [searchOpen, setSearchOpen] = useState(initialValue);
+  const onSearchOpen = () => {
+    setSearchOpen(true);
+  };
+  const onSearchClose = () => {
+    setSearchOpen(false);
+  };
+  return { searchOpen, setSearchOpen, onSearchOpen, onSearchClose };
+};
+
 export const useTaskFormState = (initialValue: boolean = false) => {
   const [taskFormOpen, setTaskFormOpen] = useState(initialValue);
 

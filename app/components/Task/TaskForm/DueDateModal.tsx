@@ -25,7 +25,7 @@ interface Props {
   onChange: (value: string) => void;
 }
 
-const AddDateModal = ({ onChange }: Props) => {
+const DueDateModal = ({ onChange }: Props) => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState<string>(defaultInput);
 
@@ -59,7 +59,7 @@ const AddDateModal = ({ onChange }: Props) => {
         <DialogActions>
           <Button
             onClick={() => {
-              onClose;
+              onClose();
               setInput(defaultInput);
             }}
             color="primary"
@@ -75,4 +75,4 @@ const AddDateModal = ({ onChange }: Props) => {
   );
 };
 
-export default AddDateModal;
+export default DueDateModal;

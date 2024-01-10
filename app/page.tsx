@@ -58,9 +58,9 @@ export default function Home() {
         <SearchFormDialog open={searchOpen} onClose={onSearchClose} />
 
         <TaskFormDialog
-          formOpen={taskFormOpen}
+          open={taskFormOpen}
           onAlertOpen={onAlertOpen}
-          onFormClose={onTaskFormClose}
+          onClose={onTaskFormClose}
           task={task}
         />
 

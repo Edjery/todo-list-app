@@ -3,21 +3,16 @@ import TaskForm from "./form/TaskForm";
 import ITask from "./ITask";
 
 interface Props {
-  formOpen: boolean;
-  onFormClose: () => void;
+  open: boolean;
+  onClose: () => void;
   onAlertOpen: () => void;
   task?: ITask | undefined;
 }
 
-const TaskFormDialog = ({
-  formOpen,
-  onFormClose,
-  onAlertOpen,
-  task,
-}: Props) => {
+const TaskFormDialog = ({ open, onClose, onAlertOpen, task }: Props) => {
   return (
-    <Dialog open={formOpen} onClose={onFormClose} maxWidth="lg">
-      <TaskForm onAlertOpen={onAlertOpen} onClose={onFormClose} task={task} />
+    <Dialog open={open} onClose={onClose} maxWidth="lg">
+      <TaskForm onAlertOpen={onAlertOpen} onClose={onClose} task={task} />
     </Dialog>
   );
 };

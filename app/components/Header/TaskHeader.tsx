@@ -1,5 +1,5 @@
-import { ITask } from "@/app/hooks/addTaskUseStateHandlers";
 import { Box, Container, Toolbar } from "../../lib/MUI-core-v4";
+import ITask from "../Task/ITask";
 import AddTaskButton from "./common/AddTaskButton";
 import FilterButton from "./common/FilterButton";
 import SearchButton from "./common/SearchButton";

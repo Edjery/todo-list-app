@@ -1,8 +1,5 @@
 import SortIcon from "@material-ui/icons/Sort";
-import {
-  useAnchor,
-  useFilterValue,
-} from "../../../hooks/addTaskUseStateHandlers";
+import { useState } from "react";
 import { Box, IconButton, Menu } from "../../../lib/MUI-core-v4";
 import { ToggleButton, ToggleButtonGroup } from "../../../lib/MUI-lab-v4";
 
@@ -10,8 +7,25 @@ const FilterButton = () => {
   const filterList = ["Default", "Date Created", "Name"];
   const defualtFilterList = filterList[0];
 
-  const { anchor, onModalOpen, onModalClose } = useAnchor();
-  const { filterValue, onFilterChange } = useFilterValue(defualtFilterList);
+  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+  const [filterValue, setFilterValue] = useState<string | unknown>(
+    defualtFilterList
+  );
+
+  const onModalOpen = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    setAnchor(event.currentTarget);
+  };
+
+  const onModalClose = (): void => {
+    setAnchor(null);
+  };
+
+  const onFilterChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: string
+  ): void => {
+    setFilterValue(newValue);
+  };
 
   return (
     <Box>

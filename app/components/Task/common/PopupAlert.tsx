@@ -1,4 +1,3 @@
-import { ITask } from "@/app/hooks/addTaskUseStateHandlers";
 import {
   Box,
   Button,
@@ -6,6 +5,7 @@ import {
   DialogContent,
   Typography,
 } from "../../../lib/MUI-core-v4";
+import ITask from "../ITask";
 
 const createMessage = "Task has been successfully created";
 const editMessage = "Task has been successfully edited";

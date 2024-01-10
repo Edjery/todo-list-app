@@ -1,4 +1,3 @@
-import { ITask } from "@/app/hooks/addTaskUseStateHandlers";
 import {
   Box,
   Checkbox,
@@ -6,6 +5,7 @@ import {
   IconButton,
 } from "@/app/lib/MUI-core-v4";
 import EditIcon from "@material-ui/icons/Edit";
+import ITask from "../ITask";
 
 interface Props {
   taskName: string;

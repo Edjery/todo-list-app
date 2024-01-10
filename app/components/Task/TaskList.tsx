@@ -1,8 +1,8 @@
 import todolistDummy from "@/app/data/todolist-dummy";
 import { useState } from "react";
-import { ITask } from "../../hooks/addTaskUseStateHandlers";
 import { Container, Typography } from "../../lib/MUI-core-v4";
 import TaskItem from "./common/TaskItem";
+import ITask from "./ITask";
 
 const taskList = todolistDummy.results;
 

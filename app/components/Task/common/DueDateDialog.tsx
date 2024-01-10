@@ -9,8 +9,6 @@ import {
   Typography,
 } from "../../../lib/MUI-core-v4";
 
-const defaultInput = "";
-
 const formatDate = (inputDateString: string) => {
   const date = new Date(inputDateString);
   const options: Intl.DateTimeFormatOptions = {
@@ -22,12 +20,13 @@ const formatDate = (inputDateString: string) => {
 };
 
 interface Props {
+  value: string;
   onChange: (value: string) => void;
 }
 
-const DueDateDialog = ({ onChange }: Props) => {
+const DueDateDialog = ({ value, onChange }: Props) => {
   const [open, setOpen] = useState(false);
-  const [input, setInput] = useState<string>(defaultInput);
+  const [input, setInput] = useState<string>(value);
 
   const onOpen = () => {
     setOpen(true);
@@ -36,8 +35,10 @@ const DueDateDialog = ({ onChange }: Props) => {
     setOpen(false);
   };
 
-  const handleDateInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+  const handleDateInputChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
+    value = event.target.value;
     setInput(value);
     onChange(formatDate(value));
   };
@@ -60,7 +61,7 @@ const DueDateDialog = ({ onChange }: Props) => {
           <Button
             onClick={() => {
               onClose();
-              setInput(defaultInput);
+              setInput(value);
             }}
             color="primary"
           >

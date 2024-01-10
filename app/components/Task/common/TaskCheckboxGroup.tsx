@@ -7,14 +7,25 @@ import {
 } from "../../../lib/MUI-core-v4";
 
 interface Props {
+  value: {
+    choice: string;
+    status: boolean;
+  }[];
   list: string[];
   onChange: (checkedItems: string[]) => void;
 }
 
-const TaskCheckboxGroup = ({ list, onChange }: Props) => {
-  const [items, setItems] = useState<string[]>([]);
+const TaskCheckboxGroup = ({ value, list, onChange }: Props) => {
+  const objectsWithTrueStatus = value.filter((item) => item.status === true);
+  const choicesWithTrueStatus = objectsWithTrueStatus.map(
+    (item) => item.choice
+  );
 
-  const onCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [items, setItems] = useState<string[]>(choicesWithTrueStatus);
+
+  const onCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     const { value, checked } = event.target;
     let updatedItems: string[];
 
@@ -37,8 +48,9 @@ const TaskCheckboxGroup = ({ list, onChange }: Props) => {
               <Checkbox
                 color="primary"
                 onChange={onCheckboxChange}
+                name={listItem}
                 checked={items.includes(listItem)}
-                value={listItem}
+                value={items.includes(listItem)}
               />
             }
             label={listItem}

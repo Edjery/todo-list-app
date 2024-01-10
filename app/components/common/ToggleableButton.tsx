@@ -2,14 +2,15 @@ import { useState } from "react";
 import { ToggleButton } from "../../lib/MUI-lab-v4";
 
 interface Props {
+  value: boolean;
   label: string;
   onChange: (checked: boolean) => void;
 }
 
-const ToggleableButton = ({ label, onChange }: Props) => {
-  const [checked, setChecked] = useState(false);
+const ToggleableButton = ({ value, label, onChange }: Props) => {
+  const [checked, setChecked] = useState(value);
 
-  const handleChange = () => {
+  const handleChange = (): void => {
     const newChecked = !checked;
     setChecked(newChecked);
     onChange(newChecked);

@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
   useAlertState,
   useTaskFormState,
-} from "../hooks/addTaskUseStateHandlers";
+} from "../../hooks/addTaskUseStateHandlers";
 import {
   Box,
   Checkbox,
@@ -11,9 +11,9 @@ import {
   FormControlLabel,
   IconButton,
   Typography,
-} from "../lib/MUI-core-v4";
-import TaskFormDialog from "./Header/Dialog/TaskFormDialog";
-import PopupAlert from "./common/PopupAlert";
+} from "../../lib/MUI-core-v4";
+import TaskFormDialog from "./TaskFormDialog";
+import PopupAlert from "../common/PopupAlert";
 
 const initialValues = {
   taskTitle: undefined,

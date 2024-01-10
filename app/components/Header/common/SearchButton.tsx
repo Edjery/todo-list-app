@@ -1,5 +1,5 @@
 import SearchIcon from "@material-ui/icons/Search";
-import { Box, IconButton } from "../../lib/MUI-core-v4";
+import { Box, IconButton } from "../../../lib/MUI-core-v4";
 
 interface Props {
   onClick: () => void;

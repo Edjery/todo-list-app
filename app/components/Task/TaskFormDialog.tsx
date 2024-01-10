@@ -22,9 +22,9 @@ import { ToggleButton, ToggleButtonGroup } from "@/app/lib/MUI-lab-v4";
 import addTaskSchema from "@/app/schemas/addTaskSchema";
 import { Field, Form, Formik } from "formik";
 import React, { useEffect } from "react";
-import ToggleableButton from "../../common/ToggleableButton";
-import DueDateModal from "../../TaskForm/DueDateModal";
-import TaskCheckboxGroup from "../../TaskForm/TaskCheckboxGroup";
+import ToggleableButton from "../common/ToggleableButton";
+import DueDateModal from "./DueDateModal";
+import TaskCheckboxGroup from "./TaskCheckboxGroup";
 
 const defaultScheduleValue = "Today";
 const defaultPriorityValue = false;

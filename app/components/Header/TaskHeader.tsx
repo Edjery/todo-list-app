@@ -1,7 +1,7 @@
 import { Box, Container, Toolbar } from "../../lib/MUI-core-v4";
-import AddTaskButton from "./AddTaskButton";
-import FilterButton from "./FilterButton";
-import SearchButton from "./SearchButton";
+import AddTaskButton from "./common/AddTaskButton";
+import FilterButton from "./common/FilterButton";
+import SearchButton from "./common/SearchButton";
 
 interface Props {
   onTaskFormOpen: () => void;

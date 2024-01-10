@@ -3,9 +3,9 @@
 import { Box } from "@/app/lib/MUI-core-v4";
 import AddTaskMiniButton from "./components/AddTaskMiniButton";
 import SearchFormDialog from "./components/Header/Dialog/SearchFormDialog";
-import TaskFormDialog from "./components/Header/Dialog/TaskFormDialog";
+import TaskFormDialog from "./components/Task/TaskFormDialog";
 import TaskHeader from "./components/Header/TaskHeader";
-import TaskList from "./components/TaskList";
+import TaskList from "./components/Task/TaskList";
 import PopupAlert from "./components/common/PopupAlert";
 import {
   useSearchState,

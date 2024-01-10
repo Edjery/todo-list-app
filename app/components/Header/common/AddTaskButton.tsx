@@ -1,5 +1,5 @@
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import { Box, IconButton, Typography } from "../../lib/MUI-core-v4";
+import { Box, IconButton, Typography } from "../../../lib/MUI-core-v4";
 
 interface Props {
   onClick: () => void;

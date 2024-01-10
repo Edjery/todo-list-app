@@ -1,23 +1,29 @@
+import { ITask } from "@/app/hooks/addTaskUseStateHandlers";
 import {
   Box,
   Button,
   Dialog,
   DialogContent,
   Typography,
-} from "../../lib/MUI-core-v4";
+} from "../../../lib/MUI-core-v4";
+
+const createMessage = "Task has been successfully created";
+const editMessage = "Task has been successfully edited";
 
 interface Props {
-  message: string;
   open: boolean;
   onClose: () => void;
+  task: ITask | undefined;
 }
 
-const PopupAlert = ({ message, open, onClose }: Props) => {
+const PopupAlert = ({ open, onClose, task }: Props) => {
   return (
     <Box>
       <Dialog open={open} onClose={onClose} maxWidth="lg">
         <DialogContent>
-          <Typography>{message}</Typography>
+          <Typography>
+            {task === undefined ? createMessage : editMessage}
+          </Typography>
         </DialogContent>
         <Box>
           <Box component="div" className="flex justify-end mx-5 mb-3">

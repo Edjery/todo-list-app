@@ -1,5 +1,6 @@
 import todolistDummy from "@/app/data/todolist-dummy";
 import {
+  ITask,
   useCustomSchedule,
   useDueDate,
   usePriority,
@@ -23,8 +24,8 @@ import addTaskSchema from "@/app/schemas/addTaskSchema";
 import { Field, Form, Formik } from "formik";
 import React, { useEffect } from "react";
 import ToggleableButton from "../common/ToggleableButton";
-import DueDateDialog from "./DueDateDialog";
-import TaskCheckboxGroup from "./TaskCheckboxGroup";
+import DueDateDialog from "./common/DueDateDialog";
+import TaskCheckboxGroup from "./common/TaskCheckboxGroup";
 
 const defaultScheduleValue = "Today";
 const defaultPriorityValue = false;
@@ -85,14 +86,14 @@ interface Props {
   formOpen: boolean;
   onFormClose: () => void;
   onAlertOpen: () => void;
-  taskId?: { taskId: number; taskListId: number };
+  task?: ITask | undefined;
 }
 
 const TaskFormDialog = ({
   formOpen,
   onFormClose,
   onAlertOpen,
-  taskId,
+  task,
 }: Props) => {
   const { scheduleValue, setScheduleValue } =
     useScheduleValueAndHandlers(defaultScheduleValue);
@@ -103,14 +104,21 @@ const TaskFormDialog = ({
     useTaskListChoice(defaultTaskListChoice);
 
   useEffect(() => {
-    if (taskId) {
+    if (task === undefined) {
+      initialValues.taskTitle = "";
+      initialValues.taskList = "";
+      setTaskListChoice(defaultTaskListChoice);
+    } else {
       initialValues.taskTitle =
-        todolistDummy.results[taskId.taskListId].Tasks[taskId.taskId].taskTitle;
-      const item = todolistDummy.results[taskId.taskListId].Title;
-      initialValues.taskList = item;
-      setTaskListChoice(item);
+        todolistDummy.results[task.taskListIndex].Tasks[
+          task.taskIndex
+        ].taskName;
+      initialValues.taskList = todolistDummy.results[task.taskListIndex].Title;
+      setTaskListChoice(initialValues.taskList);
     }
-  }, [setTaskListChoice, taskId]);
+  }, [setTaskListChoice, task]);
+
+  const submitButton = task ? "Edit Task" : "Add Task";
 
   return (
     <Dialog open={formOpen} onClose={onFormClose} maxWidth="lg">
@@ -278,7 +286,7 @@ const TaskFormDialog = ({
                     color="primary"
                     disabled={isSubmitting}
                   >
-                    {taskId ? "Edit Task" : "Add Task"}
+                    {submitButton}
                   </Button>
                 </Box>
               </Box>

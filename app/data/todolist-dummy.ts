@@ -4,19 +4,19 @@ export default {
       Title: "Today",
       Tasks: [
         {
-          taskTitle: "Check Email",
+          taskName: "Check Email",
           status: true,
         },
         {
-          taskTitle: "Buy groceries",
+          taskName: "Buy groceries",
           status: false,
         },
         {
-          taskTitle: "Clean room",
+          taskName: "Clean room",
           status: false,
         },
         {
-          taskTitle: "Do laundry",
+          taskName: "Do laundry",
           status: false,
         },
       ],
@@ -25,19 +25,19 @@ export default {
       Title: "Tomorrow",
       Tasks: [
         {
-          taskTitle: "Check Email",
+          taskName: "Check Email",
           status: false,
         },
         {
-          taskTitle: "Buy groceries",
+          taskName: "Buy groceries",
           status: false,
         },
         {
-          taskTitle: "Clean room",
+          taskName: "Clean room",
           status: false,
         },
         {
-          taskTitle: "Do laundry",
+          taskName: "Do laundry",
           status: false,
         },
       ],
@@ -46,19 +46,19 @@ export default {
       Title: "Unsorted",
       Tasks: [
         {
-          taskTitle: "Check Email",
+          taskName: "Check Email",
           status: false,
         },
         {
-          taskTitle: "Buy groceries",
+          taskName: "Buy groceries",
           status: false,
         },
         {
-          taskTitle: "Clean room",
+          taskName: "Clean room",
           status: false,
         },
         {
-          taskTitle: "Do laundry",
+          taskName: "Do laundry",
           status: false,
         },
       ],
@@ -67,19 +67,19 @@ export default {
       Title: "List 1",
       Tasks: [
         {
-          taskTitle: "Check Email",
+          taskName: "Check Email",
           status: false,
         },
         {
-          taskTitle: "Buy groceries",
+          taskName: "Buy groceries",
           status: false,
         },
         {
-          taskTitle: "Clean room",
+          taskName: "Clean room",
           status: false,
         },
         {
-          taskTitle: "Do laundry",
+          taskName: "Do laundry",
           status: false,
         },
       ],

@@ -3,26 +3,34 @@
 import { Box } from "@/app/lib/MUI-core-v4";
 import AddTaskMiniButton from "./components/AddTaskMiniButton";
 import SearchFormDialog from "./components/Header/Dialog/SearchFormDialog";
-import TaskFormDialog from "./components/Task/TaskFormDialog";
 import TaskHeader from "./components/Header/TaskHeader";
+import TaskFormDialog from "./components/Task/TaskForm";
 import TaskList from "./components/Task/TaskList";
-import PopupAlert from "./components/common/PopupAlert";
+import PopupAlert from "./components/Task/common/PopupAlert";
 import {
+  useAlertState,
   useSearchState,
   useTaskFormState,
-  useAlertState,
+  useTaskValue,
 } from "./hooks/addTaskUseStateHandlers";
 
 export default function Home() {
-  const { searchOpen, onSearchOpen, onSearchClose } = useSearchState();
   const { taskFormOpen, onTaskFormOpen, onTaskFormClose } = useTaskFormState();
+  const { searchOpen, onSearchOpen, onSearchClose } = useSearchState();
   const { alertOpen, onAlertOpen, onAlertClose } = useAlertState();
+  const { task, onSelectTask } = useTaskValue();
 
   return (
     <main>
-      <TaskHeader onTaskFormOpen={onTaskFormOpen} onSearchOpen={onSearchOpen} />
-      <TaskList />
-      <AddTaskMiniButton onClick={onTaskFormOpen} />
+      <Box>
+        <TaskHeader
+          onTaskFormOpen={onTaskFormOpen}
+          onSearchOpen={onSearchOpen}
+          onSelectTask={onSelectTask}
+        />
+        <TaskList onTaskFormOpen={onTaskFormOpen} onSelectTask={onSelectTask} />
+        <AddTaskMiniButton onClick={onTaskFormOpen} />
+      </Box>
 
       <Box>
         <SearchFormDialog open={searchOpen} onClose={onSearchClose} />
@@ -31,13 +39,10 @@ export default function Home() {
           formOpen={taskFormOpen}
           onAlertOpen={onAlertOpen}
           onFormClose={onTaskFormClose}
+          task={task}
         />
 
-        <PopupAlert
-          message="Task has been successfully created"
-          open={alertOpen}
-          onClose={onAlertClose}
-        />
+        <PopupAlert open={alertOpen} onClose={onAlertClose} task={task} />
       </Box>
     </main>
   );

@@ -1,5 +1,10 @@
 import { ChangeEvent, useState } from "react";
 
+export interface ITask {
+  taskListIndex: number;
+  taskIndex: number;
+}
+
 export const useSearchState = (initialValue: boolean = false) => {
   const [searchOpen, setSearchOpen] = useState(initialValue);
   const onSearchOpen = () => {
@@ -25,11 +30,21 @@ export const useTaskFormState = (initialValue: boolean = false) => {
   return { taskFormOpen, setTaskFormOpen, onTaskFormOpen, onTaskFormClose };
 };
 
+export const useTaskValue = (initialValue: ITask | undefined = undefined) => {
+  const [task, setTask] = useState<ITask | undefined>(initialValue);
+
+  const onSelectTask = (value: ITask | undefined) => {
+    setTask(value);
+  };
+
+  return { task, setTask, onSelectTask };
+};
+
 export const useAlertState = (initialValue: boolean = false) => {
   const [alertOpen, setAlertOpen] = useState(initialValue);
 
   const onAlertOpen = () => {
-    setAlertOpen(false);
+    setAlertOpen(true);
   };
 
   const onAlertClose = () => {

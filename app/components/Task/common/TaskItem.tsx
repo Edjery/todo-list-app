@@ -12,7 +12,7 @@ interface Props {
   status: boolean;
   taskListItemIndex: number;
   taskIndex: number;
-  handleCheckboxChange: (taskListItemIndex: number, taskIndex: number) => void;
+  onCheckboxChange: (taskListItemIndex: number, taskIndex: number) => void;
   onTaskFormOpen: () => void;
   onSelectTask: (value: ITask | undefined) => void;
 }
@@ -22,11 +22,11 @@ const TaskItem = ({
   status,
   taskListItemIndex,
   taskIndex,
-  handleCheckboxChange,
+  onCheckboxChange,
   onTaskFormOpen,
   onSelectTask,
 }: Props) => {
-  const onButtonClick = (): void => {
+  const onHandleButtonClick = (): void => {
     onTaskFormOpen();
     onSelectTask({
       taskListIndex: taskListItemIndex,
@@ -34,7 +34,7 @@ const TaskItem = ({
     });
   };
   const onFormControlChange = (): void => {
-    handleCheckboxChange(taskListItemIndex, taskIndex);
+    onCheckboxChange(taskListItemIndex, taskIndex);
   };
 
   return (
@@ -51,7 +51,7 @@ const TaskItem = ({
         label={taskName}
       />
 
-      <IconButton className="justify-self-end" onClick={onButtonClick}>
+      <IconButton className="justify-self-end" onClick={onHandleButtonClick}>
         <EditIcon />
       </IconButton>
     </Box>

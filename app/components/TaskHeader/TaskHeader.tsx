@@ -6,7 +6,7 @@ import { Box, Container, Toolbar } from "../../lib/MUI-core-v4";
 import PopupAlert from "../common/PopupAlert";
 import AddTaskButton from "./AddTaskButton";
 import TaskFormDialog from "./Dialog/TaskFormDialog";
-import SearchFormDialog from "./Dialog/searchFormDialog";
+import SearchFormDialog from "./Dialog/SearchFormDialog";
 import FilterButton from "./FilterButton";
 import SearchButton from "./SearchButton";
 

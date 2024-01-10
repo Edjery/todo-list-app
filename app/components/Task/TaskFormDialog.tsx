@@ -23,7 +23,7 @@ import addTaskSchema from "@/app/schemas/addTaskSchema";
 import { Field, Form, Formik } from "formik";
 import React, { useEffect } from "react";
 import ToggleableButton from "../common/ToggleableButton";
-import DueDateModal from "./DueDateModal";
+import DueDateDialog from "./DueDateDialog";
 import TaskCheckboxGroup from "./TaskCheckboxGroup";
 
 const defaultScheduleValue = "Today";
@@ -166,7 +166,7 @@ const TaskFormDialog = ({
                   >
                     <ToggleButton value="Today">Just Today</ToggleButton>
                     <ToggleButton value="Date">
-                      <DueDateModal
+                      <DueDateDialog
                         onChange={(value) => {
                           const newValue = handleDueDate(value);
                           setFieldValue("date", newValue);

@@ -25,7 +25,7 @@ interface Props {
   onChange: (value: string) => void;
 }
 
-const DueDateModal = ({ onChange }: Props) => {
+const DueDateDialog = ({ onChange }: Props) => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState<string>(defaultInput);
 
@@ -75,4 +75,4 @@ const DueDateModal = ({ onChange }: Props) => {
   );
 };
 
-export default DueDateModal;
+export default DueDateDialog;

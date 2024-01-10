@@ -4,7 +4,7 @@ import { Box } from "@/app/lib/MUI-core-v4";
 import AddTaskMiniButton from "./components/AddTaskMiniButton";
 import SearchFormDialog from "./components/Header/Dialog/SearchFormDialog";
 import TaskHeader from "./components/Header/TaskHeader";
-import TaskFormDialog from "./components/Task/TaskForm";
+import TaskFormDialog from "./components/Task/TaskFormDialog";
 import TaskList from "./components/Task/TaskList";
 import PopupAlert from "./components/Task/common/PopupAlert";
 import {

@@ -14,10 +14,7 @@ interface Props {
 const TaskList = ({ onSelectTask, onTaskFormOpen }: Props) => {
   const [taskListData, setTaskListData] = useState(taskList);
 
-  const handleCheckboxChange = (
-    taskListItemIndex: number,
-    taskIndex: number
-  ) => {
+  const onCheckboxChange = (taskListItemIndex: number, taskIndex: number) => {
     const updatedTaskList = [...taskListData];
     updatedTaskList[taskListItemIndex].Tasks[taskIndex].status =
       !updatedTaskList[taskListItemIndex].Tasks[taskIndex].status;
@@ -36,7 +33,7 @@ const TaskList = ({ onSelectTask, onTaskFormOpen }: Props) => {
               status={task.status}
               taskListItemIndex={taskListItemIndex}
               taskIndex={taskIndex}
-              handleCheckboxChange={handleCheckboxChange}
+              onCheckboxChange={onCheckboxChange}
               onTaskFormOpen={onTaskFormOpen}
               onSelectTask={onSelectTask}
             />

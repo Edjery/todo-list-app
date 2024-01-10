@@ -22,9 +22,9 @@ import { ToggleButton, ToggleButtonGroup } from "@/app/lib/MUI-lab-v4";
 import addTaskSchema from "@/app/schemas/addTaskSchema";
 import { Field, Form, Formik } from "formik";
 import React, { useEffect } from "react";
-import ToggleableButton from "../common/ToggleableButton";
-import DueDateModal from "./TaskForm/DueDateModal";
-import TaskCheckboxGroup from "./TaskForm/TaskCheckboxGroup";
+import ToggleableButton from "../../common/ToggleableButton";
+import DueDateModal from "../../Task/TaskForm/DueDateModal";
+import TaskCheckboxGroup from "../../Task/TaskForm/TaskCheckboxGroup";
 
 const defaultScheduleValue = "Today";
 const defaultPriorityValue = false;
@@ -88,7 +88,12 @@ interface Props {
   taskId?: { taskId: number; taskListId: number };
 }
 
-const TaskForm = ({ formOpen, onFormClose, onAlertOpen, taskId }: Props) => {
+const TaskFormDialog = ({
+  formOpen,
+  onFormClose,
+  onAlertOpen,
+  taskId,
+}: Props) => {
   const { scheduleValue, setScheduleValue } =
     useScheduleValueAndHandlers(defaultScheduleValue);
   const { handleCheckedIntervals, handleCheckedDays } = useCustomSchedule();
@@ -285,4 +290,4 @@ const TaskForm = ({ formOpen, onFormClose, onAlertOpen, taskId }: Props) => {
   );
 };
 
-export default TaskForm;
+export default TaskFormDialog;

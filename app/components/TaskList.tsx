@@ -14,7 +14,7 @@ import {
   IconButton,
   Typography,
 } from "../lib/MUI-core-v4";
-import TaskForm from "./Task/TaskForm";
+import TaskFormDialog from "./TaskHeader/Dialog/TaskFormDialog";
 import PopupAlert from "./common/PopupAlert";
 
 const initialValues = {
@@ -169,7 +169,7 @@ const TaskList = () => {
         </div>
       ))}
       <Box>
-        <TaskForm
+        <TaskFormDialog
           formOpen={taskFormOpen}
           onFormClose={onTaskFormClose}
           onAlertOpen={onAlertOpen}

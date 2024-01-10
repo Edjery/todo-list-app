@@ -1,5 +1,3 @@
-"use client";
-
 import EditIcon from "@material-ui/icons/Edit";
 import { useState } from "react";
 import {
@@ -14,7 +12,7 @@ import {
   IconButton,
   Typography,
 } from "../lib/MUI-core-v4";
-import TaskFormDialog from "./TaskHeader/Dialog/TaskFormDialog";
+import TaskFormDialog from "./Header/Dialog/TaskFormDialog";
 import PopupAlert from "./common/PopupAlert";
 
 const initialValues = {

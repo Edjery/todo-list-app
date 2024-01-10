@@ -7,7 +7,7 @@ import {
   DialogTitle,
   TextField,
   Typography,
-} from "../../../lib/MUI-core-v4";
+} from "../../lib/MUI-core-v4";
 
 const defaultInput = "";
 

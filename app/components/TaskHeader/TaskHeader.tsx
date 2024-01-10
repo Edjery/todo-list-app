@@ -39,7 +39,7 @@ const TaskHeader = ({
     <Container maxWidth="md">
       <Toolbar className="flex justify-center mt-10 shadow-md rounded-full">
         <Box>
-          <SearchButton onOpen={onSearchOpen} />
+          <SearchButton onClick={onSearchOpen} />
 
           <Dialog open={searchOpen} onClose={onSearchClose} maxWidth="lg">
             <Formik
@@ -83,7 +83,7 @@ const TaskHeader = ({
         </Box>
 
         <Box className="mx-32">
-          <AddTaskButton onTaskFormOpen={onTaskFormOpen} />
+          <AddTaskButton onClick={onTaskFormOpen} />
           <TaskForm
             formOpen={taskFormOpen}
             onAlertOpen={onAlertOpen}
@@ -93,7 +93,7 @@ const TaskHeader = ({
           <PopupAlert
             message="Task has been successfully created"
             open={alertOpen}
-            close={onAlertClose}
+            onClose={onAlertClose}
           />
         </Box>
 

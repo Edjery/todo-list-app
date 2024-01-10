@@ -15,7 +15,7 @@ const TaskFormWrapper = () => {
         onTaskFormClose={onTaskFormClose}
       />
 
-      <AddTaskMiniButton onTaskFormOpen={onTaskFormOpen} />
+      <AddTaskMiniButton onClick={onTaskFormOpen} />
     </>
   );
 };

@@ -178,7 +178,7 @@ const TaskList = () => {
         <PopupAlert
           message={popupAlertMessage}
           open={alertOpen}
-          close={onAlertClose}
+          onClose={onAlertClose}
         />
       </Box>
     </Container>

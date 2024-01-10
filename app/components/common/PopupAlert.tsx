@@ -9,19 +9,19 @@ import {
 interface Props {
   message: string;
   open: boolean;
-  close: () => void;
+  onClose: () => void;
 }
 
-const PopupAlert = ({ message, open, close }: Props) => {
+const PopupAlert = ({ message, open, onClose }: Props) => {
   return (
     <Box>
-      <Dialog open={open} onClose={close} maxWidth="lg">
+      <Dialog open={open} onClose={onClose} maxWidth="lg">
         <DialogContent>
           <Typography>{message}</Typography>
         </DialogContent>
         <Box>
           <Box component="div" className="flex justify-end mx-5 mb-3">
-            <Button variant="contained" color="primary" onClick={close}>
+            <Button variant="contained" color="primary" onClick={onClose}>
               Confirm
             </Button>
           </Box>

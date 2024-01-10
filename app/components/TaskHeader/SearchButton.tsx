@@ -2,13 +2,13 @@ import SearchIcon from "@material-ui/icons/Search";
 import { Box, IconButton } from "../../lib/MUI-core-v4";
 
 interface Props {
-  onOpen: () => void;
+  onClick: () => void;
 }
 
-const SearchButton = ({ onOpen }: Props) => {
+const SearchButton = ({ onClick }: Props) => {
   return (
     <Box>
-      <IconButton onClick={onOpen}>
+      <IconButton onClick={onClick}>
         <SearchIcon />
       </IconButton>
     </Box>

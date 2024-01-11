@@ -1,12 +1,12 @@
 import { Dialog } from "@/app/lib/MUI-core-v4";
+import ITaskIndex from "./ITaskIndex";
 import TaskForm from "./form/TaskForm";
-import ITask from "./ITask";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onAlertOpen: () => void;
-  task?: ITask | undefined;
+  task?: ITaskIndex | undefined;
 }
 
 const TaskFormDialog = ({ open, onClose, onAlertOpen, task }: Props) => {

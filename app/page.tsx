@@ -5,40 +5,24 @@ import { useState } from "react";
 import AddTaskMiniButton from "./components/AddTaskMiniButton";
 import SearchFormDialog from "./components/Header/Dialog/SearchFormDialog";
 import TaskHeader from "./components/Header/TaskHeader";
+import ITaskIndex from "./components/Task/ITaskIndex";
 import TaskFormDialog from "./components/Task/TaskFormDialog";
 import TaskList from "./components/Task/TaskList";
 import PopupAlert from "./components/Task/common/PopupAlert";
-import ITask from "./components/Task/ITask";
 
 export default function Home() {
   const [taskFormOpen, setTaskFormOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [task, setTask] = useState<ITaskIndex | undefined>(undefined);
 
-  const [task, setTask] = useState<ITask | undefined>(undefined);
-
-  const onTaskFormOpen = () => {
+  const handleTaskFormOpen = (): void => {
     setTaskFormOpen(true);
   };
-  const onTaskFormClose = () => {
+  const HandleTaskFormClose = (): void => {
     setTaskFormOpen(false);
   };
-
-  const onSearchOpen = () => {
-    setSearchOpen(true);
-  };
-  const onSearchClose = () => {
-    setSearchOpen(false);
-  };
-
-  const onAlertOpen = () => {
-    setAlertOpen(true);
-  };
-  const onAlertClose = () => {
-    setAlertOpen(false);
-  };
-
-  const onSelectTask = (value: ITask | undefined) => {
+  const handleSelectTask = (value: ITaskIndex | undefined): void => {
     setTask(value);
   };
 
@@ -46,26 +30,39 @@ export default function Home() {
     <main>
       <Box>
         <TaskHeader
-          onTaskFormOpen={onTaskFormOpen}
-          onSearchOpen={onSearchOpen}
-          onSelectTask={onSelectTask}
+          onTaskFormOpen={() => {
+            handleTaskFormOpen();
+            handleSelectTask(undefined);
+          }}
+          onSearchOpen={() => setSearchOpen(true)}
         />
-        <TaskList onTaskFormOpen={onTaskFormOpen} onSelectTask={onSelectTask} />
-        <AddTaskMiniButton onClick={onTaskFormOpen} />
+        <TaskList
+          onTaskFormOpen={handleTaskFormOpen}
+          onSelectTask={handleSelectTask}
+        />
+        <AddTaskMiniButton
+          onClick={() => {
+            handleTaskFormOpen();
+            handleSelectTask(undefined);
+          }}
+        />
       </Box>
 
-      <Box>
-        <SearchFormDialog open={searchOpen} onClose={onSearchClose} />
-
-        <TaskFormDialog
-          open={taskFormOpen}
-          onAlertOpen={onAlertOpen}
-          onClose={onTaskFormClose}
-          task={task}
-        />
-
-        <PopupAlert open={alertOpen} onClose={onAlertClose} task={task} />
-      </Box>
+      <SearchFormDialog
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+      />
+      <TaskFormDialog
+        open={taskFormOpen}
+        onAlertOpen={() => setAlertOpen(true)}
+        onClose={HandleTaskFormClose}
+        task={task}
+      />
+      <PopupAlert
+        open={alertOpen}
+        onClose={() => setAlertOpen(false)}
+        task={task}
+      />
     </main>
   );
 }

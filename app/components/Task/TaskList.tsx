@@ -1,20 +1,23 @@
 import todolistDummy from "@/app/data/todolist-dummy";
 import { useState } from "react";
 import { Container, Typography } from "../../lib/MUI-core-v4";
+import ITaskIndex from "./ITaskIndex";
 import TaskItem from "./common/TaskItem";
-import ITask from "./ITask";
 
 const taskList = todolistDummy.results;
 
 interface Props {
-  onSelectTask: (value: ITask | undefined) => void;
+  onSelectTask: (value: ITaskIndex | undefined) => void;
   onTaskFormOpen: () => void;
 }
 
 const TaskList = ({ onSelectTask, onTaskFormOpen }: Props) => {
   const [taskListData, setTaskListData] = useState(taskList);
 
-  const onCheckboxChange = (taskListItemIndex: number, taskIndex: number) => {
+  const handleCheckboxChange = (
+    taskListItemIndex: number,
+    taskIndex: number
+  ): void => {
     const updatedTaskList = [...taskListData];
     updatedTaskList[taskListItemIndex].Tasks[taskIndex].status =
       !updatedTaskList[taskListItemIndex].Tasks[taskIndex].status;
@@ -33,7 +36,7 @@ const TaskList = ({ onSelectTask, onTaskFormOpen }: Props) => {
               status={task.status}
               taskListItemIndex={taskListItemIndex}
               taskIndex={taskIndex}
-              onCheckboxChange={onCheckboxChange}
+              onCheckboxChange={handleCheckboxChange}
               onTaskFormOpen={onTaskFormOpen}
               onSelectTask={onSelectTask}
             />

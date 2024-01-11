@@ -1,4 +1,4 @@
-export default interface ITask {
+export default interface ITaskIndex {
   taskListIndex: number;
   taskIndex: number;
 }

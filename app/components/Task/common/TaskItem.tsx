@@ -5,7 +5,7 @@ import {
   IconButton,
 } from "@/app/lib/MUI-core-v4";
 import EditIcon from "@material-ui/icons/Edit";
-import ITask from "../ITask";
+import ITaskIndex from "../ITaskIndex";
 
 interface Props {
   taskName: string;
@@ -14,7 +14,7 @@ interface Props {
   taskIndex: number;
   onCheckboxChange: (taskListItemIndex: number, taskIndex: number) => void;
   onTaskFormOpen: () => void;
-  onSelectTask: (value: ITask | undefined) => void;
+  onSelectTask: (value: ITaskIndex | undefined) => void;
 }
 
 const TaskItem = ({
@@ -26,14 +26,14 @@ const TaskItem = ({
   onTaskFormOpen,
   onSelectTask,
 }: Props) => {
-  const onHandleButtonClick = (): void => {
+  const handleButtonClick = (): void => {
     onTaskFormOpen();
     onSelectTask({
       taskListIndex: taskListItemIndex,
       taskIndex: taskIndex,
     });
   };
-  const onFormControlChange = (): void => {
+  const handleFormControlChange = (): void => {
     onCheckboxChange(taskListItemIndex, taskIndex);
   };
 
@@ -45,13 +45,13 @@ const TaskItem = ({
             color="primary"
             checked={status}
             name={taskName}
-            onChange={onFormControlChange}
+            onChange={handleFormControlChange}
           />
         }
         label={taskName}
       />
 
-      <IconButton className="justify-self-end" onClick={onHandleButtonClick}>
+      <IconButton className="justify-self-end" onClick={handleButtonClick}>
         <EditIcon />
       </IconButton>
     </Box>

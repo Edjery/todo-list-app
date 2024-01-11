@@ -20,19 +20,18 @@ const TaskCheckboxGroup = ({ value, list, onChange }: Props) => {
   const choicesWithTrueStatus = objectsWithTrueStatus.map(
     (item) => item.choice
   );
-
   const [items, setItems] = useState<string[]>(choicesWithTrueStatus);
 
-  const onCheckboxChange = (
+  const handleCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    const { value, checked } = event.target;
+    const { checked, name } = event.target;
     let updatedItems: string[];
 
     if (checked) {
-      updatedItems = [...items, value];
+      updatedItems = [...items, name];
     } else {
-      updatedItems = items.filter((item) => item !== value);
+      updatedItems = items.filter((item) => item !== name);
     }
 
     setItems(updatedItems);
@@ -42,20 +41,22 @@ const TaskCheckboxGroup = ({ value, list, onChange }: Props) => {
   return (
     <Box component="div" className="flex justify-center mt-3">
       {list.map((listItem) => (
-        <FormControl key={listItem}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                color="primary"
-                onChange={onCheckboxChange}
-                name={listItem}
-                checked={items.includes(listItem)}
-                value={items.includes(listItem)}
-              />
-            }
-            label={listItem}
-          />
-        </FormControl>
+        <>
+          <FormControl key={listItem}>
+            <FormControlLabel
+              label={listItem}
+              control={
+                <Checkbox
+                  name={listItem}
+                  color="primary"
+                  onChange={handleCheckboxChange}
+                  checked={items.includes(listItem)}
+                  value={items.includes(listItem)}
+                />
+              }
+            />
+          </FormControl>
+        </>
       ))}
     </Box>
   );

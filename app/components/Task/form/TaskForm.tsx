@@ -113,9 +113,9 @@ interface Props {
   set_timeInterval_data: Dispatch<SetStateAction<ITimeInterval[]>>;
   dayInterval_data: IDayInterval[];
   set_dayInterval_data: Dispatch<SetStateAction<IDayInterval[]>>;
+  taskId?: string | undefined;
   onClose: () => void;
   onAlertOpen: () => void;
-  taskId?: string | undefined;
 }
 
 const TaskForm = ({
@@ -127,9 +127,9 @@ const TaskForm = ({
   set_timeInterval_data,
   dayInterval_data,
   set_dayInterval_data,
+  taskId,
   onClose,
   onAlertOpen,
-  taskId,
 }: Props) => {
   const taskList = task_list_data.map((item) => item.taskListName);
   const taskToFind = task_data.find((task) => task.taskId === taskId);
@@ -247,12 +247,16 @@ const TaskForm = ({
       defualtDayInterval
     );
 
-    initialValues.schedule =
-      sameTimeInterval &&
-      sameDayInterval &&
-      initialValues.taskList === defaultScheduleValue
-        ? defaultScheduleValue
-        : "Custom";
+    const defaultIntervals = sameTimeInterval && sameDayInterval;
+
+    if (defaultIntervals && initialValues.taskList === defaultScheduleValue) {
+      initialValues.schedule = defaultScheduleValue;
+    } else if (
+      !defaultIntervals ||
+      initialValues.taskList !== defaultScheduleValue
+    ) {
+      initialValues.schedule = "Custom";
+    }
   } else {
     initialValues.edit = false;
     initialValues.taskName = "";

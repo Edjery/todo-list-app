@@ -440,14 +440,14 @@ const TaskForm = ({
                 values={values}
               />
 
-              <Box className="mt-2">
+              {/* <Box className="mt-2">
                 <Field
                   name="tags"
                   placeholder="#Tags (Optional)"
                   as={TextareaAutosize}
                   className="size-full"
                 />
-              </Box>
+              </Box> */}
             </Container>
           </DialogContent>
 

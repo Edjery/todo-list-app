@@ -5,25 +5,40 @@ import { useState } from "react";
 import AddTaskMiniButton from "./components/AddTaskMiniButton";
 import SearchFormDialog from "./components/Header/Dialog/SearchFormDialog";
 import TaskHeader from "./components/Header/TaskHeader";
-import ITaskIndex from "./components/Task/ITaskIndex";
 import TaskFormDialog from "./components/Task/TaskFormDialog";
 import TaskList from "./components/Task/TaskList";
 import PopupAlert from "./components/Task/common/PopupAlert";
+import dummyTaskData from "./data/task-data";
+import dummyTaskListData from "./data/taskList-data";
+import dummyDayInterval from "./data/dayInterval-data";
+import dummyTimeInterval from "./data/timeInterval-data";
+
+const task_list_dataset = dummyTaskListData;
+const task_dataset = dummyTaskData;
+const timeInterval_dataset = dummyTimeInterval;
+const dayInterval_dataset = dummyDayInterval;
 
 export default function Home() {
+  const [task_list_data, set_task_list_data] = useState(task_list_dataset);
+  const [task_data, set_task_data] = useState(task_dataset);
+  const [timeInterval_data, set_timeInterval_data] =
+    useState(timeInterval_dataset);
+  const [dayInterval_data, set_dayInterval_data] =
+    useState(dayInterval_dataset);
+
   const [taskFormOpen, setTaskFormOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
-  const [task, setTask] = useState<ITaskIndex | undefined>(undefined);
+  const [taskId, setTaskId] = useState<string | undefined>(undefined);
 
   const handleTaskFormOpen = (): void => {
     setTaskFormOpen(true);
   };
-  const HandleTaskFormClose = (): void => {
+  const handleTaskFormClose = (): void => {
     setTaskFormOpen(false);
   };
-  const handleSelectTask = (value: ITaskIndex | undefined): void => {
-    setTask(value);
+  const handleSelectTask = (value: string | undefined): void => {
+    setTaskId(value);
   };
 
   return (
@@ -37,6 +52,9 @@ export default function Home() {
           onSearchOpen={() => setSearchOpen(true)}
         />
         <TaskList
+          task_list_data={task_list_data}
+          task_data={task_data}
+          set_task_data={set_task_data}
           onTaskFormOpen={handleTaskFormOpen}
           onSelectTask={handleSelectTask}
         />
@@ -53,15 +71,23 @@ export default function Home() {
         onClose={() => setSearchOpen(false)}
       />
       <TaskFormDialog
+        task_list_data={task_list_data}
+        set_task_list_data={set_task_list_data}
+        task_data={task_data}
+        set_task_data={set_task_data}
+        timeInterval_data={timeInterval_data}
+        set_timeInterval_data={set_timeInterval_data}
+        dayInterval_data={dayInterval_data}
+        set_dayInterval_data={set_dayInterval_data}
         open={taskFormOpen}
         onAlertOpen={() => setAlertOpen(true)}
-        onClose={HandleTaskFormClose}
-        task={task}
+        onClose={handleTaskFormClose}
+        taskId={taskId}
       />
       <PopupAlert
         open={alertOpen}
         onClose={() => setAlertOpen(false)}
-        task={task}
+        taskId={taskId}
       />
     </main>
   );

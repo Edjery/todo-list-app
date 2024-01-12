@@ -1,17 +1,18 @@
 export interface ITaskForm {
-  taskTitle: string;
+  taskName: string;
   taskDescription: string;
   schedule: string;
   dueDate: string;
-  RecurringTimeInterval: {
+  timeInterval: {
     choice: string;
     status: boolean;
   }[];
-  DaysOfTheWeek: {
+  dayInterval: {
     choice: string;
     status: boolean;
   }[];
   priority: boolean;
   taskList: string;
   tags: string;
+  edit: boolean;
 }

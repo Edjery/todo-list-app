@@ -26,10 +26,10 @@ const handleButtonChanges = (
   status: boolean;
 }[] => {
   for (let object of prevValue) {
-    for (let index in newValue) {
-      if (object.choice === newValue[index]) {
-        object.status = true;
-      }
+    if (newValue.includes(object.choice)) {
+      object.status = true;
+    } else {
+      object.status = false;
     }
   }
   return prevValue;
@@ -91,25 +91,25 @@ const TaskButtonGroup = ({
       {scheduleValue === "Custom" && (
         <>
           <TaskCheckboxGroup
-            value={values.RecurringTimeInterval}
+            value={values.timeInterval}
             list={intervals}
             onChange={(items) => {
-              const recurringTimeInterval = handleButtonChanges(
+              const newTimeInterval = handleButtonChanges(
                 items,
-                values.RecurringTimeInterval
+                values.timeInterval
               );
-              setFieldValue("RecurringTimeInterval", recurringTimeInterval);
+              setFieldValue("timeInterval", newTimeInterval);
             }}
           />
           <TaskCheckboxGroup
-            value={values.RecurringTimeInterval}
+            value={values.dayInterval}
             list={days}
             onChange={(items) => {
-              const daysOfTheWeek = handleButtonChanges(
+              const newDayInterval = handleButtonChanges(
                 items,
-                values.DaysOfTheWeek
+                values.dayInterval
               );
-              setFieldValue("DaysOfTheWeek", daysOfTheWeek);
+              setFieldValue("dayInterval", newDayInterval);
             }}
           />
         </>

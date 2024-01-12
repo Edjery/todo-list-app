@@ -25,7 +25,8 @@ interface Props {
   submitButton: "Edit Task" | "Add Task";
   currentTaskListChoice: string;
   defaultTaskListChoice: string;
-  tasklist: string;
+  tasklistChoiceValue: string;
+  taskList: string[];
 }
 
 const TaskFormFooter = ({
@@ -36,7 +37,8 @@ const TaskFormFooter = ({
   submitButton,
   defaultTaskListChoice,
   currentTaskListChoice,
-  tasklist,
+  tasklistChoiceValue,
+  taskList,
 }: Props) => {
   const [taskListChoice, setTaskListChoice] = useState<string | unknown>(
     currentTaskListChoice
@@ -57,10 +59,11 @@ const TaskFormFooter = ({
                   name="taskList"
                   placeholder="list name"
                   as={TextField}
-                  value={tasklist}
+                  value={tasklistChoiceValue}
                 />
               )}
             </Box>
+
             <Box className="mr-5">
               <FormControl variant="outlined">
                 <Select
@@ -75,14 +78,11 @@ const TaskFormFooter = ({
                     key={defaultTaskListChoice}
                     value={defaultTaskListChoice}
                   >
-                    New List
+                    {defaultTaskListChoice}
                   </MenuItem>
                   {taskList.map((taskListItem) => (
-                    <MenuItem
-                      key={taskListItem.Title}
-                      value={taskListItem.Title}
-                    >
-                      {taskListItem.Title}
+                    <MenuItem key={taskListItem} value={taskListItem}>
+                      {taskListItem}
                     </MenuItem>
                   ))}
                 </Select>

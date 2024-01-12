@@ -5,7 +5,6 @@ import {
   DialogContent,
   Typography,
 } from "../../../lib/MUI-core-v4";
-import ITaskIndex from "../ITaskIndex";
 
 const createMessage = "Task has been successfully created";
 const editMessage = "Task has been successfully edited";
@@ -13,16 +12,16 @@ const editMessage = "Task has been successfully edited";
 interface Props {
   open: boolean;
   onClose: () => void;
-  task: ITaskIndex | undefined;
+  taskId: string | undefined;
 }
 
-const PopupAlert = ({ open, onClose, task }: Props) => {
+const PopupAlert = ({ open, onClose, taskId }: Props) => {
   return (
     <Box>
       <Dialog open={open} onClose={onClose} maxWidth="lg">
         <DialogContent>
           <Typography>
-            {task === undefined ? createMessage : editMessage}
+            {taskId === undefined ? createMessage : editMessage}
           </Typography>
         </DialogContent>
         <Box>

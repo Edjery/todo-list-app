@@ -1,8 +1,9 @@
-import dummyTaskData, { ITaskData } from "@/app/data/task-data";
-import dummyTaskListData, { ITaskListData } from "@/app/data/taskList-data";
+import { ITaskData } from "@/app/data/task-data";
+import { ITaskListData } from "@/app/data/taskList-data";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Container, Typography } from "../../lib/MUI-core-v4";
+import { Box, Container, Typography } from "../../lib/MUI-core-v4";
 import TaskItem from "./common/TaskItem";
+import ConfirmationAlert from "./common/ConfirmationAlert";
 
 interface Props {
   task_list_data: ITaskListData[];
@@ -19,6 +20,9 @@ const TaskList = ({
   task_data,
   set_task_data,
 }: Props) => {
+  const [open, setOpen] = useState(false);
+  const [confirmValue, setConfirmValue] = useState("");
+
   const handleTaskCheckbox = (taskId: string): void => {
     const updatedTaskData = task_data.map((task) => {
       if (task.taskId === taskId) {
@@ -29,7 +33,6 @@ const TaskList = ({
       }
       return task;
     });
-    console.log("handleTaskCheckbox");
     set_task_data(updatedTaskData);
   };
 
@@ -38,10 +41,23 @@ const TaskList = ({
     onSelectTask(taskId);
   };
 
+  const handleDelete = (taskId: string): void => {
+    setOpen(true);
+    setConfirmValue(taskId);
+  };
+
+  const handleAlertConfirm = () => {
+    const updatedTaskData = task_data.filter(
+      (task) => task.taskId !== confirmValue
+    );
+    set_task_data(updatedTaskData);
+    setOpen(false);
+  };
+
   return (
     <Container maxWidth="sm" className="mt-10">
       {task_list_data.map((taskList) => (
-        <div key={taskList.taskListName} className="mt-5">
+        <Box key={taskList.taskListName} className="mt-5">
           <Typography variant="h6">{taskList.taskListName}</Typography>
           {task_data.map((task) =>
             taskList.taskListId === task.taskListId ? (
@@ -50,12 +66,19 @@ const TaskList = ({
                 taskName={task.taskName}
                 status={task.status}
                 onButtonClick={() => handleButtonClick(task.taskId)}
+                onDelete={() => handleDelete(task.taskId)}
                 onCheckboxChange={() => handleTaskCheckbox(task.taskId)}
               />
             ) : null
           )}
-        </div>
+        </Box>
       ))}
+
+      <ConfirmationAlert
+        open={open}
+        onClose={() => setOpen(false)}
+        onConfirm={handleAlertConfirm}
+      />
     </Container>
   );
 };

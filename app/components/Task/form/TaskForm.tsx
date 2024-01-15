@@ -1,7 +1,7 @@
-import dummyDayInterval, { IDayInterval } from "@/app/data/dayInterval-data";
+import { IDayInterval } from "@/app/data/dayInterval-data";
 import { ITaskData } from "@/app/data/task-data";
 import { ITaskListData } from "@/app/data/taskList-data";
-import dummyTimeInterval, { ITimeInterval } from "@/app/data/timeInterval-data";
+import { ITimeInterval } from "@/app/data/timeInterval-data";
 import {
   Box,
   Container,
@@ -337,19 +337,19 @@ const TaskForm = ({
       taskId: newTask.taskId,
     };
 
-    // if existing task
-    const taskIndex = task_data.findIndex((item) => item.taskId === taskId);
-    const timeIntervalIndex = timeInterval_data.findIndex(
-      (item) => item.taskId === taskId
-    );
-    const dayIntervalIndex = dayInterval_data.findIndex(
-      (item) => item.taskId === taskId
-    );
-
-    // setting task
-    newTask.taskId = task_data[taskIndex].taskId;
-    task_data[taskIndex] = newTask;
     if (values.edit) {
+      // if existing task
+      const taskIndex = task_data.findIndex((item) => item.taskId === taskId);
+      const timeIntervalIndex = timeInterval_data.findIndex(
+        (item) => item.taskId === taskId
+      );
+      const dayIntervalIndex = dayInterval_data.findIndex(
+        (item) => item.taskId === taskId
+      );
+
+      // setting task
+      newTask.taskId = task_data[taskIndex].taskId;
+      task_data[taskIndex] = newTask;
       if (taskIndex !== -1) {
         // creating task if custom
         if (values.schedule === "Custom") {
@@ -413,6 +413,7 @@ const TaskForm = ({
       }
       // new task
     } else {
+      console.log("creating new task  ");
       set_timeInterval_data([...timeInterval_data, newTimeInterval]);
       set_dayInterval_data([...dayInterval_data, newDayInterval]);
       set_task_data([...task_data, newTask]);

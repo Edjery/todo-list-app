@@ -25,6 +25,8 @@ export default function Home() {
     useState(timeInterval_dataset);
   const [dayInterval_data, set_dayInterval_data] =
     useState(dayInterval_dataset);
+  console.log("timeInterval_data:", timeInterval_data);
+  console.log("dayInterval_data:", dayInterval_data);
 
   const [taskFormOpen, setTaskFormOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);

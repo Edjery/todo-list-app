@@ -71,15 +71,16 @@ const TaskButtonGroup = ({
           <ToggleButton value="Today">Just Today</ToggleButton>
 
           <ToggleButton value="Custom">Custom Schedule</ToggleButton>
+
+          <ToggleButton value="Date">
+            <DueDateDialog
+              value={values.dueDate}
+              onChange={(value) => {
+                setFieldValue("dueDate", value);
+              }}
+            />
+          </ToggleButton>
         </ToggleButtonGroup>
-        <ToggleButton>
-          <DueDateDialog
-            value={values.dueDate}
-            onChange={(value) => {
-              setFieldValue("dueDate", value);
-            }}
-          />
-        </ToggleButton>
         <ToggleableButton
           value={values.priority}
           label={"Priority"}

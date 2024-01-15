@@ -251,6 +251,8 @@ const TaskForm = ({
 
     if (defaultIntervals && initialValues.taskList === defaultScheduleValue) {
       initialValues.schedule = defaultScheduleValue;
+    } else if (initialValues.dueDate !== "") {
+      initialValues.schedule = "Date";
     } else if (
       !defaultIntervals ||
       initialValues.taskList !== defaultScheduleValue
@@ -336,39 +338,57 @@ const TaskForm = ({
     };
 
     // if existing task
+    const taskIndex = task_data.findIndex((item) => item.taskId === taskId);
+    const timeIntervalIndex = timeInterval_data.findIndex(
+      (item) => item.taskId === taskId
+    );
+    const dayIntervalIndex = dayInterval_data.findIndex(
+      (item) => item.taskId === taskId
+    );
+
+    // setting task
+    newTask.taskId = task_data[taskIndex].taskId;
+    task_data[taskIndex] = newTask;
     if (values.edit) {
-      const taskIndex = task_data.findIndex((item) => item.taskId === taskId);
-      const timeIntervalIndex = timeInterval_data.findIndex(
-        (item) => item.taskId === taskId
-      );
-      const dayIntervalIndex = dayInterval_data.findIndex(
-        (item) => item.taskId === taskId
-      );
-
       if (taskIndex !== -1) {
-        // setting task
-        newTask.taskId = task_data[taskIndex].taskId;
-        task_data[taskIndex] = newTask;
-        set_task_data([...task_data]);
+        // creating task if custom
+        if (values.schedule === "Custom") {
+          // overwriting intervals
+          console.log("timeIntervalIndex:", timeIntervalIndex);
+          console.log("dayIntervalIndex:", dayIntervalIndex);
+          if (timeIntervalIndex !== -1) {
+            // connecting time interval to task
+            newTimeInterval.taskId =
+              timeInterval_data[timeIntervalIndex].taskId;
+            newTimeInterval.timeIntervalId =
+              timeInterval_data[timeIntervalIndex].timeIntervalId;
+            timeInterval_data[timeIntervalIndex] = newTimeInterval;
+            set_timeInterval_data([...timeInterval_data]);
+          }
+          if (dayIntervalIndex !== -1) {
+            // connecting day interval to task
+            newDayInterval.taskId = dayInterval_data[dayIntervalIndex].taskId;
+            newDayInterval.dayIntervalValId =
+              dayInterval_data[dayIntervalIndex].dayIntervalValId;
+            dayInterval_data[dayIntervalIndex] = newDayInterval;
+            set_dayInterval_data([...dayInterval_data]);
+          }
 
-        if (values.schedule !== "Today") {
           // creating intervals
-          // setting time interval
-          newTimeInterval.taskId = timeInterval_data[timeIntervalIndex].taskId;
-          newTimeInterval.timeIntervalId =
-            timeInterval_data[timeIntervalIndex].timeIntervalId;
-          timeInterval_data[timeIntervalIndex] = newTimeInterval;
-          set_timeInterval_data([...timeInterval_data]);
+          if (timeIntervalIndex === -1) {
+            newTimeInterval.taskId = newTask.taskId;
+            set_timeInterval_data([...timeInterval_data, newTimeInterval]);
+          }
+          if (dayIntervalIndex === -1) {
+            newDayInterval.taskId = newTask.taskId;
+            set_dayInterval_data([...dayInterval_data, newDayInterval]);
+          }
 
-          // setting day interval
-          newDayInterval.taskId = dayInterval_data[dayIntervalIndex].taskId;
-          newDayInterval.dayIntervalValId =
-            dayInterval_data[dayIntervalIndex].dayIntervalValId;
-          dayInterval_data[dayIntervalIndex] = newDayInterval;
-          set_dayInterval_data([...dayInterval_data]);
-        } else {
-          // removing intervals
-          if (timeIntervalIndex !== -1 && dayIntervalIndex !== -1) {
+          // removing date
+          newTask.dueDate = "";
+        } else if (values.schedule === "Today" || values.schedule === "Date") {
+          // deleting intervals if exist
+          if (timeIntervalIndex !== -1) {
             // setting time interval
             newTimeInterval.taskId =
               timeInterval_data[timeIntervalIndex].taskId;
@@ -376,7 +396,8 @@ const TaskForm = ({
               (item) => item.taskId !== newTimeInterval.taskId
             );
             set_timeInterval_data([...removeTimeInterval]);
-
+          }
+          if (dayIntervalIndex !== -1) {
             // setting day interval
             newDayInterval.taskId = dayInterval_data[dayIntervalIndex].taskId;
             const removeDayInterval = dayInterval_data.filter(
@@ -385,6 +406,8 @@ const TaskForm = ({
             set_dayInterval_data([...removeDayInterval]);
           }
         }
+
+        set_task_data([...task_data]);
       } else {
         console.error(`Task with taskId ${newTask.taskId} not found.`);
       }
@@ -402,9 +425,9 @@ const TaskForm = ({
       validationSchema={addTaskSchema}
       onSubmit={(values) => {
         console.log("values:", values);
-        handleValuesDistribution(values);
         onClose();
         onAlertOpen();
+        handleValuesDistribution(values);
       }}
     >
       {({ setFieldValue, isSubmitting, errors, touched, values }) => (

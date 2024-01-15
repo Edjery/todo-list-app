@@ -19,9 +19,9 @@ const TaskList = ({
   task_data,
   set_task_data,
 }: Props) => {
-  const handleTaskCheckbox = (taskID: string): void => {
+  const handleTaskCheckbox = (taskId: string): void => {
     const updatedTaskData = task_data.map((task) => {
-      if (task.taskId === taskID) {
+      if (task.taskId === taskId) {
         return {
           ...task,
           status: !task.status,
@@ -29,6 +29,7 @@ const TaskList = ({
       }
       return task;
     });
+    console.log("handleTaskCheckbox");
     set_task_data(updatedTaskData);
   };
 

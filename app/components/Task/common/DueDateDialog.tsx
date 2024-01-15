@@ -46,7 +46,7 @@ const DueDateDialog = ({ value, onChange }: Props) => {
   return (
     <>
       <Typography variant="inherit" onClick={onOpen}>
-        {input ? formatDate(input) : "Due Date (Optional)"}
+        {input ? formatDate(input) : "Due Date"}
       </Typography>
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>Fill the form</DialogTitle>

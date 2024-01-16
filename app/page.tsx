@@ -49,6 +49,15 @@ export default function Home() {
     setTaskId(value);
   };
 
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setFilterValue("Search");
+  };
+
+  const searchedTaskData = task_data.filter((task) =>
+    task.taskName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const handleFilterChange = (
     event: React.MouseEvent<HTMLElement>,
     newValue: string
@@ -70,7 +79,7 @@ export default function Home() {
           onFilterChange={handleFilterChange}
         />
         <TaskList
-          filterList={filterList}
+          searchedTaskData={searchedTaskData}
           filterValue={filterValue}
           task_list_data={task_list_data}
           task_data={task_data}
@@ -89,6 +98,7 @@ export default function Home() {
       <SearchFormDialog
         open={searchOpen}
         onClose={() => setSearchOpen(false)}
+        onSearch={handleSearch}
       />
       <TaskFormDialog
         task_list_data={task_list_data}

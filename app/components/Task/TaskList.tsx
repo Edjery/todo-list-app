@@ -6,7 +6,7 @@ import ConfirmationAlert from "./common/ConfirmationAlert";
 import TaskItem from "./common/TaskItem";
 
 interface Props {
-  filterList: string[];
+  searchedTaskData: ITaskData[];
   filterValue: string;
   task_list_data: ITaskListData[];
   task_data: ITaskData[];
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const TaskList = ({
-  filterList,
+  searchedTaskData,
   filterValue,
   task_list_data,
   task_data,
@@ -26,19 +26,6 @@ const TaskList = ({
 }: Props) => {
   const [open, setOpen] = useState(false);
   const [confirmValue, setConfirmValue] = useState("");
-
-  const filteredTaskData = task_data.filter((task) => {
-    switch (filterValue) {
-      case filterList[1]:
-        // Implement logic to sort by date created
-        return true;
-      case filterList[2]:
-        // Implement logic to sort by name
-        return true;
-      default:
-        return true; // Default to show all tasks
-    }
-  });
 
   const sortedTaskData = task_data.sort((a, b) => {
     if (filterValue === "Date Created") {
@@ -54,6 +41,11 @@ const TaskList = ({
     }
     return 0;
   });
+
+  if (filterValue === "Search") {
+    task_data = searchedTaskData;
+  }
+
   console.log("sortedTaskData:", sortedTaskData);
 
   const handleTaskCheckbox = (taskId: string): void => {

@@ -7,9 +7,10 @@ const initialValues = { search: "" };
 interface Props {
   open: boolean;
   onClose: () => void;
+  onSearch: (searchTerm: string) => void;
 }
 
-const SearchFormDialog = ({ open, onClose }: Props) => {
+const SearchFormDialog = ({ open, onClose, onSearch }: Props) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
       <Formik
@@ -17,6 +18,7 @@ const SearchFormDialog = ({ open, onClose }: Props) => {
         validationSchema={searchSchema}
         onSubmit={(values) => {
           console.log(values);
+          onSearch(values.search);
           onClose();
         }}
       >

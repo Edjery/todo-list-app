@@ -17,6 +17,8 @@ const task_list_dataset = dummyTaskListData;
 const task_dataset = dummyTaskData;
 const timeInterval_dataset = dummyTimeInterval;
 const dayInterval_dataset = dummyDayInterval;
+const filterList = ["Default", "Date Created", "Name"];
+const defualtFilterList = filterList[0];
 
 export default function Home() {
   const [task_list_data, set_task_list_data] = useState(task_list_dataset);
@@ -25,6 +27,9 @@ export default function Home() {
     useState(timeInterval_dataset);
   const [dayInterval_data, set_dayInterval_data] =
     useState(dayInterval_dataset);
+  const [filterValue, setFilterValue] = useState<string>(defualtFilterList);
+
+  console.log("task_data:", task_data);
   console.log("timeInterval_data:", timeInterval_data);
   console.log("dayInterval_data:", dayInterval_data);
 
@@ -32,6 +37,7 @@ export default function Home() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [taskId, setTaskId] = useState<string | undefined>(undefined);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleTaskFormOpen = (): void => {
     setTaskFormOpen(true);
@@ -43,6 +49,13 @@ export default function Home() {
     setTaskId(value);
   };
 
+  const handleFilterChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: string
+  ): void => {
+    setFilterValue(newValue);
+  };
+
   return (
     <main>
       <Box>
@@ -52,8 +65,13 @@ export default function Home() {
             handleSelectTask(undefined);
           }}
           onSearchOpen={() => setSearchOpen(true)}
+          filterList={filterList}
+          filterValue={filterValue}
+          onFilterChange={handleFilterChange}
         />
         <TaskList
+          filterList={filterList}
+          filterValue={filterValue}
           task_list_data={task_list_data}
           task_data={task_data}
           set_task_data={set_task_data}

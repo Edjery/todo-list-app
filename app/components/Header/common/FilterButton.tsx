@@ -3,14 +3,17 @@ import { useState } from "react";
 import { Box, IconButton, Menu } from "../../../lib/MUI-core-v4";
 import { ToggleButton, ToggleButtonGroup } from "../../../lib/MUI-lab-v4";
 
-const FilterButton = () => {
-  const filterList = ["Default", "Date Created", "Name"];
-  const defualtFilterList = filterList[0];
+interface Props {
+  filterList: string[];
+  filterValue: string;
+  onFilterChange: (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: string
+  ) => void;
+}
 
+const FilterButton = ({ filterList, filterValue, onFilterChange }: Props) => {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-  const [filterValue, setFilterValue] = useState<string | unknown>(
-    defualtFilterList
-  );
 
   const onModalOpen = (event: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchor(event.currentTarget);
@@ -18,13 +21,6 @@ const FilterButton = () => {
 
   const onModalClose = (): void => {
     setAnchor(null);
-  };
-
-  const onFilterChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newValue: string
-  ): void => {
-    setFilterValue(newValue);
   };
 
   return (
@@ -43,7 +39,15 @@ const FilterButton = () => {
         <ToggleButtonGroup
           value={filterValue}
           exclusive
-          onChange={onFilterChange}
+          onChange={(
+            event: React.MouseEvent<HTMLElement>,
+            newValue: string
+          ) => {
+            onFilterChange(event, newValue);
+            if (newValue == null) {
+              onFilterChange(event, filterList[0]);
+            }
+          }}
           orientation="vertical"
         >
           {filterList.map((filterListItemName) => (

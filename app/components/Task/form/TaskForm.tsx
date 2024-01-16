@@ -11,6 +11,7 @@ import {
 } from "@/app/lib/MUI-core-v4";
 import addTaskSchema from "@/app/schemas/addTaskSchema";
 import { createId } from "@paralleldrive/cuid2";
+import dayjs from "dayjs";
 import { Field, Form, Formik } from "formik";
 import { Dispatch, SetStateAction, useState } from "react";
 import TaskButtonGroup from "../common/TaskButtonGroup";
@@ -306,6 +307,7 @@ const TaskForm = ({
     // generating new task row
     const newTask: ITaskData = {
       taskId: createId(),
+      dateCreated: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
       taskName: values.taskName,
       taskDescription: values.taskDescription,
       dueDate: values.dueDate,
@@ -413,7 +415,6 @@ const TaskForm = ({
       }
       // new task
     } else {
-      console.log("creating new task  ");
       set_timeInterval_data([...timeInterval_data, newTimeInterval]);
       set_dayInterval_data([...dayInterval_data, newDayInterval]);
       set_task_data([...task_data, newTask]);

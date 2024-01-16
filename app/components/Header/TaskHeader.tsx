@@ -6,9 +6,21 @@ import SearchButton from "./common/SearchButton";
 interface Props {
   onTaskFormOpen: () => void;
   onSearchOpen: () => void;
+  filterList: string[];
+  filterValue: string;
+  onFilterChange: (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: string
+  ) => void;
 }
 
-const TaskHeader = ({ onTaskFormOpen, onSearchOpen }: Props) => {
+const TaskHeader = ({
+  onTaskFormOpen,
+  onSearchOpen,
+  filterList,
+  filterValue,
+  onFilterChange,
+}: Props) => {
   return (
     <Container maxWidth="md">
       <Toolbar className="flex justify-center mt-10 shadow-md rounded-full">
@@ -18,7 +30,11 @@ const TaskHeader = ({ onTaskFormOpen, onSearchOpen }: Props) => {
           <AddTaskButton onClick={onTaskFormOpen} />
         </Box>
 
-        <FilterButton />
+        <FilterButton
+          filterList={filterList}
+          filterValue={filterValue}
+          onFilterChange={onFilterChange}
+        />
       </Toolbar>
     </Container>
   );

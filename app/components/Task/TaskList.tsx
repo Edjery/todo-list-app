@@ -6,6 +6,8 @@ import ConfirmationAlert from "./common/ConfirmationAlert";
 import TaskItem from "./common/TaskItem";
 
 interface Props {
+  filterList: string[];
+  filterValue: string;
   task_list_data: ITaskListData[];
   task_data: ITaskData[];
   set_task_data: Dispatch<SetStateAction<ITaskData[]>>;
@@ -14,14 +16,45 @@ interface Props {
 }
 
 const TaskList = ({
-  onSelectTask,
-  onTaskFormOpen,
+  filterList,
+  filterValue,
   task_list_data,
   task_data,
+  onSelectTask,
+  onTaskFormOpen,
   set_task_data,
 }: Props) => {
   const [open, setOpen] = useState(false);
   const [confirmValue, setConfirmValue] = useState("");
+
+  const filteredTaskData = task_data.filter((task) => {
+    switch (filterValue) {
+      case filterList[1]:
+        // Implement logic to sort by date created
+        return true;
+      case filterList[2]:
+        // Implement logic to sort by name
+        return true;
+      default:
+        return true; // Default to show all tasks
+    }
+  });
+
+  const sortedTaskData = task_data.sort((a, b) => {
+    if (filterValue === "Date Created") {
+      // Sort by date created
+      const dateA = new Date(a.dateCreated);
+      const dateB = new Date(b.dateCreated);
+      return dateB.getTime() - dateA.getTime();
+    } else if (filterValue === "Name") {
+      // Sort by task name alphabetically
+      return a.taskName.localeCompare(b.taskName);
+    } else if (filterValue === "Default") {
+      return a.taskId.localeCompare(b.taskId);
+    }
+    return 0;
+  });
+  console.log("sortedTaskData:", sortedTaskData);
 
   const handleTaskCheckbox = (taskId: string): void => {
     const updatedTaskData = task_data.map((task) => {

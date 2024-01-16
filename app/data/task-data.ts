@@ -1,5 +1,6 @@
 export interface ITaskData {
   taskId: string;
+  dateCreated: string;
   taskName: string;
   taskDescription: string;
   dueDate: string;
@@ -11,6 +12,7 @@ export interface ITaskData {
 const dummyTaskData: ITaskData[] = [
   {
     taskId: "0",
+    dateCreated: "2024-01-05",
     taskName: "Check Email",
     taskDescription: "check the response from aq.com",
     dueDate: "",
@@ -20,6 +22,7 @@ const dummyTaskData: ITaskData[] = [
   },
   {
     taskId: "1",
+    dateCreated: "2024-01-16",
     taskName: "Check Message",
     taskDescription: "check the response from tuplok",
     dueDate: "2024-01-16",

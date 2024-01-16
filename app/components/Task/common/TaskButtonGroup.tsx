@@ -53,7 +53,6 @@ const TaskButtonGroup = ({
   values,
 }: Props) => {
   const [input, setInput] = useState<string>(values.dueDate);
-  console.log("values.dueDate:", values.dueDate);
 
   return (
     <>
@@ -119,10 +118,8 @@ const TaskButtonGroup = ({
             type="date"
             onChange={(event: ChangeEvent<HTMLInputElement>): void => {
               const value = event.target.value;
-              const dateFormatted = dayjs(value).format("MM/DD/YYYY");
               setInput(value);
               setFieldValue("dueDate", value);
-              console.log("value:", dateFormatted);
             }}
             value={input}
           />

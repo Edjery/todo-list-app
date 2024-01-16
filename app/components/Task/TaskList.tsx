@@ -2,8 +2,8 @@ import { ITaskData } from "@/app/data/task-data";
 import { ITaskListData } from "@/app/data/taskList-data";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Box, Container, Typography } from "../../lib/MUI-core-v4";
-import TaskItem from "./common/TaskItem";
 import ConfirmationAlert from "./common/ConfirmationAlert";
+import TaskItem from "./common/TaskItem";
 
 interface Props {
   task_list_data: ITaskListData[];
@@ -46,7 +46,7 @@ const TaskList = ({
     setConfirmValue(taskId);
   };
 
-  const handleAlertConfirm = () => {
+  const handleAlertConfirm = (): void => {
     const updatedTaskData = task_data.filter(
       (task) => task.taskId !== confirmValue
     );
@@ -57,20 +57,21 @@ const TaskList = ({
   return (
     <Container maxWidth="sm" className="mt-10">
       {task_list_data.map((taskList) => (
-        <Box key={taskList.taskListName} className="mt-5">
+        <Box key={taskList.taskListId} className="mt-5">
           <Typography variant="h6">{taskList.taskListName}</Typography>
-          {task_data.map((task) =>
-            taskList.taskListId === task.taskListId ? (
-              <TaskItem
-                key={task.taskName}
-                taskName={task.taskName}
-                status={task.status}
-                onButtonClick={() => handleButtonClick(task.taskId)}
-                onDelete={() => handleDelete(task.taskId)}
-                onCheckboxChange={() => handleTaskCheckbox(task.taskId)}
-              />
-            ) : null
-          )}
+          {task_data.map((task) => (
+            <Box key={task.taskId}>
+              {taskList.taskListId === task.taskListId ? (
+                <TaskItem
+                  taskName={task.taskName}
+                  status={task.status}
+                  onButtonClick={() => handleButtonClick(task.taskId)}
+                  onDelete={() => handleDelete(task.taskId)}
+                  onCheckboxChange={() => handleTaskCheckbox(task.taskId)}
+                />
+              ) : null}
+            </Box>
+          ))}
         </Box>
       ))}
 

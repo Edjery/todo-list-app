@@ -18,6 +18,15 @@ const dummyTaskData: ITaskData[] = [
     status: false,
     taskListId: "0",
   },
+  {
+    taskId: "1",
+    taskName: "Check Message",
+    taskDescription: "check the response from tuplok",
+    dueDate: "2024-01-16",
+    priority: true,
+    status: false,
+    taskListId: "2",
+  },
 ];
 
 export default dummyTaskData;

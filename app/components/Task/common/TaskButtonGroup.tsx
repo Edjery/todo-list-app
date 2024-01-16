@@ -1,10 +1,10 @@
-import { Box } from "@/app/lib/MUI-core-v4";
+import { Box, TextField } from "@/app/lib/MUI-core-v4";
 import { ToggleButton, ToggleButtonGroup } from "@/app/lib/MUI-lab-v4";
+import dayjs from "dayjs";
 import { FormikErrors } from "formik";
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import ToggleableButton from "../../common/ToggleableButton";
 import { ITaskForm } from "../form/ITaskForm";
-import DueDateDialog from "./DueDateDialog";
 import TaskCheckboxGroup from "./TaskCheckboxGroup";
 
 const intervals = ["Daily", "Weekly", "Monthly", "Yearly"];
@@ -52,6 +52,9 @@ const TaskButtonGroup = ({
   setFieldValue,
   values,
 }: Props) => {
+  const [input, setInput] = useState<string>(values.dueDate);
+  console.log("values.dueDate:", values.dueDate);
+
   return (
     <>
       <Box component="div" className="flex justify-center my-5">
@@ -72,14 +75,7 @@ const TaskButtonGroup = ({
 
           <ToggleButton value="Custom">Custom Schedule</ToggleButton>
 
-          <ToggleButton value="Date">
-            <DueDateDialog
-              value={values.dueDate}
-              onChange={(value) => {
-                setFieldValue("dueDate", value);
-              }}
-            />
-          </ToggleButton>
+          <ToggleButton value="Date">Due Date</ToggleButton>
         </ToggleButtonGroup>
         <ToggleableButton
           value={values.priority}
@@ -115,6 +111,22 @@ const TaskButtonGroup = ({
             }}
           />
         </>
+      )}
+
+      {scheduleValue === "Date" && (
+        <Box className="flex justify-center">
+          <TextField
+            type="date"
+            onChange={(event: ChangeEvent<HTMLInputElement>): void => {
+              const value = event.target.value;
+              const dateFormatted = dayjs(value).format("MM/DD/YYYY");
+              setInput(value);
+              setFieldValue("dueDate", value);
+              console.log("value:", dateFormatted);
+            }}
+            value={input}
+          />
+        </Box>
       )}
     </>
   );

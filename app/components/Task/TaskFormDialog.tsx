@@ -3,18 +3,17 @@ import { ITaskData } from "@/app/data/task-data";
 import { ITaskListData } from "@/app/data/taskList-data";
 import { ITimeInterval } from "@/app/data/timeInterval-data";
 import { Dialog } from "@/app/lib/MUI-core-v4";
-import { Dispatch, SetStateAction } from "react";
 import TaskForm from "./form/TaskForm";
 
 interface Props {
   taskListData: ITaskListData[];
-  setTaskListData: Dispatch<SetStateAction<ITaskListData[]>>;
   taskData: ITaskData[];
-  setTaskData: Dispatch<SetStateAction<ITaskData[]>>;
   timeIntervalData: ITimeInterval[];
-  setTimeIntervalData: Dispatch<SetStateAction<ITimeInterval[]>>;
   dayIntervalData: IDayInterval[];
-  setDayIntervalData: Dispatch<SetStateAction<IDayInterval[]>>;
+  onTaskDataChange: (values: ITaskData[]) => void;
+  onTaskListDataChange: (values: ITaskListData[]) => void;
+  onTimeIntervalDataChange: (values: ITimeInterval[]) => void;
+  onDayIntervalDataChange: (values: IDayInterval[]) => void;
   open: boolean;
   onClose: () => void;
   onAlertOpen: () => void;
@@ -23,13 +22,13 @@ interface Props {
 
 const TaskFormDialog = ({
   taskListData,
-  setTaskListData,
+  onTaskListDataChange,
   taskData,
-  setTaskData,
+  onTaskDataChange,
   timeIntervalData,
-  setTimeIntervalData,
+  onTimeIntervalDataChange,
   dayIntervalData,
-  setDayIntervalData,
+  onDayIntervalDataChange,
   open,
   onClose,
   onAlertOpen,
@@ -43,12 +42,12 @@ const TaskFormDialog = ({
         onAlertOpen={onAlertOpen}
         onClose={onClose}
         taskId={taskId}
-        setTaskListData={setTaskListData}
-        setTaskData={setTaskData}
+        onTaskListDataChange={onTaskListDataChange}
+        onTaskDataChange={onTaskDataChange}
         timeIntervalData={timeIntervalData}
-        setTimeIntervalData={setTimeIntervalData}
+        onTimeIntervalDataChange={onTimeIntervalDataChange}
         dayIntervalData={dayIntervalData}
-        setDayIntervalData={setDayIntervalData}
+        onDayIntervalDataChange={onDayIntervalDataChange}
       />
     </Dialog>
   );

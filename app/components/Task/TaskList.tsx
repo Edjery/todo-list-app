@@ -10,7 +10,7 @@ interface Props {
   filterValue: string;
   taskListData: ITaskListData[];
   taskData: ITaskData[];
-  setTaskData: Dispatch<SetStateAction<ITaskData[]>>;
+  onTaskDataChange: (value: ITaskData[]) => void;
   onSelectTask: (value: string) => void;
   onTaskFormOpen: () => void;
 }
@@ -22,7 +22,7 @@ const TaskList = ({
   taskData,
   onSelectTask,
   onTaskFormOpen,
-  setTaskData,
+  onTaskDataChange,
 }: Props) => {
   const [open, setOpen] = useState(false);
   const [confirmValue, setConfirmValue] = useState("");
@@ -58,7 +58,7 @@ const TaskList = ({
       }
       return task;
     });
-    setTaskData(updatedTaskData);
+    onTaskDataChange(updatedTaskData);
   };
 
   const handleButtonClick = (taskId: string): void => {
@@ -75,7 +75,7 @@ const TaskList = ({
     const updatedTaskData = taskData.filter(
       (task) => task.taskId !== confirmValue
     );
-    setTaskData(updatedTaskData);
+    onTaskDataChange(updatedTaskData);
     setOpen(false);
   };
 

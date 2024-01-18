@@ -8,10 +8,10 @@ import TaskHeader from "./components/Header/TaskHeader";
 import TaskFormDialog from "./components/Task/TaskFormDialog";
 import TaskList from "./components/Task/TaskList";
 import PopupAlert from "./components/Task/common/PopupAlert";
-import dummyTaskData from "./data/task-data";
-import dummyTaskListData from "./data/taskList-data";
-import dummyDayInterval from "./data/dayInterval-data";
-import dummyTimeInterval from "./data/timeInterval-data";
+import dummyTaskData, { ITaskData } from "./data/task-data";
+import dummyTaskListData, { ITaskListData } from "./data/taskList-data";
+import dummyDayInterval, { IDayInterval } from "./data/dayInterval-data";
+import dummyTimeInterval, { ITimeInterval } from "./data/timeInterval-data";
 
 const taskListDataset = dummyTaskListData;
 const taskDataset = dummyTaskData;
@@ -63,6 +63,22 @@ export default function Home() {
     setFilterValue(newValue);
   };
 
+  const handleTaskDataChange = (value: ITaskData[]) => {
+    setTaskData(value);
+  };
+
+  const handleTaskListDataChange = (value: ITaskListData[]) => {
+    setTaskListData(value);
+  };
+
+  const handleTimeIntervalDataChange = (value: ITimeInterval[]) => {
+    setTimeIntervalData(value);
+  };
+
+  const handleDayIntervalDataChange = (value: IDayInterval[]) => {
+    setDayIntervalData(value);
+  };
+
   return (
     <main>
       <Box>
@@ -81,7 +97,7 @@ export default function Home() {
           filterValue={filterValue}
           taskListData={taskListData}
           taskData={taskData}
-          setTaskData={setTaskData}
+          onTaskDataChange={handleTaskDataChange}
           onTaskFormOpen={handleTaskFormOpen}
           onSelectTask={handleSelectTask}
         />
@@ -100,13 +116,13 @@ export default function Home() {
       />
       <TaskFormDialog
         taskListData={taskListData}
-        setTaskListData={setTaskListData}
+        onTaskListDataChange={handleTaskListDataChange}
         taskData={taskData}
-        setTaskData={setTaskData}
+        onTaskDataChange={handleTaskDataChange}
         timeIntervalData={timeIntervalData}
-        setTimeIntervalData={setTimeIntervalData}
+        onTimeIntervalDataChange={handleTimeIntervalDataChange}
         dayIntervalData={dayIntervalData}
-        setDayIntervalData={setDayIntervalData}
+        onDayIntervalDataChange={handleDayIntervalDataChange}
         open={taskFormOpen}
         onAlertOpen={() => setAlertOpen(true)}
         onClose={handleTaskFormClose}

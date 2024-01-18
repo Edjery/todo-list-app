@@ -13,7 +13,7 @@ import addTaskSchema from "@/app/schemas/addTaskSchema";
 import { createId } from "@paralleldrive/cuid2";
 import dayjs from "dayjs";
 import { Field, Form, Formik } from "formik";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import TaskButtonGroup from "../common/TaskButtonGroup";
 import TaskFormFooter from "../common/TaskFormFooter";
 import { ITaskForm } from "./ITaskForm";
@@ -107,13 +107,13 @@ const isObjectEqual = (
 
 interface Props {
   taskListData: ITaskListData[];
-  setTaskListData: Dispatch<SetStateAction<ITaskListData[]>>;
+  onTaskDataChange: (values: ITaskData[]) => void;
   taskData: ITaskData[];
-  setTaskData: Dispatch<SetStateAction<ITaskData[]>>;
+  onTaskListDataChange: (values: ITaskListData[]) => void;
   timeIntervalData: ITimeInterval[];
-  setTimeIntervalData: Dispatch<SetStateAction<ITimeInterval[]>>;
+  onTimeIntervalDataChange: (values: ITimeInterval[]) => void;
   dayIntervalData: IDayInterval[];
-  setDayIntervalData: Dispatch<SetStateAction<IDayInterval[]>>;
+  onDayIntervalDataChange: (values: IDayInterval[]) => void;
   taskId?: string | undefined;
   onClose: () => void;
   onAlertOpen: () => void;
@@ -121,13 +121,13 @@ interface Props {
 
 const TaskForm = ({
   taskListData,
-  setTaskListData,
+  onTaskListDataChange,
   taskData,
-  setTaskData,
+  onTaskDataChange,
   timeIntervalData,
-  setTimeIntervalData,
+  onTimeIntervalDataChange,
   dayIntervalData,
-  setDayIntervalData,
+  onDayIntervalDataChange,
   taskId,
   onClose,
   onAlertOpen,
@@ -294,7 +294,7 @@ const TaskForm = ({
         taskListName: values.taskList,
       };
       taskListId = newTaskList.taskListId;
-      setTaskListData([...taskListData, newTaskList]);
+      onTaskListDataChange([...taskListData, newTaskList]);
     }
     // existing task list
     else {
@@ -364,7 +364,7 @@ const TaskForm = ({
             newTimeInterval.timeIntervalId =
               timeIntervalData[timeIntervalIndex].timeIntervalId;
             timeIntervalData[timeIntervalIndex] = newTimeInterval;
-            setTimeIntervalData([...timeIntervalData]);
+            onTimeIntervalDataChange([...timeIntervalData]);
           }
           if (dayIntervalIndex !== -1) {
             // connecting day interval to task
@@ -372,17 +372,17 @@ const TaskForm = ({
             newDayInterval.dayIntervalValId =
               dayIntervalData[dayIntervalIndex].dayIntervalValId;
             dayIntervalData[dayIntervalIndex] = newDayInterval;
-            setDayIntervalData([...dayIntervalData]);
+            onDayIntervalDataChange([...dayIntervalData]);
           }
 
           // creating intervals
           if (timeIntervalIndex === -1) {
             newTimeInterval.taskId = newTask.taskId;
-            setTimeIntervalData([...timeIntervalData, newTimeInterval]);
+            onTimeIntervalDataChange([...timeIntervalData, newTimeInterval]);
           }
           if (dayIntervalIndex === -1) {
             newDayInterval.taskId = newTask.taskId;
-            setDayIntervalData([...dayIntervalData, newDayInterval]);
+            onDayIntervalDataChange([...dayIntervalData, newDayInterval]);
           }
 
           // removing date
@@ -395,7 +395,7 @@ const TaskForm = ({
             const removeTimeInterval = timeIntervalData.filter(
               (item) => item.taskId !== newTimeInterval.taskId
             );
-            setTimeIntervalData([...removeTimeInterval]);
+            onTimeIntervalDataChange([...removeTimeInterval]);
           }
           if (dayIntervalIndex !== -1) {
             // setting day interval
@@ -403,19 +403,19 @@ const TaskForm = ({
             const removeDayInterval = dayIntervalData.filter(
               (item) => item.taskId !== newDayInterval.taskId
             );
-            setDayIntervalData([...removeDayInterval]);
+            onDayIntervalDataChange([...removeDayInterval]);
           }
         }
 
-        setTaskData([...taskData]);
+        onTaskDataChange([...taskData]);
       } else {
         console.error(`Task with taskId ${newTask.taskId} not found.`);
       }
       // new task
     } else {
-      setTimeIntervalData([...timeIntervalData, newTimeInterval]);
-      setDayIntervalData([...dayIntervalData, newDayInterval]);
-      setTaskData([...taskData, newTask]);
+      onTimeIntervalDataChange([...timeIntervalData, newTimeInterval]);
+      onDayIntervalDataChange([...dayIntervalData, newDayInterval]);
+      onTaskDataChange([...taskData, newTask]);
     }
   };
 

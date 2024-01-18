@@ -106,46 +106,46 @@ const isObjectEqual = (
 };
 
 interface Props {
-  task_list_data: ITaskListData[];
-  set_task_list_data: Dispatch<SetStateAction<ITaskListData[]>>;
-  task_data: ITaskData[];
-  set_task_data: Dispatch<SetStateAction<ITaskData[]>>;
-  timeInterval_data: ITimeInterval[];
-  set_timeInterval_data: Dispatch<SetStateAction<ITimeInterval[]>>;
-  dayInterval_data: IDayInterval[];
-  set_dayInterval_data: Dispatch<SetStateAction<IDayInterval[]>>;
+  taskListData: ITaskListData[];
+  setTaskListData: Dispatch<SetStateAction<ITaskListData[]>>;
+  taskData: ITaskData[];
+  setTaskData: Dispatch<SetStateAction<ITaskData[]>>;
+  timeIntervalData: ITimeInterval[];
+  setTimeIntervalData: Dispatch<SetStateAction<ITimeInterval[]>>;
+  dayIntervalData: IDayInterval[];
+  setDayIntervalData: Dispatch<SetStateAction<IDayInterval[]>>;
   taskId?: string | undefined;
   onClose: () => void;
   onAlertOpen: () => void;
 }
 
 const TaskForm = ({
-  task_list_data,
-  set_task_list_data,
-  task_data,
-  set_task_data,
-  timeInterval_data,
-  set_timeInterval_data,
-  dayInterval_data,
-  set_dayInterval_data,
+  taskListData,
+  setTaskListData,
+  taskData,
+  setTaskData,
+  timeIntervalData,
+  setTimeIntervalData,
+  dayIntervalData,
+  setDayIntervalData,
   taskId,
   onClose,
   onAlertOpen,
 }: Props) => {
-  const taskList = task_list_data.map((item) => item.taskListName);
-  const taskToFind = task_data.find((task) => task.taskId === taskId);
+  const taskList = taskListData.map((item) => item.taskListName);
+  const taskToFind = taskData.find((task) => task.taskId === taskId);
   const submitButton = taskId ? "Edit Task" : "Add Task";
-  const currentTimeInterval = timeInterval_data.find(
+  const currentTimeInterval = timeIntervalData.find(
     (timeInterval) => timeInterval.taskId === taskId
   );
-  const currentDayInterval = dayInterval_data.find(
+  const currentDayInterval = dayIntervalData.find(
     (dayInterval) => dayInterval.taskId === taskId
   );
 
   if (taskToFind) {
     const { taskName, taskDescription, dueDate, priority, taskListId } =
       taskToFind;
-    const currentTaskListValue = task_list_data.find(
+    const currentTaskListValue = taskListData.find(
       (list) => list.taskListId === taskListId
     );
 
@@ -294,11 +294,11 @@ const TaskForm = ({
         taskListName: values.taskList,
       };
       taskListId = newTaskList.taskListId;
-      set_task_list_data([...task_list_data, newTaskList]);
+      setTaskListData([...taskListData, newTaskList]);
     }
     // existing task list
     else {
-      const findTaskList = task_list_data.find(
+      const findTaskList = taskListData.find(
         (item) => item.taskListName === values.taskList
       )?.taskListId;
       taskListId = findTaskList === undefined ? createId() : findTaskList;
@@ -341,17 +341,17 @@ const TaskForm = ({
 
     if (values.edit) {
       // if existing task
-      const taskIndex = task_data.findIndex((item) => item.taskId === taskId);
-      const timeIntervalIndex = timeInterval_data.findIndex(
+      const taskIndex = taskData.findIndex((item) => item.taskId === taskId);
+      const timeIntervalIndex = timeIntervalData.findIndex(
         (item) => item.taskId === taskId
       );
-      const dayIntervalIndex = dayInterval_data.findIndex(
+      const dayIntervalIndex = dayIntervalData.findIndex(
         (item) => item.taskId === taskId
       );
 
       // setting task
-      newTask.taskId = task_data[taskIndex].taskId;
-      task_data[taskIndex] = newTask;
+      newTask.taskId = taskData[taskIndex].taskId;
+      taskData[taskIndex] = newTask;
       if (taskIndex !== -1) {
         // creating task if custom
         if (values.schedule === "Custom") {
@@ -360,30 +360,29 @@ const TaskForm = ({
           console.log("dayIntervalIndex:", dayIntervalIndex);
           if (timeIntervalIndex !== -1) {
             // connecting time interval to task
-            newTimeInterval.taskId =
-              timeInterval_data[timeIntervalIndex].taskId;
+            newTimeInterval.taskId = timeIntervalData[timeIntervalIndex].taskId;
             newTimeInterval.timeIntervalId =
-              timeInterval_data[timeIntervalIndex].timeIntervalId;
-            timeInterval_data[timeIntervalIndex] = newTimeInterval;
-            set_timeInterval_data([...timeInterval_data]);
+              timeIntervalData[timeIntervalIndex].timeIntervalId;
+            timeIntervalData[timeIntervalIndex] = newTimeInterval;
+            setTimeIntervalData([...timeIntervalData]);
           }
           if (dayIntervalIndex !== -1) {
             // connecting day interval to task
-            newDayInterval.taskId = dayInterval_data[dayIntervalIndex].taskId;
+            newDayInterval.taskId = dayIntervalData[dayIntervalIndex].taskId;
             newDayInterval.dayIntervalValId =
-              dayInterval_data[dayIntervalIndex].dayIntervalValId;
-            dayInterval_data[dayIntervalIndex] = newDayInterval;
-            set_dayInterval_data([...dayInterval_data]);
+              dayIntervalData[dayIntervalIndex].dayIntervalValId;
+            dayIntervalData[dayIntervalIndex] = newDayInterval;
+            setDayIntervalData([...dayIntervalData]);
           }
 
           // creating intervals
           if (timeIntervalIndex === -1) {
             newTimeInterval.taskId = newTask.taskId;
-            set_timeInterval_data([...timeInterval_data, newTimeInterval]);
+            setTimeIntervalData([...timeIntervalData, newTimeInterval]);
           }
           if (dayIntervalIndex === -1) {
             newDayInterval.taskId = newTask.taskId;
-            set_dayInterval_data([...dayInterval_data, newDayInterval]);
+            setDayIntervalData([...dayIntervalData, newDayInterval]);
           }
 
           // removing date
@@ -392,32 +391,31 @@ const TaskForm = ({
           // deleting intervals if exist
           if (timeIntervalIndex !== -1) {
             // setting time interval
-            newTimeInterval.taskId =
-              timeInterval_data[timeIntervalIndex].taskId;
-            const removeTimeInterval = timeInterval_data.filter(
+            newTimeInterval.taskId = timeIntervalData[timeIntervalIndex].taskId;
+            const removeTimeInterval = timeIntervalData.filter(
               (item) => item.taskId !== newTimeInterval.taskId
             );
-            set_timeInterval_data([...removeTimeInterval]);
+            setTimeIntervalData([...removeTimeInterval]);
           }
           if (dayIntervalIndex !== -1) {
             // setting day interval
-            newDayInterval.taskId = dayInterval_data[dayIntervalIndex].taskId;
-            const removeDayInterval = dayInterval_data.filter(
+            newDayInterval.taskId = dayIntervalData[dayIntervalIndex].taskId;
+            const removeDayInterval = dayIntervalData.filter(
               (item) => item.taskId !== newDayInterval.taskId
             );
-            set_dayInterval_data([...removeDayInterval]);
+            setDayIntervalData([...removeDayInterval]);
           }
         }
 
-        set_task_data([...task_data]);
+        setTaskData([...taskData]);
       } else {
         console.error(`Task with taskId ${newTask.taskId} not found.`);
       }
       // new task
     } else {
-      set_timeInterval_data([...timeInterval_data, newTimeInterval]);
-      set_dayInterval_data([...dayInterval_data, newDayInterval]);
-      set_task_data([...task_data, newTask]);
+      setTimeIntervalData([...timeIntervalData, newTimeInterval]);
+      setDayIntervalData([...dayIntervalData, newDayInterval]);
+      setTaskData([...taskData, newTask]);
     }
   };
 

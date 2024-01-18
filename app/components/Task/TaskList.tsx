@@ -8,9 +8,9 @@ import TaskItem from "./common/TaskItem";
 interface Props {
   searchedTaskData: ITaskData[];
   filterValue: string;
-  task_list_data: ITaskListData[];
-  task_data: ITaskData[];
-  set_task_data: Dispatch<SetStateAction<ITaskData[]>>;
+  taskListData: ITaskListData[];
+  taskData: ITaskData[];
+  setTaskData: Dispatch<SetStateAction<ITaskData[]>>;
   onSelectTask: (value: string) => void;
   onTaskFormOpen: () => void;
 }
@@ -18,16 +18,16 @@ interface Props {
 const TaskList = ({
   searchedTaskData,
   filterValue,
-  task_list_data,
-  task_data,
+  taskListData,
+  taskData,
   onSelectTask,
   onTaskFormOpen,
-  set_task_data,
+  setTaskData,
 }: Props) => {
   const [open, setOpen] = useState(false);
   const [confirmValue, setConfirmValue] = useState("");
 
-  const sortedTaskData = task_data.sort((a, b) => {
+  const sortedTaskData = taskData.sort((a, b) => {
     if (filterValue === "Date Created") {
       // Sort by date created
       const dateA = new Date(a.dateCreated);
@@ -43,13 +43,13 @@ const TaskList = ({
   });
 
   if (filterValue === "Search") {
-    task_data = searchedTaskData;
+    taskData = searchedTaskData;
   }
 
   console.log("sortedTaskData:", sortedTaskData);
 
   const handleTaskCheckbox = (taskId: string): void => {
-    const updatedTaskData = task_data.map((task) => {
+    const updatedTaskData = taskData.map((task) => {
       if (task.taskId === taskId) {
         return {
           ...task,
@@ -58,7 +58,7 @@ const TaskList = ({
       }
       return task;
     });
-    set_task_data(updatedTaskData);
+    setTaskData(updatedTaskData);
   };
 
   const handleButtonClick = (taskId: string): void => {
@@ -72,19 +72,19 @@ const TaskList = ({
   };
 
   const handleAlertConfirm = (): void => {
-    const updatedTaskData = task_data.filter(
+    const updatedTaskData = taskData.filter(
       (task) => task.taskId !== confirmValue
     );
-    set_task_data(updatedTaskData);
+    setTaskData(updatedTaskData);
     setOpen(false);
   };
 
   return (
     <Container maxWidth="sm" className="mt-10">
-      {task_list_data.map((taskList) => (
+      {taskListData.map((taskList) => (
         <Box key={taskList.taskListId} className="mt-5">
           <Typography variant="h6">{taskList.taskListName}</Typography>
-          {task_data.map((task) => (
+          {taskData.map((task) => (
             <Box key={task.taskId}>
               {taskList.taskListId === task.taskListId ? (
                 <TaskItem

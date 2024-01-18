@@ -7,14 +7,14 @@ import { Dispatch, SetStateAction } from "react";
 import TaskForm from "./form/TaskForm";
 
 interface Props {
-  task_list_data: ITaskListData[];
-  set_task_list_data: Dispatch<SetStateAction<ITaskListData[]>>;
-  task_data: ITaskData[];
-  set_task_data: Dispatch<SetStateAction<ITaskData[]>>;
-  timeInterval_data: ITimeInterval[];
-  set_timeInterval_data: Dispatch<SetStateAction<ITimeInterval[]>>;
-  dayInterval_data: IDayInterval[];
-  set_dayInterval_data: Dispatch<SetStateAction<IDayInterval[]>>;
+  taskListData: ITaskListData[];
+  setTaskListData: Dispatch<SetStateAction<ITaskListData[]>>;
+  taskData: ITaskData[];
+  setTaskData: Dispatch<SetStateAction<ITaskData[]>>;
+  timeIntervalData: ITimeInterval[];
+  setTimeIntervalData: Dispatch<SetStateAction<ITimeInterval[]>>;
+  dayIntervalData: IDayInterval[];
+  setDayIntervalData: Dispatch<SetStateAction<IDayInterval[]>>;
   open: boolean;
   onClose: () => void;
   onAlertOpen: () => void;
@@ -22,14 +22,14 @@ interface Props {
 }
 
 const TaskFormDialog = ({
-  task_list_data,
-  set_task_list_data,
-  task_data,
-  set_task_data,
-  timeInterval_data,
-  set_timeInterval_data,
-  dayInterval_data,
-  set_dayInterval_data,
+  taskListData,
+  setTaskListData,
+  taskData,
+  setTaskData,
+  timeIntervalData,
+  setTimeIntervalData,
+  dayIntervalData,
+  setDayIntervalData,
   open,
   onClose,
   onAlertOpen,
@@ -38,17 +38,17 @@ const TaskFormDialog = ({
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
       <TaskForm
-        task_list_data={task_list_data}
-        task_data={task_data}
+        taskListData={taskListData}
+        taskData={taskData}
         onAlertOpen={onAlertOpen}
         onClose={onClose}
         taskId={taskId}
-        set_task_list_data={set_task_list_data}
-        set_task_data={set_task_data}
-        timeInterval_data={timeInterval_data}
-        set_timeInterval_data={set_timeInterval_data}
-        dayInterval_data={dayInterval_data}
-        set_dayInterval_data={set_dayInterval_data}
+        setTaskListData={setTaskListData}
+        setTaskData={setTaskData}
+        timeIntervalData={timeIntervalData}
+        setTimeIntervalData={setTimeIntervalData}
+        dayIntervalData={dayIntervalData}
+        setDayIntervalData={setDayIntervalData}
       />
     </Dialog>
   );

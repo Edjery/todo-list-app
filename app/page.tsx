@@ -13,25 +13,23 @@ import dummyTaskListData from "./data/taskList-data";
 import dummyDayInterval from "./data/dayInterval-data";
 import dummyTimeInterval from "./data/timeInterval-data";
 
-const task_list_dataset = dummyTaskListData;
-const task_dataset = dummyTaskData;
-const timeInterval_dataset = dummyTimeInterval;
-const dayInterval_dataset = dummyDayInterval;
+const taskListDataset = dummyTaskListData;
+const taskDataset = dummyTaskData;
+const timeIntervaDataset = dummyTimeInterval;
+const dayIntervalDataset = dummyDayInterval;
 const filterList = ["Default", "Date Created", "Name"];
 const defualtFilterList = filterList[0];
 
 export default function Home() {
-  const [task_list_data, set_task_list_data] = useState(task_list_dataset);
-  const [task_data, set_task_data] = useState(task_dataset);
-  const [timeInterval_data, set_timeInterval_data] =
-    useState(timeInterval_dataset);
-  const [dayInterval_data, set_dayInterval_data] =
-    useState(dayInterval_dataset);
+  const [taskListData, setTaskListData] = useState(taskListDataset);
+  const [taskData, setTaskData] = useState(taskDataset);
+  const [timeIntervalData, setTimeIntervalData] = useState(timeIntervaDataset);
+  const [dayIntervalData, setDayIntervalData] = useState(dayIntervalDataset);
   const [filterValue, setFilterValue] = useState<string>(defualtFilterList);
 
-  console.log("task_data:", task_data);
-  console.log("timeInterval_data:", timeInterval_data);
-  console.log("dayInterval_data:", dayInterval_data);
+  console.log("taskData:", taskData);
+  console.log("timeIntervalData:", timeIntervalData);
+  console.log("dayIntervalData:", dayIntervalData);
 
   const [taskFormOpen, setTaskFormOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -54,7 +52,7 @@ export default function Home() {
     setFilterValue("Search");
   };
 
-  const searchedTaskData = task_data.filter((task) =>
+  const searchedTaskData = taskData.filter((task) =>
     task.taskName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -81,9 +79,9 @@ export default function Home() {
         <TaskList
           searchedTaskData={searchedTaskData}
           filterValue={filterValue}
-          task_list_data={task_list_data}
-          task_data={task_data}
-          set_task_data={set_task_data}
+          taskListData={taskListData}
+          taskData={taskData}
+          setTaskData={setTaskData}
           onTaskFormOpen={handleTaskFormOpen}
           onSelectTask={handleSelectTask}
         />
@@ -101,14 +99,14 @@ export default function Home() {
         onSearch={handleSearch}
       />
       <TaskFormDialog
-        task_list_data={task_list_data}
-        set_task_list_data={set_task_list_data}
-        task_data={task_data}
-        set_task_data={set_task_data}
-        timeInterval_data={timeInterval_data}
-        set_timeInterval_data={set_timeInterval_data}
-        dayInterval_data={dayInterval_data}
-        set_dayInterval_data={set_dayInterval_data}
+        taskListData={taskListData}
+        setTaskListData={setTaskListData}
+        taskData={taskData}
+        setTaskData={setTaskData}
+        timeIntervalData={timeIntervalData}
+        setTimeIntervalData={setTimeIntervalData}
+        dayIntervalData={dayIntervalData}
+        setDayIntervalData={setDayIntervalData}
         open={taskFormOpen}
         onAlertOpen={() => setAlertOpen(true)}
         onClose={handleTaskFormClose}

@@ -36,8 +36,6 @@ const handleButtonChanges = (
 };
 
 interface Props {
-  scheduleValue: string;
-  setScheduleValue: (value: React.SetStateAction<string>) => void;
   setFieldValue: (
     field: string,
     value: any,
@@ -46,27 +44,21 @@ interface Props {
   values: ITaskForm;
 }
 
-const TaskButtonGroup = ({
-  scheduleValue,
-  setScheduleValue,
-  setFieldValue,
-  values,
-}: Props) => {
+const TaskButtonGroup = ({ setFieldValue, values }: Props) => {
   const [input, setInput] = useState<string>(values.dueDate);
 
   return (
     <>
       <Box component="div" className="flex justify-center my-5">
         <ToggleButtonGroup
-          value={scheduleValue}
+          value={values.schedule}
           exclusive
           onChange={(
             event: React.MouseEvent<HTMLElement>,
-            newValue: string | null
+            newScheduleValue: string | null
           ) => {
-            if (newValue !== null) {
-              setScheduleValue(newValue);
-              setFieldValue("schedule", newValue);
+            if (newScheduleValue !== null) {
+              setFieldValue("schedule", newScheduleValue);
             }
           }}
         >
@@ -85,7 +77,7 @@ const TaskButtonGroup = ({
         />
       </Box>
 
-      {scheduleValue === "Custom" && (
+      {values.schedule === "Custom" && (
         <>
           <TaskCheckboxGroup
             value={values.timeInterval}
@@ -112,7 +104,7 @@ const TaskButtonGroup = ({
         </>
       )}
 
-      {scheduleValue === "Date" && (
+      {values.schedule === "Date" && (
         <Box className="flex justify-center">
           <TextField
             type="date"

@@ -1,4 +1,4 @@
-import todolistDummy from "@/app/data/todolistDummy";
+import { defaultTaskListChoice } from "@/app/data/dataMatrix";
 import {
   Box,
   Button,
@@ -11,38 +11,30 @@ import { Field, FormikErrors } from "formik";
 import { ChangeEvent, useState } from "react";
 import { ITaskForm } from "../form/ITaskForm";
 
-const { results: taskList } = todolistDummy;
-
 interface Props {
-  onClose: () => void;
-  scheduleValue: string;
+  values: ITaskForm;
+  taskList: string[];
   setFieldValue: (
     field: string,
     value: any,
     shouldValidate?: boolean | undefined
   ) => Promise<void | FormikErrors<ITaskForm>>;
   isSubmitting: boolean;
-  submitButton: "Edit Task" | "Add Task";
-  currentTaskListChoice: string;
-  defaultTaskListChoice: string;
-  tasklistChoiceValue: string;
-  taskList: string[];
+  onClose: () => void;
 }
 
 const TaskFormFooter = ({
-  onClose,
-  scheduleValue,
+  values,
+  taskList,
   setFieldValue,
   isSubmitting,
-  submitButton,
-  defaultTaskListChoice,
-  currentTaskListChoice,
-  tasklistChoiceValue,
-  taskList,
+  onClose,
 }: Props) => {
   const [taskListChoice, setTaskListChoice] = useState<string | unknown>(
-    currentTaskListChoice
+    values.taskList
   );
+  const submitButton = values.edit ? "Edit Task" : "Add Task";
+
   return (
     <Box component="div" className="flex justify-between m-5">
       <Button variant="outlined" onClick={onClose}>
@@ -50,7 +42,7 @@ const TaskFormFooter = ({
       </Button>
 
       <Box component="div" className="flex">
-        {scheduleValue === "Custom" && (
+        {values.schedule === "Custom" && (
           <>
             <Box className="mx-5 self-center">
               {taskListChoice === defaultTaskListChoice && (
@@ -59,7 +51,7 @@ const TaskFormFooter = ({
                   name="taskList"
                   placeholder="list name"
                   as={TextField}
-                  value={tasklistChoiceValue}
+                  value={values.taskList}
                 />
               )}
             </Box>

@@ -10,44 +10,44 @@ interface Props {
   taskData: ITaskData[];
   timeIntervalData: ITimeInterval[];
   dayIntervalData: IDayInterval[];
-  onTaskDataChange: (values: ITaskData[]) => void;
-  onTaskListDataChange: (values: ITaskListData[]) => void;
-  onTimeIntervalDataChange: (values: ITimeInterval[]) => void;
-  onDayIntervalDataChange: (values: IDayInterval[]) => void;
+  taskId?: string | undefined;
+  onUpdateTaskData: (values: ITaskData[]) => void;
+  onUpdateTaskListData: (values: ITaskListData[]) => void;
+  onUpdateTimeIntervalData: (values: ITimeInterval[]) => void;
+  onUpdateDayIntervalData: (values: IDayInterval[]) => void;
+  onAlertOpen: () => void;
   open: boolean;
   onClose: () => void;
-  onAlertOpen: () => void;
-  taskId?: string | undefined;
 }
 
 const TaskFormDialog = ({
-  taskListData,
-  onTaskListDataChange,
+  taskId,
   taskData,
-  onTaskDataChange,
-  timeIntervalData,
-  onTimeIntervalDataChange,
-  dayIntervalData,
-  onDayIntervalDataChange,
+  taskListData,
   open,
   onClose,
   onAlertOpen,
-  taskId,
+  timeIntervalData,
+  dayIntervalData,
+  onUpdateTaskListData,
+  onUpdateTaskData,
+  onUpdateTimeIntervalData,
+  onUpdateDayIntervalData,
 }: Props) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
       <TaskForm
-        taskListData={taskListData}
-        taskData={taskData}
-        onAlertOpen={onAlertOpen}
-        onClose={onClose}
         taskId={taskId}
-        onTaskListDataChange={onTaskListDataChange}
-        onTaskDataChange={onTaskDataChange}
+        taskData={taskData}
+        onClose={onClose}
+        onAlertOpen={onAlertOpen}
+        taskListData={taskListData}
         timeIntervalData={timeIntervalData}
-        onTimeIntervalDataChange={onTimeIntervalDataChange}
         dayIntervalData={dayIntervalData}
-        onDayIntervalDataChange={onDayIntervalDataChange}
+        onUpdateTaskList={onUpdateTaskListData}
+        onUpdateTaskData={onUpdateTaskData}
+        onTimeIntervalDataChange={onUpdateTimeIntervalData}
+        onDayIntervalDataChange={onUpdateDayIntervalData}
       />
     </Dialog>
   );

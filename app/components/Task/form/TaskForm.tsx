@@ -106,31 +106,31 @@ const isObjectEqual = (
 };
 
 interface Props {
-  taskListData: ITaskListData[];
-  onTaskDataChange: (values: ITaskData[]) => void;
-  taskData: ITaskData[];
-  onTaskListDataChange: (values: ITaskListData[]) => void;
-  timeIntervalData: ITimeInterval[];
-  onTimeIntervalDataChange: (values: ITimeInterval[]) => void;
-  dayIntervalData: IDayInterval[];
-  onDayIntervalDataChange: (values: IDayInterval[]) => void;
   taskId?: string | undefined;
+  taskData: ITaskData[];
   onClose: () => void;
   onAlertOpen: () => void;
+  taskListData: ITaskListData[];
+  timeIntervalData: ITimeInterval[];
+  dayIntervalData: IDayInterval[];
+  onUpdateTaskData: (values: ITaskData[]) => void;
+  onUpdateTaskList: (values: ITaskListData[]) => void;
+  onTimeIntervalDataChange: (values: ITimeInterval[]) => void;
+  onDayIntervalDataChange: (values: IDayInterval[]) => void;
 }
 
 const TaskForm = ({
-  taskListData,
-  onTaskListDataChange,
-  taskData,
-  onTaskDataChange,
-  timeIntervalData,
-  onTimeIntervalDataChange,
-  dayIntervalData,
-  onDayIntervalDataChange,
   taskId,
+  taskData,
   onClose,
   onAlertOpen,
+  taskListData,
+  timeIntervalData,
+  dayIntervalData,
+  onUpdateTaskList,
+  onUpdateTaskData,
+  onTimeIntervalDataChange,
+  onDayIntervalDataChange,
 }: Props) => {
   const taskList = taskListData.map((item) => item.taskListName);
   const taskToFind = taskData.find((task) => task.taskId === taskId);
@@ -294,7 +294,7 @@ const TaskForm = ({
         taskListName: values.taskList,
       };
       taskListId = newTaskList.taskListId;
-      onTaskListDataChange([...taskListData, newTaskList]);
+      onUpdateTaskList([...taskListData, newTaskList]);
     }
     // existing task list
     else {
@@ -407,7 +407,7 @@ const TaskForm = ({
           }
         }
 
-        onTaskDataChange([...taskData]);
+        onUpdateTaskData([...taskData]);
       } else {
         console.error(`Task with taskId ${newTask.taskId} not found.`);
       }
@@ -415,7 +415,7 @@ const TaskForm = ({
     } else {
       onTimeIntervalDataChange([...timeIntervalData, newTimeInterval]);
       onDayIntervalDataChange([...dayIntervalData, newDayInterval]);
-      onTaskDataChange([...taskData, newTask]);
+      onUpdateTaskData([...taskData, newTask]);
     }
   };
 

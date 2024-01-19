@@ -6,23 +6,18 @@ import {
   Typography,
 } from "../../../lib/MUI-core-v4";
 
-const createMessage = "Task has been successfully created";
-const editMessage = "Task has been successfully edited";
-
 interface Props {
+  message: string;
   open: boolean;
   onClose: () => void;
-  taskId: string | undefined;
 }
 
-const PopupAlert = ({ open, onClose, taskId }: Props) => {
+const PopupAlert = ({ message, open, onClose }: Props) => {
   return (
     <Box>
       <Dialog open={open} onClose={onClose} maxWidth="lg">
         <DialogContent>
-          <Typography>
-            {taskId === undefined ? createMessage : editMessage}
-          </Typography>
+          <Typography>{message}</Typography>
         </DialogContent>
         <Box>
           <Box component="div" className="flex justify-end mx-5 mb-3">

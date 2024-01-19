@@ -8,9 +8,9 @@ import TaskItem from "./common/TaskItem";
 interface Props {
   taskListData: ITaskListData[];
   displayedTaskData: ITaskData[];
-  onEditTaskData: (taskId: string) => void;
   onTaskCheckboxChange: (taskId: string) => void;
-  onTaskDataChange: (value: ITaskData[]) => void;
+  onEditTaskData: (taskId: string) => void;
+  onDeleteTaskData: (taskId: string) => void;
 }
 
 const TaskList = ({
@@ -18,21 +18,18 @@ const TaskList = ({
   displayedTaskData,
   onEditTaskData,
   onTaskCheckboxChange,
-  onTaskDataChange,
+  onDeleteTaskData,
 }: Props) => {
   const [open, setOpen] = useState(false);
-  const [confirmValue, setConfirmValue] = useState("");
+  const [id, setId] = useState("");
 
   const handleDelete = (taskId: string): void => {
-    setConfirmValue(taskId);
+    setId(taskId);
     setOpen(true);
   };
 
   const handleAlertConfirm = (): void => {
-    const updatedTaskData = displayedTaskData.filter(
-      (task) => task.taskId !== confirmValue
-    );
-    onTaskDataChange(updatedTaskData);
+    onDeleteTaskData(id);
     setOpen(false);
   };
 

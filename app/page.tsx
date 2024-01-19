@@ -41,35 +41,32 @@ export default function Home() {
     task.taskName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // handle forms
   const handleTaskFormOpen = (): void => {
     setTaskFormOpen(true);
   };
   const handleTaskFormClose = (): void => {
     setTaskFormOpen(false);
   };
-  const handleSelectTask = (value: string | undefined): void => {
-    setTaskId(value);
+
+  // handle tasks
+  const handleAddTaskData = (): void => {
+    setTaskId(undefined);
+    handleTaskFormOpen();
   };
 
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-    setSortValue("Search");
-  };
-
-  const handleTaskDataChange = (value: ITaskData[]) => {
+  const handleUpdateTaskData = (value: ITaskData[]) => {
     setTaskData(value);
   };
 
-  const handleTaskListDataChange = (value: ITaskListData[]) => {
-    setTaskListData(value);
+  const handleEditTaskData = (taskId: string): void => {
+    setTaskId(taskId);
+    handleTaskFormOpen();
   };
 
-  const handleTimeIntervalDataChange = (value: ITimeInterval[]) => {
-    setTimeIntervalData(value);
-  };
-
-  const handleDayIntervalDataChange = (value: IDayInterval[]) => {
-    setDayIntervalData(value);
+  const handleDeleteTaskData = (taskId: string): void => {
+    const updatedTaskData = taskData.filter((task) => task.taskId !== taskId);
+    handleUpdateTaskData(updatedTaskData);
   };
 
   const getSortedTaskData = () => {
@@ -100,71 +97,69 @@ export default function Home() {
       }
       return task;
     });
-    handleTaskDataChange(updatedTaskData);
-  };
-
-  const handleSortChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newValue: string
-  ): void => {
-    setSortValue(newValue);
-  };
-
-  const handleEditTaskData = (taskId: string): void => {
-    handleSelectTask(taskId);
-    handleTaskFormOpen();
+    handleUpdateTaskData(updatedTaskData);
   };
 
   return (
     <main>
       <Box>
         <TaskHeader
-          onSearchOpen={() => setSearchOpen(true)}
-          onTaskFormOpen={() => {
-            handleSelectTask(undefined);
-            handleTaskFormOpen();
-          }}
+          onSearchOpen={(): void => setSearchOpen(true)}
+          onTaskFormOpen={handleAddTaskData}
           sortValue={sortValue}
-          onSortChange={handleSortChange}
+          onSortChange={(
+            event: React.MouseEvent<HTMLElement>,
+            newSortValue: string
+          ): void => {
+            setSortValue(newSortValue);
+          }}
         />
         <TaskList
           taskListData={taskListData}
           displayedTaskData={getSortedTaskData()}
-          onTaskDataChange={handleTaskDataChange}
           onTaskCheckboxChange={handleTaskCheckboxChange}
           onEditTaskData={handleEditTaskData}
+          onDeleteTaskData={handleDeleteTaskData}
         />
-        <AddTaskMiniButton
-          onClick={() => {
-            handleTaskFormOpen();
-            handleSelectTask(undefined);
-          }}
-        />
+        <AddTaskMiniButton onClick={handleAddTaskData} />
       </Box>
 
       <SearchFormDialog
         open={searchOpen}
-        onClose={() => setSearchOpen(false)}
-        onSearch={handleSearch}
+        onClose={(): void => setSearchOpen(false)}
+        onSearch={(searchTerm: string): void => {
+          setSortValue("Search");
+          setSearchTerm(searchTerm);
+        }}
       />
       <TaskFormDialog
         taskListData={taskListData}
-        onTaskListDataChange={handleTaskListDataChange}
+        onUpdateTaskListData={(taskListValue: ITaskListData[]): void =>
+          setTaskListData(taskListValue)
+        }
         taskData={taskData}
-        onTaskDataChange={handleTaskDataChange}
+        onUpdateTaskData={handleUpdateTaskData}
         timeIntervalData={timeIntervalData}
-        onTimeIntervalDataChange={handleTimeIntervalDataChange}
+        onUpdateTimeIntervalData={(timeIntervalValue: ITimeInterval[]): void =>
+          setTimeIntervalData(timeIntervalValue)
+        }
         dayIntervalData={dayIntervalData}
-        onDayIntervalDataChange={handleDayIntervalDataChange}
+        onUpdateDayIntervalData={(dayIntervalValue: IDayInterval[]): void =>
+          setDayIntervalData(dayIntervalValue)
+        }
         open={taskFormOpen}
-        onAlertOpen={() => setAlertOpen(true)}
+        onAlertOpen={(): void => setAlertOpen(true)}
         onClose={handleTaskFormClose}
         taskId={taskId}
       />
       <PopupAlert
         open={alertOpen}
-        onClose={() => setAlertOpen(false)}
-        taskId={taskId}
+        onClose={(): void => setAlertOpen(false)}
+        message={
+          taskId === undefined
+            ? "Task has been successfully created"
+            : "Task has been successfully edited"
+        }
       />
     </main>
   );

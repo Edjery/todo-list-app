@@ -46,19 +46,9 @@ export default function Home() {
   );
 
   // handle tasks
-  const handleTaskDataAdd = (): void => {
+  const handleTaskDataCreate = (): void => {
     setTaskId(undefined);
     setFormOpen(true);
-  };
-
-  const handleTaskDataEdit = (taskId: string): void => {
-    setTaskId(taskId);
-    setFormOpen(true);
-  };
-
-  const handleTaskDataDelete = (taskId: string): void => {
-    const updatedTaskData = taskData.filter((task) => task.taskId !== taskId);
-    setTaskData(updatedTaskData);
   };
 
   const handleTaskStatusUpdate = (taskId: string): void => {
@@ -456,7 +446,7 @@ export default function Home() {
       <Box>
         <TaskHeader
           onSearchOpen={(): void => setSearchOpen(true)}
-          onTaskFormOpen={handleTaskDataAdd}
+          onFormOpen={handleTaskDataCreate}
           sortValue={sortValue}
           onSortChange={(
             event: React.MouseEvent<HTMLElement>,
@@ -469,10 +459,18 @@ export default function Home() {
           taskListData={taskListData}
           taskDataToDisplay={getTaskDataSorted()}
           onTaskStatusUpdate={handleTaskStatusUpdate}
-          onTaskDataEdit={handleTaskDataEdit}
-          onTaskDataDelete={handleTaskDataDelete}
+          onTaskDataEdit={(taskId: string): void => {
+            setTaskId(taskId);
+            setFormOpen(true);
+          }}
+          onTaskDataDelete={(taskId: string): void => {
+            const updatedTaskData = taskData.filter(
+              (task) => task.taskId !== taskId
+            );
+            setTaskData(updatedTaskData);
+          }}
         />
-        <AddTaskMiniButton onClick={handleTaskDataAdd} />
+        <AddTaskMiniButton onClick={handleTaskDataCreate} />
       </Box>
 
       <SearchFormDialog

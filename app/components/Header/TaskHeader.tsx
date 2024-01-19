@@ -5,7 +5,7 @@ import SortButton from "./common/SortButton";
 
 interface Props {
   onSearchOpen: () => void;
-  onTaskFormOpen: () => void;
+  onFormOpen: () => void;
   sortValue: string;
   onSortChange: (
     event: React.MouseEvent<HTMLElement>,
@@ -15,7 +15,7 @@ interface Props {
 
 const TaskHeader = ({
   onSearchOpen,
-  onTaskFormOpen,
+  onFormOpen,
   sortValue,
   onSortChange,
 }: Props) => {
@@ -25,7 +25,7 @@ const TaskHeader = ({
         <SearchButton onClick={onSearchOpen} />
 
         <Box className="mx-32">
-          <AddTaskButton onClick={onTaskFormOpen} />
+          <AddTaskButton onClick={onFormOpen} />
         </Box>
 
         <SortButton sortValue={sortValue} onSortChange={onSortChange} />

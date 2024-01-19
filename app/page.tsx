@@ -55,10 +55,6 @@ export default function Home() {
     handleTaskFormOpen();
   };
 
-  const handleUpdateTaskData = (value: ITaskData[]) => {
-    setTaskData(value);
-  };
-
   const handleEditTaskData = (taskId: string): void => {
     setTaskId(taskId);
     handleTaskFormOpen();
@@ -66,7 +62,7 @@ export default function Home() {
 
   const handleDeleteTaskData = (taskId: string): void => {
     const updatedTaskData = taskData.filter((task) => task.taskId !== taskId);
-    handleUpdateTaskData(updatedTaskData);
+    setTaskData(updatedTaskData);
   };
 
   const getSortedTaskData = () => {
@@ -97,7 +93,7 @@ export default function Home() {
       }
       return task;
     });
-    handleUpdateTaskData(updatedTaskData);
+    setTaskData(updatedTaskData);
   };
 
   return (
@@ -127,25 +123,27 @@ export default function Home() {
       <SearchFormDialog
         open={searchOpen}
         onClose={(): void => setSearchOpen(false)}
-        onSearch={(searchTerm: string): void => {
+        onSearch={(newSearchTerm: string): void => {
           setSortValue("Search");
-          setSearchTerm(searchTerm);
+          setSearchTerm(newSearchTerm);
         }}
       />
       <TaskFormDialog
         taskListData={taskListData}
-        onUpdateTaskListData={(taskListValue: ITaskListData[]): void =>
-          setTaskListData(taskListValue)
+        onUpdateTaskListData={(newTaskListValue: ITaskListData[]): void =>
+          setTaskListData(newTaskListValue)
         }
         taskData={taskData}
-        onUpdateTaskData={handleUpdateTaskData}
-        timeIntervalData={timeIntervalData}
-        onUpdateTimeIntervalData={(timeIntervalValue: ITimeInterval[]): void =>
-          setTimeIntervalData(timeIntervalValue)
+        onUpdateTaskData={(newTaskDataValue: ITaskData[]): void =>
+          setTaskData(newTaskDataValue)
         }
+        timeIntervalData={timeIntervalData}
+        onUpdateTimeIntervalData={(
+          newTimeIntervalValue: ITimeInterval[]
+        ): void => setTimeIntervalData(newTimeIntervalValue)}
         dayIntervalData={dayIntervalData}
-        onUpdateDayIntervalData={(dayIntervalValue: IDayInterval[]): void =>
-          setDayIntervalData(dayIntervalValue)
+        onUpdateDayIntervalData={(newDayIntervalValue: IDayInterval[]): void =>
+          setDayIntervalData(newDayIntervalValue)
         }
         open={taskFormOpen}
         onAlertOpen={(): void => setAlertOpen(true)}

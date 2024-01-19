@@ -29,20 +29,18 @@ const TaskList = ({
         <Box key={taskList.taskListId} className="mt-5">
           <Typography variant="h6">{taskList.taskListName}</Typography>
           {taskDataToDisplay.map((task) => (
-            <Box>
+            <Box key={task.taskId}>
               {taskList.taskListId === task.taskListId ? (
-                <Box key={task.taskId}>
-                  <TaskItem
-                    taskName={task.taskName}
-                    status={task.status}
-                    onCheckboxChange={() => onTaskStatusUpdate(task.taskId)}
-                    onEdit={() => onTaskDataEdit(task.taskId)}
-                    onDelete={() => {
-                      setId(task.taskId);
-                      setOpen(true);
-                    }}
-                  />
-                </Box>
+                <TaskItem
+                  taskName={task.taskName}
+                  status={task.status}
+                  onCheckboxChange={() => onTaskStatusUpdate(task.taskId)}
+                  onEdit={() => onTaskDataEdit(task.taskId)}
+                  onDelete={() => {
+                    setId(task.taskId);
+                    setOpen(true);
+                  }}
+                />
               ) : null}
             </Box>
           ))}

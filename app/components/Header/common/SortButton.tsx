@@ -1,18 +1,18 @@
+import { sortList } from "@/app/data/dataMatrix";
 import SortIcon from "@material-ui/icons/Sort";
 import { useState } from "react";
 import { Box, IconButton, Menu } from "../../../lib/MUI-core-v4";
 import { ToggleButton, ToggleButtonGroup } from "../../../lib/MUI-lab-v4";
 
 interface Props {
-  filterList: string[];
-  filterValue: string;
-  onFilterChange: (
+  sortValue: string;
+  onSortChange: (
     event: React.MouseEvent<HTMLElement>,
     newValue: string
   ) => void;
 }
 
-const FilterButton = ({ filterList, filterValue, onFilterChange }: Props) => {
+const SortButton = ({ sortValue, onSortChange }: Props) => {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
 
   const onModalOpen = (event: React.MouseEvent<HTMLButtonElement>): void => {
@@ -37,22 +37,22 @@ const FilterButton = ({ filterList, filterValue, onFilterChange }: Props) => {
         onClose={onModalClose}
       >
         <ToggleButtonGroup
-          value={filterValue}
+          value={sortValue}
           exclusive
           onChange={(
             event: React.MouseEvent<HTMLElement>,
             newValue: string
           ) => {
-            onFilterChange(event, newValue);
+            onSortChange(event, newValue);
             if (newValue == null) {
-              onFilterChange(event, filterList[0]);
+              onSortChange(event, sortList[0]);
             }
           }}
           orientation="vertical"
         >
-          {filterList.map((filterListItemName) => (
-            <ToggleButton key={filterListItemName} value={filterListItemName}>
-              {filterListItemName}
+          {sortList.map((sortListItemName) => (
+            <ToggleButton key={sortListItemName} value={sortListItemName}>
+              {sortListItemName}
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
@@ -61,4 +61,4 @@ const FilterButton = ({ filterList, filterValue, onFilterChange }: Props) => {
   );
 };
 
-export default FilterButton;
+export default SortButton;

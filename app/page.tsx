@@ -8,24 +8,24 @@ import TaskHeader from "./components/Header/TaskHeader";
 import TaskFormDialog from "./components/Task/TaskFormDialog";
 import TaskList from "./components/Task/TaskList";
 import PopupAlert from "./components/Task/common/PopupAlert";
-import dummyTaskData, { ITaskData } from "./data/task-data";
-import dummyTaskListData, { ITaskListData } from "./data/taskList-data";
-import dummyDayInterval, { IDayInterval } from "./data/dayInterval-data";
-import dummyTimeInterval, { ITimeInterval } from "./data/timeInterval-data";
+import { sortList } from "./data/dataMatrix";
+import dummyDayInterval, { IDayInterval } from "./data/dayIntervalData";
+import dummyTaskData, { ITaskData } from "./data/taskData";
+import dummyTaskListData, { ITaskListData } from "./data/taskListData";
+import dummyTimeInterval, { ITimeInterval } from "./data/timeIntervalData";
 
 const taskListDataset = dummyTaskListData;
 const taskDataset = dummyTaskData;
 const timeIntervaDataset = dummyTimeInterval;
 const dayIntervalDataset = dummyDayInterval;
-const filterList = ["Default", "Date Created", "Name"];
-const defualtFilterList = filterList[0];
+const defualtSortList = sortList[0];
 
 export default function Home() {
   const [taskListData, setTaskListData] = useState(taskListDataset);
   const [taskData, setTaskData] = useState(taskDataset);
   const [timeIntervalData, setTimeIntervalData] = useState(timeIntervaDataset);
   const [dayIntervalData, setDayIntervalData] = useState(dayIntervalDataset);
-  const [filterValue, setFilterValue] = useState<string>(defualtFilterList);
+  const [sortValue, setSortValue] = useState<string>(defualtSortList);
 
   console.log("taskData:", taskData);
   console.log("timeIntervalData:", timeIntervalData);
@@ -36,6 +36,10 @@ export default function Home() {
   const [alertOpen, setAlertOpen] = useState(false);
   const [taskId, setTaskId] = useState<string | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const searchedTaskData = taskData.filter((task) =>
+    task.taskName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handleTaskFormOpen = (): void => {
     setTaskFormOpen(true);
@@ -49,18 +53,7 @@ export default function Home() {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    setFilterValue("Search");
-  };
-
-  const searchedTaskData = taskData.filter((task) =>
-    task.taskName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleFilterChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newValue: string
-  ): void => {
-    setFilterValue(newValue);
+    setSortValue("Search");
   };
 
   const handleTaskDataChange = (value: ITaskData[]) => {
@@ -79,27 +72,67 @@ export default function Home() {
     setDayIntervalData(value);
   };
 
+  const getSortedTaskData = () => {
+    const sortedTaskData = searchedTaskData.sort((a, b) => {
+      if (sortValue === "Default") {
+        const dateA = new Date(a.dateCreated);
+        const dateB = new Date(b.dateCreated);
+        return dateB.getTime() - dateA.getTime();
+      } else if (sortValue === "Date Created") {
+        const dateA = new Date(a.dateCreated);
+        const dateB = new Date(b.dateCreated);
+        return dateA.getTime() - dateB.getTime();
+      } else if (sortValue === "Name") {
+        return a.taskName.localeCompare(b.taskName);
+      }
+      return 0;
+    });
+    return sortedTaskData;
+  };
+
+  const handleTaskCheckboxChange = (taskId: string): void => {
+    const updatedTaskData = taskData.map((task) => {
+      if (task.taskId === taskId) {
+        return {
+          ...task,
+          status: !task.status,
+        };
+      }
+      return task;
+    });
+    handleTaskDataChange(updatedTaskData);
+  };
+
+  const handleSortChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: string
+  ): void => {
+    setSortValue(newValue);
+  };
+
+  const handleEditTaskData = (taskId: string): void => {
+    handleSelectTask(taskId);
+    handleTaskFormOpen();
+  };
+
   return (
     <main>
       <Box>
         <TaskHeader
-          onTaskFormOpen={() => {
-            handleTaskFormOpen();
-            handleSelectTask(undefined);
-          }}
           onSearchOpen={() => setSearchOpen(true)}
-          filterList={filterList}
-          filterValue={filterValue}
-          onFilterChange={handleFilterChange}
+          onTaskFormOpen={() => {
+            handleSelectTask(undefined);
+            handleTaskFormOpen();
+          }}
+          sortValue={sortValue}
+          onSortChange={handleSortChange}
         />
         <TaskList
-          searchedTaskData={searchedTaskData}
-          filterValue={filterValue}
           taskListData={taskListData}
-          taskData={taskData}
+          displayedTaskData={getSortedTaskData()}
           onTaskDataChange={handleTaskDataChange}
-          onTaskFormOpen={handleTaskFormOpen}
-          onSelectTask={handleSelectTask}
+          onTaskCheckboxChange={handleTaskCheckboxChange}
+          onEditTaskData={handleEditTaskData}
         />
         <AddTaskMiniButton
           onClick={() => {

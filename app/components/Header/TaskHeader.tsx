@@ -1,25 +1,23 @@
 import { Box, Container, Toolbar } from "../../lib/MUI-core-v4";
 import AddTaskButton from "./common/AddTaskButton";
-import FilterButton from "./common/FilterButton";
 import SearchButton from "./common/SearchButton";
+import SortButton from "./common/SortButton";
 
 interface Props {
-  onTaskFormOpen: () => void;
   onSearchOpen: () => void;
-  filterList: string[];
-  filterValue: string;
-  onFilterChange: (
+  onTaskFormOpen: () => void;
+  sortValue: string;
+  onSortChange: (
     event: React.MouseEvent<HTMLElement>,
     newValue: string
   ) => void;
 }
 
 const TaskHeader = ({
-  onTaskFormOpen,
   onSearchOpen,
-  filterList,
-  filterValue,
-  onFilterChange,
+  onTaskFormOpen,
+  sortValue,
+  onSortChange,
 }: Props) => {
   return (
     <Container maxWidth="md">
@@ -30,11 +28,7 @@ const TaskHeader = ({
           <AddTaskButton onClick={onTaskFormOpen} />
         </Box>
 
-        <FilterButton
-          filterList={filterList}
-          filterValue={filterValue}
-          onFilterChange={onFilterChange}
-        />
+        <SortButton sortValue={sortValue} onSortChange={onSortChange} />
       </Toolbar>
     </Container>
   );

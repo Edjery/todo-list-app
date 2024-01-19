@@ -10,7 +10,7 @@ import EditIcon from "@material-ui/icons/Edit";
 interface Props {
   taskName: string;
   status: boolean;
-  onButtonClick: () => void;
+  onEdit: () => void;
   onDelete: () => void;
   onCheckboxChange: () => void;
 }
@@ -18,7 +18,7 @@ interface Props {
 const TaskItem = ({
   taskName,
   status,
-  onButtonClick,
+  onEdit,
   onDelete,
   onCheckboxChange,
 }: Props) => {
@@ -37,7 +37,7 @@ const TaskItem = ({
       />
 
       <Box>
-        <IconButton className="justify-self-end" onClick={onButtonClick}>
+        <IconButton className="justify-self-end" onClick={onEdit}>
           <EditIcon />
         </IconButton>
         <IconButton className="justify-self-end" onClick={onDelete}>

@@ -1,4 +1,4 @@
-import todolistDummy from "@/app/data/todolist-dummy";
+import todolistDummy from "@/app/data/todolistDummy";
 import {
   Box,
   Button,

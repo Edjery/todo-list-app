@@ -1,7 +1,7 @@
-import { IDayInterval } from "@/app/data/dayInterval-data";
-import { ITaskData } from "@/app/data/task-data";
-import { ITaskListData } from "@/app/data/taskList-data";
-import { ITimeInterval } from "@/app/data/timeInterval-data";
+import { IDayInterval } from "@/app/data/dayIntervalData";
+import { ITaskData } from "@/app/data/taskData";
+import { ITaskListData } from "@/app/data/taskListData";
+import { ITimeInterval } from "@/app/data/timeIntervalData";
 import {
   Box,
   Container,

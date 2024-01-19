@@ -10,17 +10,17 @@ import EditIcon from "@material-ui/icons/Edit";
 interface Props {
   taskName: string;
   status: boolean;
+  onCheckboxChange: () => void;
   onEdit: () => void;
   onDelete: () => void;
-  onCheckboxChange: () => void;
 }
 
 const TaskItem = ({
   taskName,
   status,
+  onCheckboxChange,
   onEdit,
   onDelete,
-  onCheckboxChange,
 }: Props) => {
   return (
     <Box component="div" className="flex justify-between">

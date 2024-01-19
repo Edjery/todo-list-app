@@ -23,31 +23,26 @@ const TaskList = ({
   const [open, setOpen] = useState(false);
   const [id, setId] = useState("");
 
-  const handleDelete = (taskId: string): void => {
-    setId(taskId);
-    setOpen(true);
-  };
-
-  const handleAlertConfirm = (): void => {
-    onTaskDataDelete(id);
-    setOpen(false);
-  };
-
   return (
     <Container maxWidth="sm" className="mt-10">
       {taskListData.map((taskList) => (
         <Box key={taskList.taskListId} className="mt-5">
           <Typography variant="h6">{taskList.taskListName}</Typography>
           {taskDataToDisplay.map((task) => (
-            <Box key={task.taskId}>
+            <Box>
               {taskList.taskListId === task.taskListId ? (
-                <TaskItem
-                  taskName={task.taskName}
-                  status={task.status}
-                  onEdit={() => onTaskDataEdit(task.taskId)}
-                  onDelete={() => handleDelete(task.taskId)}
-                  onCheckboxChange={() => onTaskStatusUpdate(task.taskId)}
-                />
+                <Box key={task.taskId}>
+                  <TaskItem
+                    taskName={task.taskName}
+                    status={task.status}
+                    onCheckboxChange={() => onTaskStatusUpdate(task.taskId)}
+                    onEdit={() => onTaskDataEdit(task.taskId)}
+                    onDelete={() => {
+                      setId(task.taskId);
+                      setOpen(true);
+                    }}
+                  />
+                </Box>
               ) : null}
             </Box>
           ))}
@@ -57,7 +52,10 @@ const TaskList = ({
       <ConfirmationAlert
         open={open}
         onClose={() => setOpen(false)}
-        onConfirm={handleAlertConfirm}
+        onConfirm={(): void => {
+          onTaskDataDelete(id);
+          setOpen(false);
+        }}
       />
     </Container>
   );

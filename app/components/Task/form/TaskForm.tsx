@@ -62,7 +62,7 @@ const TaskForm = ({ onAlertOpen, initForm, onFormSubmit, onClose }: Props) => {
                 />
               </Box>
 
-              <TaskButtonGroup setFieldValue={setFieldValue} values={values} />
+              <TaskButtonGroup values={values} setFieldValue={setFieldValue} />
 
               {/* <Box className="mt-2">
                 <Field

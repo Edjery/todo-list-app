@@ -1,22 +1,11 @@
+import { days, intervals } from "@/app/data/dataMatrix";
 import { Box, TextField } from "@/app/lib/MUI-core-v4";
 import { ToggleButton, ToggleButtonGroup } from "@/app/lib/MUI-lab-v4";
-import dayjs from "dayjs";
 import { FormikErrors } from "formik";
 import React, { ChangeEvent, useState } from "react";
 import ToggleableButton from "../../common/ToggleableButton";
 import { ITaskForm } from "../form/ITaskForm";
 import TaskCheckboxGroup from "./TaskCheckboxGroup";
-
-const intervals = ["Daily", "Weekly", "Monthly", "Yearly"];
-const days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
 
 const handleButtonChanges = (
   newValue: string[],
@@ -36,15 +25,15 @@ const handleButtonChanges = (
 };
 
 interface Props {
+  values: ITaskForm;
   setFieldValue: (
     field: string,
     value: any,
     shouldValidate?: boolean | undefined
   ) => Promise<void | FormikErrors<ITaskForm>>;
-  values: ITaskForm;
 }
 
-const TaskButtonGroup = ({ setFieldValue, values }: Props) => {
+const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
   const [input, setInput] = useState<string>(values.dueDate);
 
   return (

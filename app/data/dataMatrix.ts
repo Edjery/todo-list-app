@@ -34,3 +34,14 @@ export const defaultInitialValues: ITaskForm = {
   tags: "",
   edit: false,
 };
+
+export const intervals = ["Daily", "Weekly", "Monthly", "Yearly"];
+export const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];

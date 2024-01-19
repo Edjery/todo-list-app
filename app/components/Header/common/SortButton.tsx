@@ -15,17 +15,13 @@ interface Props {
 const SortButton = ({ sortValue, onSortChange }: Props) => {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
 
-  const onModalOpen = (event: React.MouseEvent<HTMLButtonElement>): void => {
-    setAnchor(event.currentTarget);
-  };
-
-  const onModalClose = (): void => {
-    setAnchor(null);
-  };
-
   return (
     <Box>
-      <IconButton onClick={onModalOpen}>
+      <IconButton
+        onClick={(event: React.MouseEvent<HTMLButtonElement>): void =>
+          setAnchor(event.currentTarget)
+        }
+      >
         <SortIcon />
       </IconButton>
 
@@ -34,7 +30,7 @@ const SortButton = ({ sortValue, onSortChange }: Props) => {
         anchorEl={anchor}
         keepMounted
         open={Boolean(anchor)}
-        onClose={onModalClose}
+        onClose={() => setAnchor(null)}
       >
         <ToggleButtonGroup
           value={sortValue}

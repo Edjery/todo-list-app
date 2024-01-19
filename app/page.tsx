@@ -42,24 +42,17 @@ export default function Home() {
   );
 
   // handle forms
-  const handleTaskFormOpen = (): void => {
-    setTaskFormOpen(true);
-  };
-  const handleTaskFormClose = (): void => {
-    setTaskFormOpen(false);
-  };
-
   const handleTaskFormSubmit = (): void => {};
 
   // handle tasks
   const handleTaskDataAdd = (): void => {
     setTaskId(undefined);
-    handleTaskFormOpen();
+    setTaskFormOpen(true);
   };
 
   const handleTaskDataEdit = (taskId: string): void => {
     setTaskId(taskId);
-    handleTaskFormOpen();
+    setTaskFormOpen(true);
   };
 
   const handleTaskDataDelete = (taskId: string): void => {
@@ -134,7 +127,7 @@ export default function Home() {
         taskId={taskId}
         taskData={taskData}
         open={taskFormOpen}
-        onClose={handleTaskFormClose}
+        onClose={(): void => setTaskFormOpen(false)}
         onAlertOpen={(): void => setAlertOpen(true)}
         taskListData={taskListData}
         timeIntervalData={timeIntervalData}

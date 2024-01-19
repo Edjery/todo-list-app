@@ -29,16 +29,16 @@ export default function Home() {
   const [taskData, setTaskData] = useState(dummyTaskData);
   const [timeIntervalData, setTimeIntervalData] = useState(dummyTimeInterval);
   const [dayIntervalData, setDayIntervalData] = useState(dummyDayInterval);
-  const [sortValue, setSortValue] = useState<string>(sortList[0]);
 
   console.log("taskData:", taskData);
   console.log("timeIntervalData:", timeIntervalData);
   console.log("dayIntervalData:", dayIntervalData);
 
-  const [formOpen, setFormOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [alertOpen, setAlertOpen] = useState(false);
   const [taskId, setTaskId] = useState<string | undefined>(undefined);
+  const [formOpen, setFormOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [sortValue, setSortValue] = useState<string>(sortList[0]);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const searchedTaskData = taskData.filter((task) =>
@@ -61,6 +61,19 @@ export default function Home() {
     setTaskData(updatedTaskData);
   };
 
+  const handleTaskStatusUpdate = (taskId: string): void => {
+    const updatedTaskData = taskData.map((task) => {
+      if (task.taskId === taskId) {
+        return {
+          ...task,
+          status: !task.status,
+        };
+      }
+      return task;
+    });
+    setTaskData(updatedTaskData);
+  };
+
   const getTaskDataSorted = () => {
     const sortedTaskData = searchedTaskData.sort((a, b) => {
       if (sortValue === "Default") {
@@ -77,19 +90,6 @@ export default function Home() {
       return 0;
     });
     return sortedTaskData;
-  };
-
-  const handleTaskStatusUpdate = (taskId: string): void => {
-    const updatedTaskData = taskData.map((task) => {
-      if (task.taskId === taskId) {
-        return {
-          ...task,
-          status: !task.status,
-        };
-      }
-      return task;
-    });
-    setTaskData(updatedTaskData);
   };
 
   // handle forms

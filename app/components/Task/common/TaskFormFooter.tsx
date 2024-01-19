@@ -1,4 +1,5 @@
 import { defaultTaskListChoice } from "@/app/data/dataMatrix";
+import { ITaskListData } from "@/app/data/taskListData";
 import {
   Box,
   Button,
@@ -8,12 +9,12 @@ import {
   TextField,
 } from "@/app/lib/MUI-core-v4";
 import { Field, FormikErrors } from "formik";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { ITaskForm } from "../form/ITaskForm";
 
 interface Props {
   values: ITaskForm;
-  taskList: string[];
+  taskListData: ITaskListData[];
   setFieldValue: (
     field: string,
     value: any,
@@ -25,14 +26,11 @@ interface Props {
 
 const TaskFormFooter = ({
   values,
-  taskList,
+  taskListData,
   setFieldValue,
   isSubmitting,
   onClose,
 }: Props) => {
-  const [taskListChoice, setTaskListChoice] = useState<string | unknown>(
-    values.taskList
-  );
   const submitButton = values.edit ? "Edit Task" : "Add Task";
 
   return (
@@ -45,7 +43,7 @@ const TaskFormFooter = ({
         {values.schedule === "Custom" && (
           <>
             <Box className="mx-5 self-center">
-              {taskListChoice === defaultTaskListChoice && (
+              {values.taskList === defaultTaskListChoice && (
                 <Field
                   type="text"
                   name="taskList"
@@ -59,10 +57,9 @@ const TaskFormFooter = ({
             <Box className="mr-5">
               <FormControl variant="outlined">
                 <Select
-                  value={taskListChoice}
+                  value={values.taskList}
                   onChange={(event: ChangeEvent<{ value: unknown }>) => {
                     const { value } = event.target;
-                    setTaskListChoice(value);
                     setFieldValue("taskList", value);
                   }}
                 >
@@ -72,9 +69,12 @@ const TaskFormFooter = ({
                   >
                     {defaultTaskListChoice}
                   </MenuItem>
-                  {taskList.map((taskListItem) => (
-                    <MenuItem key={taskListItem} value={taskListItem}>
-                      {taskListItem}
+                  {taskListData.map((taskListItem) => (
+                    <MenuItem
+                      key={taskListItem.taskListId}
+                      value={taskListItem.taskListName}
+                    >
+                      {taskListItem.taskListName}
                     </MenuItem>
                   ))}
                 </Select>

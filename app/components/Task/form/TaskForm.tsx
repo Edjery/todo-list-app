@@ -24,7 +24,6 @@ interface Props {
 
 const TaskForm = ({ onAlertOpen, initForm, onFormSubmit, onClose }: Props) => {
   const { initialValues, taskListData } = initForm();
-  const taskList = taskListData.map((item) => item.taskListName);
 
   return (
     <Formik
@@ -78,7 +77,7 @@ const TaskForm = ({ onAlertOpen, initForm, onFormSubmit, onClose }: Props) => {
 
           <TaskFormFooter
             values={values}
-            taskList={taskList}
+            taskListData={taskListData}
             setFieldValue={setFieldValue}
             isSubmitting={isSubmitting}
             onClose={onClose}

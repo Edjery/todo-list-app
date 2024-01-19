@@ -7,18 +7,18 @@ import TaskItem from "./common/TaskItem";
 
 interface Props {
   taskListData: ITaskListData[];
-  displayedTaskData: ITaskData[];
-  onTaskCheckboxChange: (taskId: string) => void;
-  onEditTaskData: (taskId: string) => void;
-  onDeleteTaskData: (taskId: string) => void;
+  taskDataToDisplay: ITaskData[];
+  onTaskStatusUpdate: (taskId: string) => void;
+  onTaskDataEdit: (taskId: string) => void;
+  onTaskDataDelete: (taskId: string) => void;
 }
 
 const TaskList = ({
   taskListData,
-  displayedTaskData,
-  onEditTaskData,
-  onTaskCheckboxChange,
-  onDeleteTaskData,
+  taskDataToDisplay,
+  onTaskStatusUpdate,
+  onTaskDataEdit,
+  onTaskDataDelete,
 }: Props) => {
   const [open, setOpen] = useState(false);
   const [id, setId] = useState("");
@@ -29,7 +29,7 @@ const TaskList = ({
   };
 
   const handleAlertConfirm = (): void => {
-    onDeleteTaskData(id);
+    onTaskDataDelete(id);
     setOpen(false);
   };
 
@@ -38,15 +38,15 @@ const TaskList = ({
       {taskListData.map((taskList) => (
         <Box key={taskList.taskListId} className="mt-5">
           <Typography variant="h6">{taskList.taskListName}</Typography>
-          {displayedTaskData.map((task) => (
+          {taskDataToDisplay.map((task) => (
             <Box key={task.taskId}>
               {taskList.taskListId === task.taskListId ? (
                 <TaskItem
                   taskName={task.taskName}
                   status={task.status}
-                  onEdit={() => onEditTaskData(task.taskId)}
+                  onEdit={() => onTaskDataEdit(task.taskId)}
                   onDelete={() => handleDelete(task.taskId)}
-                  onCheckboxChange={() => onTaskCheckboxChange(task.taskId)}
+                  onCheckboxChange={() => onTaskStatusUpdate(task.taskId)}
                 />
               ) : null}
             </Box>

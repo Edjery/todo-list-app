@@ -49,23 +49,25 @@ export default function Home() {
     setTaskFormOpen(false);
   };
 
+  const handleTaskFormSubmit = (): void => {};
+
   // handle tasks
-  const handleAddTaskData = (): void => {
+  const handleTaskDataAdd = (): void => {
     setTaskId(undefined);
     handleTaskFormOpen();
   };
 
-  const handleEditTaskData = (taskId: string): void => {
+  const handleTaskDataEdit = (taskId: string): void => {
     setTaskId(taskId);
     handleTaskFormOpen();
   };
 
-  const handleDeleteTaskData = (taskId: string): void => {
+  const handleTaskDataDelete = (taskId: string): void => {
     const updatedTaskData = taskData.filter((task) => task.taskId !== taskId);
     setTaskData(updatedTaskData);
   };
 
-  const getSortedTaskData = () => {
+  const getTaskDataSorted = () => {
     const sortedTaskData = searchedTaskData.sort((a, b) => {
       if (sortValue === "Default") {
         const dateA = new Date(a.dateCreated);
@@ -83,7 +85,7 @@ export default function Home() {
     return sortedTaskData;
   };
 
-  const handleTaskCheckboxChange = (taskId: string): void => {
+  const handleTaskStatusUpdate = (taskId: string): void => {
     const updatedTaskData = taskData.map((task) => {
       if (task.taskId === taskId) {
         return {
@@ -101,7 +103,7 @@ export default function Home() {
       <Box>
         <TaskHeader
           onSearchOpen={(): void => setSearchOpen(true)}
-          onTaskFormOpen={handleAddTaskData}
+          onTaskFormOpen={handleTaskDataAdd}
           sortValue={sortValue}
           onSortChange={(
             event: React.MouseEvent<HTMLElement>,
@@ -112,12 +114,12 @@ export default function Home() {
         />
         <TaskList
           taskListData={taskListData}
-          displayedTaskData={getSortedTaskData()}
-          onTaskCheckboxChange={handleTaskCheckboxChange}
-          onEditTaskData={handleEditTaskData}
-          onDeleteTaskData={handleDeleteTaskData}
+          taskDataToDisplay={getTaskDataSorted()}
+          onTaskStatusUpdate={handleTaskStatusUpdate}
+          onTaskDataEdit={handleTaskDataEdit}
+          onTaskDataDelete={handleTaskDataDelete}
         />
-        <AddTaskMiniButton onClick={handleAddTaskData} />
+        <AddTaskMiniButton onClick={handleTaskDataAdd} />
       </Box>
 
       <SearchFormDialog
@@ -129,26 +131,26 @@ export default function Home() {
         }}
       />
       <TaskFormDialog
+        taskId={taskId}
+        taskData={taskData}
+        open={taskFormOpen}
+        onClose={handleTaskFormClose}
+        onAlertOpen={(): void => setAlertOpen(true)}
         taskListData={taskListData}
-        onUpdateTaskListData={(newTaskListValue: ITaskListData[]): void =>
+        timeIntervalData={timeIntervalData}
+        dayIntervalData={dayIntervalData}
+        onTaskListDataUpdate={(newTaskListValue: ITaskListData[]): void =>
           setTaskListData(newTaskListValue)
         }
-        taskData={taskData}
-        onUpdateTaskData={(newTaskDataValue: ITaskData[]): void =>
+        onTaskDataUpdate={(newTaskDataValue: ITaskData[]): void =>
           setTaskData(newTaskDataValue)
         }
-        timeIntervalData={timeIntervalData}
-        onUpdateTimeIntervalData={(
+        onTimeIntervalDataUpdate={(
           newTimeIntervalValue: ITimeInterval[]
         ): void => setTimeIntervalData(newTimeIntervalValue)}
-        dayIntervalData={dayIntervalData}
-        onUpdateDayIntervalData={(newDayIntervalValue: IDayInterval[]): void =>
+        onDayIntervalDataUpdate={(newDayIntervalValue: IDayInterval[]): void =>
           setDayIntervalData(newDayIntervalValue)
         }
-        open={taskFormOpen}
-        onAlertOpen={(): void => setAlertOpen(true)}
-        onClose={handleTaskFormClose}
-        taskId={taskId}
       />
       <PopupAlert
         open={alertOpen}

@@ -113,10 +113,10 @@ interface Props {
   taskListData: ITaskListData[];
   timeIntervalData: ITimeInterval[];
   dayIntervalData: IDayInterval[];
-  onUpdateTaskData: (values: ITaskData[]) => void;
-  onUpdateTaskList: (values: ITaskListData[]) => void;
-  onTimeIntervalDataChange: (values: ITimeInterval[]) => void;
-  onDayIntervalDataChange: (values: IDayInterval[]) => void;
+  onTaskDataUpdate: (values: ITaskData[]) => void;
+  onTaskListDataUpdate: (values: ITaskListData[]) => void;
+  onTimeIntervalDataUpdate: (values: ITimeInterval[]) => void;
+  onDayIntervalDataUpdate: (values: IDayInterval[]) => void;
 }
 
 const TaskForm = ({
@@ -127,10 +127,10 @@ const TaskForm = ({
   taskListData,
   timeIntervalData,
   dayIntervalData,
-  onUpdateTaskList,
-  onUpdateTaskData,
-  onTimeIntervalDataChange,
-  onDayIntervalDataChange,
+  onTaskListDataUpdate,
+  onTaskDataUpdate,
+  onTimeIntervalDataUpdate,
+  onDayIntervalDataUpdate,
 }: Props) => {
   const taskList = taskListData.map((item) => item.taskListName);
   const taskToFind = taskData.find((task) => task.taskId === taskId);
@@ -294,7 +294,7 @@ const TaskForm = ({
         taskListName: values.taskList,
       };
       taskListId = newTaskList.taskListId;
-      onUpdateTaskList([...taskListData, newTaskList]);
+      onTaskListDataUpdate([...taskListData, newTaskList]);
     }
     // existing task list
     else {
@@ -364,7 +364,7 @@ const TaskForm = ({
             newTimeInterval.timeIntervalId =
               timeIntervalData[timeIntervalIndex].timeIntervalId;
             timeIntervalData[timeIntervalIndex] = newTimeInterval;
-            onTimeIntervalDataChange([...timeIntervalData]);
+            onTimeIntervalDataUpdate([...timeIntervalData]);
           }
           if (dayIntervalIndex !== -1) {
             // connecting day interval to task
@@ -372,17 +372,17 @@ const TaskForm = ({
             newDayInterval.dayIntervalValId =
               dayIntervalData[dayIntervalIndex].dayIntervalValId;
             dayIntervalData[dayIntervalIndex] = newDayInterval;
-            onDayIntervalDataChange([...dayIntervalData]);
+            onDayIntervalDataUpdate([...dayIntervalData]);
           }
 
           // creating intervals
           if (timeIntervalIndex === -1) {
             newTimeInterval.taskId = newTask.taskId;
-            onTimeIntervalDataChange([...timeIntervalData, newTimeInterval]);
+            onTimeIntervalDataUpdate([...timeIntervalData, newTimeInterval]);
           }
           if (dayIntervalIndex === -1) {
             newDayInterval.taskId = newTask.taskId;
-            onDayIntervalDataChange([...dayIntervalData, newDayInterval]);
+            onDayIntervalDataUpdate([...dayIntervalData, newDayInterval]);
           }
 
           // removing date
@@ -395,7 +395,7 @@ const TaskForm = ({
             const removeTimeInterval = timeIntervalData.filter(
               (item) => item.taskId !== newTimeInterval.taskId
             );
-            onTimeIntervalDataChange([...removeTimeInterval]);
+            onTimeIntervalDataUpdate([...removeTimeInterval]);
           }
           if (dayIntervalIndex !== -1) {
             // setting day interval
@@ -403,19 +403,19 @@ const TaskForm = ({
             const removeDayInterval = dayIntervalData.filter(
               (item) => item.taskId !== newDayInterval.taskId
             );
-            onDayIntervalDataChange([...removeDayInterval]);
+            onDayIntervalDataUpdate([...removeDayInterval]);
           }
         }
 
-        onUpdateTaskData([...taskData]);
+        onTaskDataUpdate([...taskData]);
       } else {
         console.error(`Task with taskId ${newTask.taskId} not found.`);
       }
       // new task
     } else {
-      onTimeIntervalDataChange([...timeIntervalData, newTimeInterval]);
-      onDayIntervalDataChange([...dayIntervalData, newDayInterval]);
-      onUpdateTaskData([...taskData, newTask]);
+      onTimeIntervalDataUpdate([...timeIntervalData, newTimeInterval]);
+      onDayIntervalDataUpdate([...dayIntervalData, newDayInterval]);
+      onTaskDataUpdate([...taskData, newTask]);
     }
   };
 

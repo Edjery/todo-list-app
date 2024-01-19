@@ -11,10 +11,10 @@ interface Props {
   timeIntervalData: ITimeInterval[];
   dayIntervalData: IDayInterval[];
   taskId?: string | undefined;
-  onUpdateTaskData: (values: ITaskData[]) => void;
-  onUpdateTaskListData: (values: ITaskListData[]) => void;
-  onUpdateTimeIntervalData: (values: ITimeInterval[]) => void;
-  onUpdateDayIntervalData: (values: IDayInterval[]) => void;
+  onTaskDataUpdate: (values: ITaskData[]) => void;
+  onTaskListDataUpdate: (values: ITaskListData[]) => void;
+  onTimeIntervalDataUpdate: (values: ITimeInterval[]) => void;
+  onDayIntervalDataUpdate: (values: IDayInterval[]) => void;
   onAlertOpen: () => void;
   open: boolean;
   onClose: () => void;
@@ -23,16 +23,16 @@ interface Props {
 const TaskFormDialog = ({
   taskId,
   taskData,
-  taskListData,
   open,
   onClose,
   onAlertOpen,
+  taskListData,
   timeIntervalData,
   dayIntervalData,
-  onUpdateTaskListData,
-  onUpdateTaskData,
-  onUpdateTimeIntervalData,
-  onUpdateDayIntervalData,
+  onTaskListDataUpdate,
+  onTaskDataUpdate,
+  onTimeIntervalDataUpdate,
+  onDayIntervalDataUpdate,
 }: Props) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
@@ -44,10 +44,10 @@ const TaskFormDialog = ({
         taskListData={taskListData}
         timeIntervalData={timeIntervalData}
         dayIntervalData={dayIntervalData}
-        onUpdateTaskList={onUpdateTaskListData}
-        onUpdateTaskData={onUpdateTaskData}
-        onTimeIntervalDataChange={onUpdateTimeIntervalData}
-        onDayIntervalDataChange={onUpdateDayIntervalData}
+        onTaskListDataUpdate={onTaskListDataUpdate}
+        onTaskDataUpdate={onTaskDataUpdate}
+        onTimeIntervalDataUpdate={onTimeIntervalDataUpdate}
+        onDayIntervalDataUpdate={onDayIntervalDataUpdate}
       />
     </Dialog>
   );

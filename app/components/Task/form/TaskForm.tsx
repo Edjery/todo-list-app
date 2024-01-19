@@ -64,14 +64,14 @@ const TaskForm = ({ onAlertOpen, initForm, onFormSubmit, onClose }: Props) => {
 
               <TaskButtonGroup values={values} setFieldValue={setFieldValue} />
 
-              {/* <Box className="mt-2">
+              <Box className="mt-2">
                 <Field
                   name="tags"
                   placeholder="#Tags (Optional)"
                   as={TextareaAutosize}
                   className="size-full"
                 />
-              </Box> */}
+              </Box>
             </Container>
           </DialogContent>
 

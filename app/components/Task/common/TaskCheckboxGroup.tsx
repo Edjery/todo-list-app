@@ -41,8 +41,8 @@ const TaskCheckboxGroup = ({ value, list, onChange }: Props) => {
   return (
     <Box component="div" className="flex justify-center mt-3">
       {list.map((listItem) => (
-        <>
-          <FormControl key={listItem}>
+        <Box key={listItem}>
+          <FormControl>
             <FormControlLabel
               label={listItem}
               control={
@@ -56,7 +56,7 @@ const TaskCheckboxGroup = ({ value, list, onChange }: Props) => {
               }
             />
           </FormControl>
-        </>
+        </Box>
       ))}
     </Box>
   );

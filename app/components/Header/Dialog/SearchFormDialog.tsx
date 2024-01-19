@@ -2,8 +2,6 @@ import { Box, Button, Dialog, TextField } from "@/app/lib/MUI-core-v4";
 import searchSchema from "@/app/schemas/searchSchema";
 import { Field, Form, Formik } from "formik";
 
-const initialValues = { search: "" };
-
 interface Props {
   open: boolean;
   onClose: () => void;
@@ -14,10 +12,10 @@ const SearchFormDialog = ({ open, onClose, onSearch }: Props) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
       <Formik
-        initialValues={initialValues}
+        initialValues={{ search: "" }}
         validationSchema={searchSchema}
         onSubmit={(values) => {
-          console.log(values);
+          console.log("searching for:", values.search);
           onSearch(values.search);
           onClose();
         }}

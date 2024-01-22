@@ -18,7 +18,7 @@ const SortButton = ({ sortValue, onSortChange }: Props) => {
   return (
     <Box>
       <IconButton
-        onClick={(event: React.MouseEvent<HTMLButtonElement>): void =>
+        onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
           setAnchor(event.currentTarget)
         }
       >

@@ -43,13 +43,13 @@ const TaskFormFooter = ({
         {values.schedule === "Custom" && (
           <>
             <Box className="mx-5 self-center">
-              {values.taskList === defaultTaskListChoice && (
+              {values.taskListName === defaultTaskListChoice && (
                 <Field
                   type="text"
                   name="taskList"
                   placeholder="list name"
                   as={TextField}
-                  value={values.taskList}
+                  value={values.taskListName}
                 />
               )}
             </Box>
@@ -57,7 +57,7 @@ const TaskFormFooter = ({
             <Box className="mr-5">
               <FormControl variant="outlined">
                 <Select
-                  value={values.taskList}
+                  value={values.taskListName}
                   onChange={(event: ChangeEvent<{ value: unknown }>) => {
                     const { value } = event.target;
                     setFieldValue("taskList", value);

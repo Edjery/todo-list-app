@@ -6,16 +6,16 @@ import ConfirmationAlert from "./common/ConfirmationAlert";
 import TaskItem from "./common/TaskItem";
 
 interface Props {
-  taskListData: ITaskListData[];
-  taskDataToDisplay: ITaskData[];
+  list: ITaskListData[];
+  tasks: ITaskData[];
   onTaskStatusUpdate: (taskId: string) => void;
   onTaskDataEdit: (taskId: string) => void;
   onTaskDataDelete: (taskId: string) => void;
 }
 
 const TaskList = ({
-  taskListData,
-  taskDataToDisplay,
+  list,
+  tasks,
   onTaskStatusUpdate,
   onTaskDataEdit,
   onTaskDataDelete,
@@ -25,14 +25,14 @@ const TaskList = ({
 
   return (
     <Container maxWidth="sm" className="mt-10">
-      {taskListData.map((taskList) => (
-        <Box key={taskList.taskListId} className="mt-5">
-          <Typography variant="h6">{taskList.taskListName}</Typography>
-          {taskDataToDisplay.map((task) => (
+      {list.map((listName) => (
+        <Box key={listName.taskListId} className="mt-5">
+          <Typography variant="h6">{listName.taskListName}</Typography>
+          {tasks.map((task) => (
             <Box key={task.taskId}>
-              {taskList.taskListId === task.taskListId ? (
+              {listName.taskListId === task.taskListId ? (
                 <TaskItem
-                  taskName={task.taskName}
+                  name={task.taskName}
                   status={task.status}
                   onCheckboxChange={() => onTaskStatusUpdate(task.taskId)}
                   onEdit={() => onTaskDataEdit(task.taskId)}
@@ -50,7 +50,7 @@ const TaskList = ({
       <ConfirmationAlert
         open={open}
         onClose={() => setOpen(false)}
-        onConfirm={(): void => {
+        onConfirm={() => {
           onTaskDataDelete(id);
           setOpen(false);
         }}

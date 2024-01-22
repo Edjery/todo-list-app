@@ -3,16 +3,16 @@ export interface ITaskForm {
   taskDescription: string;
   schedule: string;
   dueDate: string;
-  timeInterval: {
+  timeIntervalData: {
     choice: string;
     status: boolean;
   }[];
-  dayInterval: {
+  dayIntervalData: {
     choice: string;
     status: boolean;
   }[];
   priority: boolean;
-  taskList: string;
+  taskListName: string;
   tags: string;
   edit: boolean;
 }

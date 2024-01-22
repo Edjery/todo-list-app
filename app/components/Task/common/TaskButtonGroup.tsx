@@ -69,23 +69,23 @@ const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
       {values.schedule === "Custom" && (
         <>
           <TaskCheckboxGroup
-            value={values.timeInterval}
+            value={values.timeIntervalData}
             list={intervals}
             onChange={(items) => {
               const newTimeInterval = handleButtonChanges(
                 items,
-                values.timeInterval
+                values.timeIntervalData
               );
               setFieldValue("timeInterval", newTimeInterval);
             }}
           />
           <TaskCheckboxGroup
-            value={values.dayInterval}
+            value={values.dayIntervalData}
             list={days}
             onChange={(items) => {
               const newDayInterval = handleButtonChanges(
                 items,
-                values.dayInterval
+                values.dayIntervalData
               );
               setFieldValue("dayInterval", newDayInterval);
             }}

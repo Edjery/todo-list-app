@@ -27,10 +27,10 @@ export const defaultInitialValues: ITaskForm = {
   taskDescription: "",
   schedule: defaultScheduleValue,
   dueDate: "",
-  timeInterval: defaultTimeInterval,
-  dayInterval: defualtDayInterval,
+  timeIntervalData: defaultTimeInterval,
+  dayIntervalData: defualtDayInterval,
   priority: defaultPriorityValue,
-  taskList: defaultTaskListChoice,
+  taskListName: defaultTaskListChoice,
   tags: "",
   edit: false,
 };

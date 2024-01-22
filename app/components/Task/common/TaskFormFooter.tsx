@@ -1,5 +1,5 @@
 import { defaultTaskListChoice } from "@/app/data/dataMatrix";
-import { ITaskListData } from "@/app/data/taskListData";
+import { ITaskList } from "@/app/data/taskListData";
 import {
   Box,
   Button,
@@ -9,12 +9,12 @@ import {
   TextField,
 } from "@/app/lib/MUI-core-v4";
 import { Field, FormikErrors } from "formik";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { ITaskForm } from "../form/ITaskForm";
 
 interface Props {
   values: ITaskForm;
-  taskListData: ITaskListData[];
+  taskListData: ITaskList[];
   setFieldValue: (
     field: string,
     value: any,
@@ -31,6 +31,9 @@ const TaskFormFooter = ({
   isSubmitting,
   onClose,
 }: Props) => {
+  const [taskListChoice, setTaskListChoice] = useState<string | unknown>(
+    values.taskListName
+  );
   const submitButton = values.edit ? "Edit Task" : "Add Task";
 
   return (
@@ -43,13 +46,12 @@ const TaskFormFooter = ({
         {values.schedule === "Custom" && (
           <>
             <Box className="mx-5 self-center">
-              {values.taskListName === defaultTaskListChoice && (
+              {taskListChoice === defaultTaskListChoice && (
                 <Field
                   type="text"
-                  name="taskList"
+                  name="taskListName"
                   placeholder="list name"
                   as={TextField}
-                  value={values.taskListName}
                 />
               )}
             </Box>
@@ -57,10 +59,10 @@ const TaskFormFooter = ({
             <Box className="mr-5">
               <FormControl variant="outlined">
                 <Select
-                  value={values.taskListName}
+                  value={taskListChoice}
                   onChange={(event: ChangeEvent<{ value: unknown }>) => {
-                    const { value } = event.target;
-                    setFieldValue("taskList", value);
+                    setFieldValue("taskListName", event.target.value);
+                    setTaskListChoice(event.target.value);
                   }}
                 >
                   <MenuItem
@@ -70,11 +72,8 @@ const TaskFormFooter = ({
                     {defaultTaskListChoice}
                   </MenuItem>
                   {taskListData.map((taskListItem) => (
-                    <MenuItem
-                      key={taskListItem.taskListId}
-                      value={taskListItem.taskListName}
-                    >
-                      {taskListItem.taskListName}
+                    <MenuItem key={taskListItem.id} value={taskListItem.name}>
+                      {taskListItem.name}
                     </MenuItem>
                   ))}
                 </Select>

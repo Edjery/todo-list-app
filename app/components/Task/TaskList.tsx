@@ -1,13 +1,13 @@
-import { ITaskData } from "@/app/data/taskData";
-import { ITaskListData } from "@/app/data/taskListData";
+import { ITask } from "@/app/data/taskData";
+import { ITaskList } from "@/app/data/taskListData";
 import { useState } from "react";
 import { Box, Container, Typography } from "../../lib/MUI-core-v4";
 import ConfirmationAlert from "./common/ConfirmationAlert";
 import TaskItem from "./common/TaskItem";
 
 interface Props {
-  list: ITaskListData[];
-  tasks: ITaskData[];
+  list: ITaskList[];
+  tasks: ITask[];
   onTaskStatusUpdate: (taskId: string) => void;
   onTaskDataEdit: (taskId: string) => void;
   onTaskDataDelete: (taskId: string) => void;
@@ -26,18 +26,18 @@ const TaskList = ({
   return (
     <Container maxWidth="sm" className="mt-10">
       {list.map((listName) => (
-        <Box key={listName.taskListId} className="mt-5">
-          <Typography variant="h6">{listName.taskListName}</Typography>
+        <Box key={listName.id} className="mt-5">
+          <Typography variant="h6">{listName.name}</Typography>
           {tasks.map((task) => (
-            <Box key={task.taskId}>
-              {listName.taskListId === task.taskListId ? (
+            <Box key={task.id}>
+              {listName.id === task.taskListId ? (
                 <TaskItem
-                  name={task.taskName}
+                  name={task.name}
                   status={task.status}
-                  onCheckboxChange={() => onTaskStatusUpdate(task.taskId)}
-                  onEdit={() => onTaskDataEdit(task.taskId)}
+                  onCheckboxChange={() => onTaskStatusUpdate(task.id)}
+                  onEdit={() => onTaskDataEdit(task.id)}
                   onDelete={() => {
-                    setId(task.taskId);
+                    setId(task.id);
                     setOpen(true);
                   }}
                 />

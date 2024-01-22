@@ -1,5 +1,5 @@
 export interface ITimeInterval {
-  timeIntervalId: string;
+  id: string;
   daily: boolean;
   weekly: boolean;
   monthly: boolean;
@@ -9,7 +9,7 @@ export interface ITimeInterval {
 
 const dummyTimeInterval: ITimeInterval[] = [
   {
-    timeIntervalId: "0",
+    id: "0",
     daily: true,
     weekly: false,
     monthly: false,

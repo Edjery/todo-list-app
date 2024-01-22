@@ -1,60 +1,60 @@
-export interface ITaskData {
-  taskId: string;
+export interface ITask {
+  id: string;
   dateCreated: string;
-  taskName: string;
-  taskDescription: string;
+  name: string;
+  description: string;
   dueDate: string;
   priority: boolean;
   status: boolean;
   taskListId: string;
 }
 
-const dummyTaskData: ITaskData[] = [
+const dummyTaskData: ITask[] = [
   {
-    taskId: "0",
+    id: "0",
     dateCreated: "2024-01-05",
-    taskName: "Check Email",
-    taskDescription: "check the response from aq.com",
+    name: "Check Email",
+    description: "check the response from aq.com",
     dueDate: "",
     priority: true,
     status: false,
     taskListId: "0",
   },
   {
-    taskId: "1",
+    id: "1",
     dateCreated: "2024-01-16",
-    taskName: "Check Message",
-    taskDescription: "check the response from tuplok",
+    name: "Check Message",
+    description: "check the response from tuplok",
     dueDate: "2024-01-16",
     priority: true,
     status: false,
     taskListId: "2",
   },
   {
-    taskId: "2",
+    id: "2",
     dateCreated: "2024-01-19T08:37:36",
-    taskName: "Wash dish",
-    taskDescription: "",
+    name: "Wash dish",
+    description: "",
     dueDate: "2024-01-16",
     priority: true,
     status: false,
     taskListId: "2",
   },
   {
-    taskId: "3",
+    id: "3",
     dateCreated: "2024-01-19T08:38:36",
-    taskName: "Cook soup",
-    taskDescription: "",
+    name: "Cook soup",
+    description: "",
     dueDate: "2024-01-16",
     priority: true,
     status: false,
     taskListId: "2",
   },
   {
-    taskId: "4",
+    id: "4",
     dateCreated: "2024-01-19T08:39:36",
-    taskName: "Back Massage at 4pm",
-    taskDescription: "",
+    name: "Back Massage at 4pm",
+    description: "",
     dueDate: "2024-01-16",
     priority: true,
     status: false,

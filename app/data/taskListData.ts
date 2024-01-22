@@ -1,20 +1,20 @@
-export interface ITaskListData {
-  taskListId: string;
-  taskListName: string;
+export interface ITaskList {
+  id: string;
+  name: string;
 }
 
-const dummyTaskListData: ITaskListData[] = [
+const dummyTaskListData: ITaskList[] = [
   {
-    taskListId: "0",
-    taskListName: "Today",
+    id: "0",
+    name: "Today",
   },
   {
-    taskListId: "1",
-    taskListName: "Tomorrow",
+    id: "1",
+    name: "Tomorrow",
   },
   {
-    taskListId: "2",
-    taskListName: "Unsorted",
+    id: "2",
+    name: "Unsorted",
   },
 ];
 

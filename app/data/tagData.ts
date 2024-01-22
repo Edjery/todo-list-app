@@ -1,12 +1,12 @@
-export interface ITagData {
-  tagId: string;
-  tagName: string;
+export interface ITag {
+  id: string;
+  name: string;
   taskId: string;
 }
 
-const dummyTagData: ITagData[] = [
-  { tagId: "0", tagName: "mail", taskId: "0" },
-  { tagId: "1", tagName: "message", taskId: "1" },
+const dummyTagData: ITag[] = [
+  { id: "0", name: "mail", taskId: "0" },
+  { id: "1", name: "message", taskId: "1" },
 ];
 
 export default dummyTagData;

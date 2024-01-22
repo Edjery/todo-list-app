@@ -1,4 +1,4 @@
-import { ITaskListData } from "@/app/data/taskListData";
+import { ITaskList } from "@/app/data/taskListData";
 import {
   Box,
   Container,
@@ -15,7 +15,7 @@ import { ITaskForm } from "./ITaskForm";
 interface Props {
   initForm: () => {
     initialValues: ITaskForm;
-    taskListData: ITaskListData[];
+    taskListData: ITaskList[];
   };
   onFormSubmit: (values: ITaskForm) => void;
   onAlertOpen: () => void;

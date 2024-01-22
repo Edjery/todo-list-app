@@ -1,5 +1,5 @@
 export interface IDayInterval {
-  dayIntervalValId: string;
+  id: string;
   sunday: boolean;
   monday: boolean;
   tuesday: boolean;
@@ -12,7 +12,7 @@ export interface IDayInterval {
 
 const dummyDayInterval: IDayInterval[] = [
   {
-    dayIntervalValId: "0",
+    id: "0",
     sunday: false,
     monday: true,
     tuesday: false,

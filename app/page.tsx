@@ -71,27 +71,27 @@ export default function Home() {
   };
 
   const handleTaskStatusUpdate = (taskId: string) => {
-    // new code
-    // Get the task
-    const taskToBeUpdated = taskService.get(taskId);
-    // Update the status
-    if (taskToBeUpdated) taskToBeUpdated.status = !taskToBeUpdated.status;
-    setTasks(taskService.getAll());
+    // // new code
+    // // Get the task
+    // const taskToBeUpdated = taskService.get(taskId);
+    // // Update the status
+    // if (taskToBeUpdated) taskToBeUpdated.status = !taskToBeUpdated.status;
+    // setTasks(taskService.getAll());
 
     // old code
-    // const updatedTaskData = tasks.map((data) => {
-    //   if (data.id === taskId) {
-    //     console.log("Successfully Updated the Task status!");
-    //     console.log("UpdatedTask:", data.name);
-    //     console.log("Status:", data.status);
-    //     return {
-    //       ...data,
-    //       status: !data.status,
-    //     };
-    //   }
-    //   return data;
-    // });
-    // setTasks(updatedTaskData);
+    const updatedTaskData = tasks.map((data) => {
+      if (data.id === taskId) {
+        console.log("Successfully Updated the Task status!");
+        console.log("UpdatedTask:", data.name);
+        console.log("Status:", data.status);
+        return {
+          ...data,
+          status: !data.status,
+        };
+      }
+      return data;
+    });
+    setTasks(updatedTaskData);
   };
 
   const getTaskDataSorted = () => {

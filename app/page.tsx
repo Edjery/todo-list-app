@@ -19,11 +19,12 @@ import {
   defualtDayInterval,
   sortList,
 } from "./data/dataMatrix";
-import { IDayInterval } from "./data/dayIntervalData";
-import { ITag } from "./data/tagData";
-import { ITask } from "./data/taskData";
-import { ITaskList } from "./data/taskListData";
-import { ITimeInterval } from "./data/timeIntervalData";
+
+import IDayInterval from "./services/Interfaces/IDayInterval";
+import ITag from "./services/Interfaces/ITag";
+import ITask from "./services/Interfaces/ITask";
+import ITaskList from "./services/Interfaces/ITaskList";
+import ITimeInterval from "./services/Interfaces/ITimeInterval";
 import dayIntervalService from "./services/DayIntervalService";
 import tagService from "./services/TagService";
 import taskListService from "./services/TaskListSevice";
@@ -34,7 +35,7 @@ export default function Home() {
   const [taskList, setTaskList] = useState<ITaskList[]>(
     taskListService.getAll()
   );
-  const [task, setTask] = useState<ITask[]>(taskService.getAll());
+  const [tasks, setTasks] = useState<ITask[]>(taskService.getAll());
   const [timeInterval, setTimeInterval] = useState<ITimeInterval[]>(
     timeIntervalService.getAll()
   );
@@ -43,8 +44,11 @@ export default function Home() {
   );
   const [tag, setTag] = useState<ITag[]>(tagService.getAll());
 
+  console.log("taskListService:", taskListService.taskLists);
+  console.log("taskListService.getAll():", taskListService.getAll());
+
   console.log("taskList:", taskList);
-  console.log("task:", task);
+  console.log("task:", tasks);
   console.log("timeInterval:", timeInterval);
   console.log("dayInterval:", dayInterval);
   console.log("tag:", tag);
@@ -56,7 +60,7 @@ export default function Home() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const filteredTaskData = task.filter((data) =>
+  const filteredTaskData = tasks.filter((data) =>
     data.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -67,16 +71,27 @@ export default function Home() {
   };
 
   const handleTaskStatusUpdate = (taskId: string) => {
-    const updatedTaskData = task.map((data) => {
-      if (data.id === taskId) {
-        return {
-          ...data,
-          status: !data.status,
-        };
-      }
-      return data;
-    });
-    setTask(updatedTaskData);
+    // new code
+    // Get the task
+    const taskToBeUpdated = taskService.get(taskId);
+    // Update the status
+    if (taskToBeUpdated) taskToBeUpdated.status = !taskToBeUpdated.status;
+    setTasks(taskService.getAll());
+
+    // old code
+    // const updatedTaskData = tasks.map((data) => {
+    //   if (data.id === taskId) {
+    //     console.log("Successfully Updated the Task status!");
+    //     console.log("UpdatedTask:", data.name);
+    //     console.log("Status:", data.status);
+    //     return {
+    //       ...data,
+    //       status: !data.status,
+    //     };
+    //   }
+    //   return data;
+    // });
+    // setTasks(updatedTaskData);
   };
 
   const getTaskDataSorted = () => {
@@ -100,13 +115,13 @@ export default function Home() {
   // handle forms
   const handleFormSubmit = (values: ITaskForm) => {
     const taskListNames = taskList.map((item) => item.name);
+    let taskListId = "";
     values.taskListName =
       values.schedule === "Today" ? "Today" : values.taskListName;
     values.taskListName =
       values.schedule === "Date" ? "Unsorted" : values.taskListName;
 
     // find task list
-    let taskListId = "";
     if (taskListNames.includes(values.taskListName)) {
       const findTaskList = taskList.find(
         (item) => item.name === values.taskListName
@@ -115,16 +130,12 @@ export default function Home() {
     }
     // create task list
     else {
-      const newTaskList: ITaskList = {
+      const newTaskList: ITaskList = taskListService.create({
         id: createId(),
         name: values.taskListName,
-      };
-      taskListId = newTaskList.id;
-      setTaskList([...taskList, newTaskList]);
-
-      taskListService.getAll();
-      taskListService.create(newTaskList);
+      });
       setTaskList(taskListService.getAll());
+      taskListId = newTaskList.id;
     }
 
     // generating new task row
@@ -170,81 +181,88 @@ export default function Home() {
     };
 
     // edit task
-    if (values.edit) {
-      const taskIndex = task.findIndex((item) => item.id === taskId);
-      const timeIntervalIndex = timeInterval.findIndex(
-        (item) => item.taskId === taskId
-      );
-      const dayIntervalIndex = dayInterval.findIndex(
-        (item) => item.taskId === taskId
-      );
-      const tagIndex = tag.findIndex((item) => item.taskId === taskId);
+    if (values.edit && taskId) {
+      // updating task id
+      const taskToBeUpdated = taskService.get(taskId);
+      if (taskToBeUpdated) {
+        newTask.id = taskToBeUpdated.id;
+      }
 
-      // updating task
-      newTask.id = task[taskIndex].id;
-      task[taskIndex] = newTask;
-      setTask([...task]);
+      const timeIntervalToBeUpdated = timeIntervalService.getByTaskId(taskId);
+      const dayIntervalToBeUpdated = dayIntervalService.getByTaskId(taskId);
       // creating/updating intervals if custom
       if (values.schedule === "Custom") {
-        // updating intervals
-        if (timeIntervalIndex !== -1) {
-          newTimeInterval.taskId = timeInterval[timeIntervalIndex].taskId;
-          newTimeInterval.id = timeInterval[timeIntervalIndex].id;
-          timeInterval[timeIntervalIndex] = newTimeInterval;
-          setTimeInterval([...timeInterval]);
-        }
-        if (dayIntervalIndex !== -1) {
-          newDayInterval.taskId = dayInterval[dayIntervalIndex].taskId;
-          newDayInterval.id = dayInterval[dayIntervalIndex].id;
-          dayInterval[dayIntervalIndex] = newDayInterval;
-          setDayInterval([...dayInterval]);
-        }
-
-        // creating intervals
-        if (timeIntervalIndex === -1) {
-          newTimeInterval.taskId = newTask.id;
-          setTimeInterval([...timeInterval, newTimeInterval]);
-        }
-        if (dayIntervalIndex === -1) {
-          newDayInterval.taskId = newTask.id;
-          setDayInterval([...dayInterval, newDayInterval]);
-        }
-
-        // restting date
+        // resetting date
         newTask.dueDate = defaultInitialValues.dueDate;
+        // updating intervals
+        if (timeIntervalToBeUpdated) {
+          newTimeInterval.id = timeIntervalToBeUpdated.id;
+          newTimeInterval.taskId = taskId;
+          timeIntervalService.update(
+            timeIntervalToBeUpdated.id,
+            newTimeInterval
+          );
+          setTimeInterval(timeIntervalService.getAll());
+        } else {
+          newTimeInterval.taskId = newTask.id;
+          timeIntervalService.create(newTimeInterval);
+          setTimeInterval(timeIntervalService.getAll());
+        }
+        if (dayIntervalToBeUpdated) {
+          newDayInterval.id = dayIntervalToBeUpdated.id;
+          newDayInterval.taskId = taskId;
+          dayIntervalService.update(dayIntervalToBeUpdated.id, newDayInterval);
+          setDayInterval(dayIntervalService.getAll());
+        } else {
+          newDayInterval.taskId = newTask.id;
+          dayIntervalService.create(newDayInterval);
+          setDayInterval(dayIntervalService.getAll());
+        }
       }
       // deleting intervals if not custom
       else if (values.schedule === "Today" || values.schedule === "Date") {
-        if (timeIntervalIndex !== -1) {
-          newTimeInterval.taskId = timeInterval[timeIntervalIndex].taskId;
-          const filteredTimeIntervalData = timeInterval.filter(
-            (item) => item.taskId !== newTimeInterval.taskId
-          );
-          setTimeInterval([...filteredTimeIntervalData]);
+        if (timeIntervalToBeUpdated) {
+          timeIntervalService.remove(timeIntervalToBeUpdated.id);
+          setTimeInterval(timeIntervalService.getAll());
         }
-        if (dayIntervalIndex !== -1) {
-          newDayInterval.taskId = dayInterval[dayIntervalIndex].taskId;
-          const filteredDayIntervalData = dayInterval.filter(
-            (item) => item.taskId !== newDayInterval.taskId
-          );
-          setDayInterval([...filteredDayIntervalData]);
+        if (dayIntervalToBeUpdated) {
+          dayIntervalService.remove(dayIntervalToBeUpdated.id);
+          setDayInterval(dayIntervalService.getAll());
         }
+        newTask.dueDate =
+          values.schedule === "Today"
+            ? defaultInitialValues.dueDate
+            : newTask.dueDate;
       }
+
       // updating tags
-      if (tagIndex !== -1) {
-        newTag.taskId = tag[tagIndex].taskId;
-        tag[tagIndex] = newTag;
-        setTag([...tag]);
+      const tagToBeUpdated = tagService.getByTaskId(taskId);
+      if (tagToBeUpdated) {
+        newTag.id = tagToBeUpdated.id;
+        newTag.taskId = tagToBeUpdated.taskId;
+        tagService.update(tagToBeUpdated.id, newTag);
+        setTag(tagService.getAll());
       } else {
-        setTag([...tag, newTag]);
+        tagService.create(newTag);
+        setTag(tagService.getAll());
       }
+
+      // updating task
+      taskService.update(taskId, newTask);
+      setTasks(taskService.getAll());
     }
     // create task
     else {
-      setTask([...task, newTask]);
-      setTimeInterval([...timeInterval, newTimeInterval]);
-      setDayInterval([...dayInterval, newDayInterval]);
-      setTag([...tag, newTag]);
+      setTasks([...tasks, taskService.create(newTask)]);
+      setTimeInterval([
+        ...timeInterval,
+        timeIntervalService.create(newTimeInterval),
+      ]);
+      setDayInterval([
+        ...dayInterval,
+        dayIntervalService.create(newDayInterval),
+      ]);
+      setTag([...tag, tagService.create(newTag)]);
     }
   };
 
@@ -303,10 +321,7 @@ export default function Home() {
     return true;
   };
 
-  const initForm = (): {
-    initialValues: ITaskForm;
-    taskListData: ITaskList[];
-  } => {
+  const initForm = (): ITaskForm => {
     const initialValues: ITaskForm = {
       taskName: defaultInitialValues.taskName,
       taskDescription: defaultInitialValues.taskDescription,
@@ -319,55 +334,45 @@ export default function Home() {
       tags: defaultInitialValues.tags,
       edit: defaultInitialValues.edit,
     };
-    const ifTaskExist = task.find((data) => data.id === taskId);
 
-    if (ifTaskExist) {
-      const {
-        name: taskName,
-        description: taskDescription,
-        dueDate,
-        priority,
-        taskListId,
-      } = ifTaskExist;
-      const currentTaskList = taskList.find((list) => list.id === taskListId);
-      const currentTimeInterval = timeInterval.find(
-        (data) => data.taskId === taskId
-      );
-      const currentDayInterval = dayInterval.find(
-        (data) => data.taskId === taskId
-      );
-      const currentTagData = tag.find((data) => data.taskId === taskId);
+    const taskExist = taskId ? taskService.get(taskId) : undefined;
+    if (taskExist && taskId) {
+      const { name, description, dueDate, priority, taskListId } = taskExist;
+      const initialTaskList = taskListService.get(taskListId);
+      const initialTimeInterval = timeIntervalService.getByTaskId(taskId);
+      const initialDayInterval = dayIntervalService.getByTaskId(taskId);
+      const initialTagData = tagService.getByTaskId(taskId);
 
-      initialValues.taskName = taskName;
-      initialValues.taskDescription = taskDescription;
+      initialValues.taskName = name;
+      initialValues.taskDescription = description;
       initialValues.dueDate = dueDate;
       initialValues.timeIntervalData = [
         {
           choice: "Daily",
           status:
-            currentTimeInterval?.daily !== undefined
-              ? currentTimeInterval?.daily
+            initialTimeInterval?.daily !== undefined
+              ? initialTimeInterval?.daily
               : false,
         },
         {
           choice: "Weekly",
           status:
-            currentTimeInterval?.weekly !== undefined
-              ? currentTimeInterval?.weekly
+            initialTimeInterval?.weekly !== undefined
+              ? initialTimeInterval?.weekly
               : false,
         },
         {
           choice: "Monthly",
           status:
-            currentTimeInterval?.monthly !== undefined
-              ? currentTimeInterval?.monthly
+            initialTimeInterval?.monthly !== undefined
+              ? initialTimeInterval?.monthly
               : false,
         },
         {
           choice: "Yearly",
           status:
-            currentTimeInterval?.yearly !== undefined
-              ? currentTimeInterval?.yearly
+            initialTimeInterval?.yearly !== undefined
+              ? initialTimeInterval?.yearly
               : false,
         },
       ];
@@ -375,57 +380,57 @@ export default function Home() {
         {
           choice: "Sunday",
           status:
-            currentDayInterval?.sunday !== undefined
-              ? currentDayInterval?.sunday
+            initialDayInterval?.sunday !== undefined
+              ? initialDayInterval?.sunday
               : false,
         },
         {
           choice: "Monday",
           status:
-            currentDayInterval?.monday !== undefined
-              ? currentDayInterval?.monday
+            initialDayInterval?.monday !== undefined
+              ? initialDayInterval?.monday
               : false,
         },
         {
           choice: "Tuesday",
           status:
-            currentDayInterval?.tuesday !== undefined
-              ? currentDayInterval?.tuesday
+            initialDayInterval?.tuesday !== undefined
+              ? initialDayInterval?.tuesday
               : false,
         },
         {
           choice: "Wednesday",
           status:
-            currentDayInterval?.wednesday !== undefined
-              ? currentDayInterval?.wednesday
+            initialDayInterval?.wednesday !== undefined
+              ? initialDayInterval?.wednesday
               : false,
         },
         {
           choice: "Thursday",
           status:
-            currentDayInterval?.thursday !== undefined
-              ? currentDayInterval?.thursday
+            initialDayInterval?.thursday !== undefined
+              ? initialDayInterval?.thursday
               : false,
         },
         {
           choice: "Friday",
           status:
-            currentDayInterval?.friday !== undefined
-              ? currentDayInterval?.friday
+            initialDayInterval?.friday !== undefined
+              ? initialDayInterval?.friday
               : false,
         },
         {
           choice: "Saturday",
           status:
-            currentDayInterval?.saturday !== undefined
-              ? currentDayInterval?.saturday
+            initialDayInterval?.saturday !== undefined
+              ? initialDayInterval?.saturday
               : false,
         },
       ];
       initialValues.priority = priority;
       initialValues.taskListName =
-        currentTaskList?.name || defaultTaskListChoice;
-      initialValues.tags = currentTagData?.name || defaultInitialValues.tags;
+        initialTaskList?.name || defaultTaskListChoice;
+      initialValues.tags = initialTagData?.name || defaultInitialValues.tags;
       initialValues.edit = true;
 
       // setting initial schedule
@@ -464,7 +469,7 @@ export default function Home() {
       initialValues.tags = defaultInitialValues.tags;
       initialValues.edit = defaultInitialValues.edit;
     }
-    return { initialValues, taskListData: taskList };
+    return initialValues;
   };
 
   return (
@@ -490,8 +495,8 @@ export default function Home() {
             setFormOpen(true);
           }}
           onTaskDataDelete={(taskId: string) => {
-            const updatedTaskData = task.filter((data) => data.id !== taskId);
-            setTask(updatedTaskData);
+            const updatedTaskData = tasks.filter((data) => data.id !== taskId);
+            setTasks(updatedTaskData);
           }}
         />
         <AddTaskMiniButton onClick={handleTaskDataCreate} />

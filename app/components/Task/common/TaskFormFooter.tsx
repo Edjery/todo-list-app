@@ -1,5 +1,4 @@
 import { defaultTaskListChoice } from "@/app/data/dataMatrix";
-import { ITaskList } from "@/app/data/taskListData";
 import {
   Box,
   Button,
@@ -8,13 +7,13 @@ import {
   Select,
   TextField,
 } from "@/app/lib/MUI-core-v4";
+import taskListService from "@/app/services/TaskListSevice";
 import { Field, FormikErrors } from "formik";
 import { ChangeEvent, useState } from "react";
 import { ITaskForm } from "../form/ITaskForm";
 
 interface Props {
   values: ITaskForm;
-  taskListData: ITaskList[];
   setFieldValue: (
     field: string,
     value: any,
@@ -26,11 +25,11 @@ interface Props {
 
 const TaskFormFooter = ({
   values,
-  taskListData,
   setFieldValue,
   isSubmitting,
   onClose,
 }: Props) => {
+  const taskList = taskListService.getAll();
   const [taskListChoice, setTaskListChoice] = useState<string | unknown>(
     values.taskListName
   );
@@ -71,7 +70,7 @@ const TaskFormFooter = ({
                   >
                     {defaultTaskListChoice}
                   </MenuItem>
-                  {taskListData.map((taskListItem) => (
+                  {taskList.map((taskListItem) => (
                     <MenuItem key={taskListItem.id} value={taskListItem.name}>
                       {taskListItem.name}
                     </MenuItem>

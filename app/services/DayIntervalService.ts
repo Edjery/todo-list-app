@@ -1,4 +1,4 @@
-import { IDayInterval } from "../data/dayIntervalData";
+import IDayInterval from "./Interfaces/IDayInterval";
 
 class DayIntervalService {
   dayIntervals: IDayInterval[];
@@ -26,6 +26,12 @@ class DayIntervalService {
   get(dayIntervalId: string): IDayInterval | undefined {
     return this.dayIntervals.find(
       (dayInterval) => dayInterval.id === dayIntervalId
+    );
+  }
+
+  getByTaskId(taskId: string): IDayInterval | undefined {
+    return this.dayIntervals.find(
+      (dayInterval) => dayInterval.taskId === taskId
     );
   }
 

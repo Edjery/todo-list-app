@@ -16,7 +16,7 @@ interface Props {
 }
 
 const TaskItem = ({
-  name: name,
+  name,
   status,
   onCheckboxChange,
   onEdit,

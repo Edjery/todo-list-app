@@ -1,4 +1,4 @@
-import { ITask } from "../data/taskData";
+import ITask from "./Interfaces/ITask";
 
 class TaskService {
   tasks: ITask[];

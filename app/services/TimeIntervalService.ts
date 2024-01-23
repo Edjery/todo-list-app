@@ -1,4 +1,4 @@
-import { ITimeInterval } from "../data/timeIntervalData";
+import ITimeInterval from "./Interfaces/ITimeInterval";
 
 class TimeIntervalService {
   timeIntervals: ITimeInterval[];
@@ -23,6 +23,12 @@ class TimeIntervalService {
   get(timeIntervalId: string): ITimeInterval | undefined {
     return this.timeIntervals.find(
       (timeInterval) => timeInterval.id === timeIntervalId
+    );
+  }
+
+  getByTaskId(taskId: string): ITimeInterval | undefined {
+    return this.timeIntervals.find(
+      (timeInterval) => timeInterval.taskId === taskId
     );
   }
 

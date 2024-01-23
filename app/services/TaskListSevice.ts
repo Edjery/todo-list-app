@@ -1,4 +1,4 @@
-import { ITaskList } from "../data/taskListData";
+import ITaskList from "./Interfaces/ITaskList";
 
 class TaskListService {
   taskLists: ITaskList[];

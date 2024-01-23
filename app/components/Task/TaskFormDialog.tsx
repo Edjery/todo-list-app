@@ -1,14 +1,12 @@
-import { ITaskList } from "@/app/data/taskListData";
 import { Dialog } from "@/app/lib/MUI-core-v4";
+import ITaskList from "@/app/services/Interfaces/ITaskList";
 import { ITaskForm } from "./form/ITaskForm";
 import TaskForm from "./form/TaskForm";
 
 interface Props {
   open: boolean;
-  initForm: () => {
-    initialValues: ITaskForm;
-    taskListData: ITaskList[];
-  };
+  initForm: () => ITaskForm;
+
   onFormSubmit: (values: ITaskForm) => void;
   onAlertOpen: () => void;
   onClose: () => void;

@@ -1,5 +1,5 @@
-import { ITask } from "@/app/data/taskData";
-import { ITaskList } from "@/app/data/taskListData";
+import ITask from "@/app/services/Interfaces/ITask";
+import ITaskList from "@/app/services/Interfaces/ITaskList";
 import { useState } from "react";
 import { Box, Container, Typography } from "../../lib/MUI-core-v4";
 import ConfirmationAlert from "./common/ConfirmationAlert";

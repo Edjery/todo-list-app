@@ -1,4 +1,3 @@
-import { ITaskList } from "@/app/data/taskListData";
 import {
   Box,
   Container,
@@ -13,17 +12,14 @@ import TaskFormFooter from "../common/TaskFormFooter";
 import { ITaskForm } from "./ITaskForm";
 
 interface Props {
-  initForm: () => {
-    initialValues: ITaskForm;
-    taskListData: ITaskList[];
-  };
+  initForm: () => ITaskForm;
   onFormSubmit: (values: ITaskForm) => void;
   onAlertOpen: () => void;
   onClose: () => void;
 }
 
 const TaskForm = ({ onAlertOpen, initForm, onFormSubmit, onClose }: Props) => {
-  const { initialValues, taskListData } = initForm();
+  const initialValues = initForm();
 
   return (
     <Formik
@@ -77,7 +73,6 @@ const TaskForm = ({ onAlertOpen, initForm, onFormSubmit, onClose }: Props) => {
 
           <TaskFormFooter
             values={values}
-            taskListData={taskListData}
             setFieldValue={setFieldValue}
             isSubmitting={isSubmitting}
             onClose={onClose}

@@ -1,4 +1,4 @@
-import { ITag } from "../data/tagData";
+import ITag from "./Interfaces/ITag";
 
 class TagService {
   tags: ITag[];
@@ -16,6 +16,10 @@ class TagService {
 
   get(tagId: string): ITag | undefined {
     return this.tags.find((tag) => tag.id === tagId);
+  }
+
+  getByTaskId(taskId: string): ITag | undefined {
+    return this.tags.find((tag) => tag.taskId === taskId);
   }
 
   create(newTag: ITag): ITag {

@@ -62,30 +62,6 @@ export default function Home() {
     setFormOpen(true);
   };
 
-  const handleTaskStatusUpdate = (taskId: string) => {
-    // // new code
-    // // Get the task
-    // const taskToBeUpdated = taskService.get(taskId);
-    // // Update the status
-    // if (taskToBeUpdated) taskToBeUpdated.status = !taskToBeUpdated.status;
-    // setTasks(taskService.getAll());
-
-    // old code
-    const updatedTaskData = tasks.map((data) => {
-      if (data.id === taskId) {
-        console.log("Successfully Updated the Task status!");
-        console.log("UpdatedTask:", data.name);
-        console.log("Status:", data.status);
-        return {
-          ...data,
-          status: !data.status,
-        };
-      }
-      return data;
-    });
-    setTasks(updatedTaskData);
-  };
-
   const getTaskDataSorted = () => {
     const sortedTaskData = filteredTaskData.sort((a, b) => {
       if (sortValue === "Default") {
@@ -275,12 +251,15 @@ export default function Home() {
         <TaskList
           list={taskList}
           tasks={getTaskDataSorted()}
-          onTaskStatusUpdate={handleTaskStatusUpdate}
-          onTaskDataEdit={(taskId: string) => {
+          onStatusUpdate={(taskId: string) => {
+            taskService.updateStatus(taskId);
+            setTasks(taskService.getAll());
+          }}
+          onEdit={(taskId: string) => {
             setTaskId(taskId);
             setFormOpen(true);
           }}
-          onTaskDataDelete={(taskId: string) => {
+          onDelete={(taskId: string) => {
             taskService.remove(taskId);
             setTasks(taskService.getAll());
           }}

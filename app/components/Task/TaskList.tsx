@@ -8,18 +8,12 @@ import TaskItem from "./common/TaskItem";
 interface Props {
   list: ITaskList[];
   tasks: ITask[];
-  onTaskStatusUpdate: (taskId: string) => void;
-  onTaskDataEdit: (taskId: string) => void;
-  onTaskDataDelete: (taskId: string) => void;
+  onStatusUpdate: (taskId: string) => void;
+  onEdit: (taskId: string) => void;
+  onDelete: (taskId: string) => void;
 }
 
-const TaskList = ({
-  list,
-  tasks,
-  onTaskStatusUpdate,
-  onTaskDataEdit,
-  onTaskDataDelete,
-}: Props) => {
+const TaskList = ({ list, tasks, onStatusUpdate, onEdit, onDelete }: Props) => {
   const [open, setOpen] = useState(false);
   const [id, setId] = useState("");
 
@@ -34,8 +28,8 @@ const TaskList = ({
                 <TaskItem
                   name={task.name}
                   status={task.status}
-                  onCheckboxChange={() => onTaskStatusUpdate(task.id)}
-                  onEdit={() => onTaskDataEdit(task.id)}
+                  onCheckboxChange={() => onStatusUpdate(task.id)}
+                  onEdit={() => onEdit(task.id)}
                   onDelete={() => {
                     setId(task.id);
                     setOpen(true);
@@ -51,7 +45,7 @@ const TaskList = ({
         open={open}
         onClose={() => setOpen(false)}
         onConfirm={() => {
-          onTaskDataDelete(id);
+          onDelete(id);
           setOpen(false);
         }}
       />

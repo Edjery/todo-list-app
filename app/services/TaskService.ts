@@ -80,6 +80,16 @@ class TaskService {
     return null; // Task not found
   }
 
+  updateStatus(taskId: string): ITask | null {
+    const index = this.tasks.findIndex((task) => task.id === taskId);
+    if (index !== -1) {
+      const currentStatus = this.tasks[index].status;
+      this.tasks[index] = { ...this.tasks[index], status: !currentStatus };
+      return this.tasks[index];
+    }
+    return null; // Task not found
+  }
+
   remove(taskId: string) {
     const index = this.tasks.findIndex((task) => task.id === taskId);
     if (index !== -1) {

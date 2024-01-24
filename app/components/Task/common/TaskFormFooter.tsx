@@ -31,9 +31,9 @@ const TaskFormFooter = ({
 }: Props) => {
   const taskList = taskListService.getAll();
   const [taskListChoice, setTaskListChoice] = useState<string | unknown>(
-    values.taskListName
+    values.taskList
   );
-  const submitButton = values.edit ? "Edit Task" : "Add Task";
+  const submitButton = values.id ? "Add Task" : "Edit Task";
 
   return (
     <Box component="div" className="flex justify-between m-5">

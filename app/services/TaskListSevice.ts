@@ -28,6 +28,10 @@ class TaskListService {
     return this.taskLists.find((taskList) => taskList.id === taskListId);
   }
 
+  getByName(taskListName: string): ITaskList | undefined {
+    return this.taskLists.find((taskList) => taskList.name === taskListName);
+  }
+
   create(newTaskList: ITaskList): ITaskList {
     this.taskLists.push(newTaskList);
     return newTaskList;

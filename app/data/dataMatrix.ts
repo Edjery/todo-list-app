@@ -23,16 +23,16 @@ export const defualtDayInterval = [
 ];
 
 export const defaultInitialValues: ITaskForm = {
-  taskName: "",
-  taskDescription: "",
+  id: undefined,
+  name: "",
+  description: "",
   schedule: defaultScheduleValue,
   dueDate: "",
   timeIntervalData: defaultTimeInterval,
   dayIntervalData: defualtDayInterval,
   priority: defaultPriorityValue,
-  taskListName: defaultTaskListChoice,
+  taskList: defaultTaskListChoice,
   tags: "",
-  edit: false,
 };
 
 export const intervals = ["Daily", "Weekly", "Monthly", "Yearly"];

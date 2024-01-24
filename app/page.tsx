@@ -24,27 +24,7 @@ import taskService from "./services/TaskService";
 import timeIntervalService from "./services/TimeIntervalService";
 
 export default function Home() {
-  const [taskList, setTaskList] = useState<ITaskList[]>(
-    taskListService.getAll()
-  );
   const [tasks, setTasks] = useState<ITask[]>(taskService.getAll());
-  const [timeInterval, setTimeInterval] = useState<ITimeInterval[]>(
-    timeIntervalService.getAll()
-  );
-  const [dayInterval, setDayInterval] = useState<IDayInterval[]>(
-    dayIntervalService.getAll()
-  );
-  const [tag, setTag] = useState<ITag[]>(tagService.getAll());
-
-  console.log("taskListService:", taskListService.taskLists);
-  console.log("taskListService.getAll():", taskListService.getAll());
-
-  console.log("taskList:", taskList);
-  console.log("task:", tasks);
-  console.log("timeInterval:", timeInterval);
-  console.log("dayInterval:", dayInterval);
-  console.log("tag:", tag);
-
   const [taskId, setTaskId] = useState<string | undefined>(undefined);
   const [formOpen, setFormOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
@@ -82,43 +62,40 @@ export default function Home() {
 
   // handle forms
   const handleFormSubmit = (values: ITaskForm) => {
-    const taskListNames = taskList.map((item) => item.name);
+    console.log(values.id);
+    // TaskList init
+    const taskListNames = taskListService.getAll().map((item) => item.name);
     let taskListId = "";
-    values.taskListName =
-      values.schedule === "Today" ? "Today" : values.taskListName;
-    values.taskListName =
-      values.schedule === "Date" ? "Unsorted" : values.taskListName;
+    values.taskList = values.schedule === "Today" ? "Today" : values.taskList;
+    values.taskList = values.schedule === "Date" ? "Unsorted" : values.taskList;
 
-    // find task list
-    if (taskListNames.includes(values.taskListName)) {
-      const findTaskList = taskList.find(
-        (item) => item.name === values.taskListName
-      );
-      taskListId = findTaskList?.id || createId();
+    // find task list if exist
+    if (taskListNames.includes(values.taskList)) {
+      const taskListValue = taskListService.getByName(values.taskList);
+      if (taskListValue) taskListId = taskListValue.id;
+      else console.error("Tasklist has a missing ID!");
     }
-    // create task list
+    // create task list if not exist
     else {
       const newTaskList: ITaskList = taskListService.create({
         id: createId(),
-        name: values.taskListName,
+        name: values.taskList,
       });
-      setTaskList(taskListService.getAll());
       taskListId = newTaskList.id;
     }
 
-    // generating new task row
+    // distributing task values
     const newTask: ITask = {
-      id: createId(),
+      id: values.id || createId(),
       dateCreated: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
-      name: values.taskName,
-      description: values.taskDescription,
+      name: values.name,
+      description: values.description,
       dueDate: values.dueDate,
       priority: values.priority,
       status: false,
       taskListId: taskListId,
     };
-
-    // generating new timeInterval row
+    // distributing timeInterval values
     const newTimeInterval: ITimeInterval = {
       id: createId(),
       daily: values.timeIntervalData[0].status,
@@ -127,8 +104,7 @@ export default function Home() {
       yearly: values.timeIntervalData[3].status,
       taskId: newTask.id,
     };
-
-    // generating new dayInterval row
+    // distributing dayInterval values
     const newDayInterval: IDayInterval = {
       id: createId(),
       sunday: values.dayIntervalData[0].status,
@@ -140,98 +116,87 @@ export default function Home() {
       saturday: values.dayIntervalData[6].status,
       taskId: newTask.id,
     };
-
-    // generating new newTag row
+    // distributing newTag values
     const newTag: ITag = {
       id: createId(),
       name: values.tags,
       taskId: newTask.id,
     };
 
-    // edit task
-    if (values.edit && taskId) {
+    // creating task
+    if (!values.id) {
+      taskService.create(newTask);
+      timeIntervalService.create(newTimeInterval);
+      dayIntervalService.create(newDayInterval);
+      tagService.create(newTag);
+    }
+    // editing task
+    else {
       // updating task id
-      const taskToBeUpdated = taskService.get(taskId);
-      if (taskToBeUpdated) {
-        newTask.id = taskToBeUpdated.id;
-      }
+      const taskToBeUpdated = taskService.get(values.id);
+      if (taskToBeUpdated) newTask.id = taskToBeUpdated.id;
 
-      const timeIntervalToBeUpdated = timeIntervalService.getByTaskId(taskId);
-      const dayIntervalToBeUpdated = dayIntervalService.getByTaskId(taskId);
+      const timeIntervalToBeUpdated = timeIntervalService.getByTaskId(
+        values.id
+      );
+      const dayIntervalToBeUpdated = dayIntervalService.getByTaskId(values.id);
       // creating/updating intervals if custom
       if (values.schedule === "Custom") {
-        // resetting date
-        newTask.dueDate = defaultInitialValues.dueDate;
-        // updating intervals
-        if (timeIntervalToBeUpdated) {
+        // creating time interval
+        if (!timeIntervalToBeUpdated) {
+          newTimeInterval.taskId = newTask.id;
+          timeIntervalService.create(newTimeInterval);
+        }
+        // updating time interval
+        else {
           newTimeInterval.id = timeIntervalToBeUpdated.id;
-          newTimeInterval.taskId = taskId;
+          newTimeInterval.taskId = values.id;
           timeIntervalService.update(
             timeIntervalToBeUpdated.id,
             newTimeInterval
           );
-          setTimeInterval(timeIntervalService.getAll());
-        } else {
-          newTimeInterval.taskId = newTask.id;
-          timeIntervalService.create(newTimeInterval);
-          setTimeInterval(timeIntervalService.getAll());
         }
-        if (dayIntervalToBeUpdated) {
-          newDayInterval.id = dayIntervalToBeUpdated.id;
-          newDayInterval.taskId = taskId;
-          dayIntervalService.update(dayIntervalToBeUpdated.id, newDayInterval);
-          setDayInterval(dayIntervalService.getAll());
-        } else {
+        // creating day interval
+        if (!dayIntervalToBeUpdated) {
           newDayInterval.taskId = newTask.id;
           dayIntervalService.create(newDayInterval);
-          setDayInterval(dayIntervalService.getAll());
         }
+        // updating day interval
+        else {
+          newDayInterval.id = dayIntervalToBeUpdated.id;
+          newDayInterval.taskId = values.id;
+          dayIntervalService.update(dayIntervalToBeUpdated.id, newDayInterval);
+        }
+        // resetting date
+        newTask.dueDate = defaultInitialValues.dueDate;
       }
       // deleting intervals if not custom
-      else if (values.schedule === "Today" || values.schedule === "Date") {
-        if (timeIntervalToBeUpdated) {
+      else {
+        if (timeIntervalToBeUpdated)
           timeIntervalService.remove(timeIntervalToBeUpdated.id);
-          setTimeInterval(timeIntervalService.getAll());
-        }
-        if (dayIntervalToBeUpdated) {
+        if (dayIntervalToBeUpdated)
           dayIntervalService.remove(dayIntervalToBeUpdated.id);
-          setDayInterval(dayIntervalService.getAll());
-        }
+        // resetting date if needed
         newTask.dueDate =
           values.schedule === "Today"
             ? defaultInitialValues.dueDate
             : newTask.dueDate;
       }
 
+      const tagToBeUpdated = tagService.getByTaskId(values.id);
+      // creating tags
+      if (!tagToBeUpdated) tagService.create(newTag);
       // updating tags
-      const tagToBeUpdated = tagService.getByTaskId(taskId);
-      if (tagToBeUpdated) {
+      else {
         newTag.id = tagToBeUpdated.id;
         newTag.taskId = tagToBeUpdated.taskId;
         tagService.update(tagToBeUpdated.id, newTag);
-        setTag(tagService.getAll());
-      } else {
-        tagService.create(newTag);
-        setTag(tagService.getAll());
       }
 
       // updating task
-      taskService.update(taskId, newTask);
-      setTasks(taskService.getAll());
+      taskService.update(values.id, newTask);
     }
-    // create task
-    else {
-      setTasks([...tasks, taskService.create(newTask)]);
-      setTimeInterval([
-        ...timeInterval,
-        timeIntervalService.create(newTimeInterval),
-      ]);
-      setDayInterval([
-        ...dayInterval,
-        dayIntervalService.create(newDayInterval),
-      ]);
-      setTag([...tag, tagService.create(newTag)]);
-    }
+    setTasks(taskService.getAll());
   };
 
   return (
@@ -249,7 +214,6 @@ export default function Home() {
           }}
         />
         <TaskList
-          list={taskList}
           tasks={getTaskDataSorted()}
           onStatusUpdate={(taskId: string) => {
             taskService.updateStatus(taskId);

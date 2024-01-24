@@ -33,16 +33,16 @@ interface Props {
 
 const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
   const initialValues: ITaskForm = {
-    taskName: defaultInitialValues.taskName,
-    taskDescription: defaultInitialValues.taskDescription,
+    id: defaultInitialValues.id,
+    name: defaultInitialValues.name,
+    description: defaultInitialValues.description,
     schedule: defaultInitialValues.schedule,
     dueDate: defaultInitialValues.dueDate,
     timeIntervalData: defaultInitialValues.timeIntervalData,
     dayIntervalData: defaultInitialValues.dayIntervalData,
     priority: defaultInitialValues.priority,
-    taskListName: defaultInitialValues.taskListName,
+    taskList: defaultInitialValues.taskList,
     tags: defaultInitialValues.tags,
-    edit: defaultInitialValues.edit,
   };
 
   const taskExist = taskId ? taskService.get(taskId) : undefined;
@@ -53,8 +53,9 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
     const initialDayInterval = dayIntervalService.getByTaskId(taskId);
     const initialTagData = tagService.getByTaskId(taskId);
 
-    initialValues.taskName = name;
-    initialValues.taskDescription = description;
+    initialValues.id = taskId;
+    initialValues.name = name;
+    initialValues.description = description;
     initialValues.dueDate = dueDate;
     initialValues.timeIntervalData = [
       {
@@ -138,9 +139,8 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
       },
     ];
     initialValues.priority = priority;
-    initialValues.taskListName = initialTaskList?.name || defaultTaskListChoice;
+    initialValues.taskList = initialTaskList?.name || defaultTaskListChoice;
     initialValues.tags = initialTagData?.name || defaultInitialValues.tags;
-    initialValues.edit = true;
 
     // setting initial schedule
     const sameTimeInterval = areArrayObjectsEqual(
@@ -153,30 +153,27 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
     );
     const defaultIntervals = sameTimeInterval && sameDayInterval;
 
-    if (
-      defaultIntervals &&
-      initialValues.taskListName === defaultScheduleValue
-    ) {
+    if (defaultIntervals && initialValues.taskList === defaultScheduleValue) {
       initialValues.schedule = defaultScheduleValue;
     } else if (initialValues.dueDate !== "") {
       initialValues.schedule = "Date";
     } else if (
       !defaultIntervals ||
-      initialValues.taskListName !== defaultScheduleValue
+      initialValues.taskList !== defaultScheduleValue
     ) {
       initialValues.schedule = "Custom";
     }
   } else {
-    initialValues.taskName = defaultInitialValues.taskName;
-    initialValues.taskDescription = defaultInitialValues.taskDescription;
+    initialValues.id = defaultInitialValues.id;
+    initialValues.name = defaultInitialValues.name;
+    initialValues.description = defaultInitialValues.description;
     initialValues.schedule = defaultInitialValues.schedule;
     initialValues.dueDate = defaultInitialValues.dueDate;
     initialValues.timeIntervalData = defaultInitialValues.timeIntervalData;
     initialValues.dayIntervalData = defaultInitialValues.dayIntervalData;
     initialValues.priority = defaultInitialValues.priority;
-    initialValues.taskListName = defaultInitialValues.taskListName;
+    initialValues.taskList = defaultInitialValues.taskList;
     initialValues.tags = defaultInitialValues.tags;
-    initialValues.edit = defaultInitialValues.edit;
   }
 
   return (
@@ -197,19 +194,17 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
               <Box className="mt-2">
                 <Field
                   type="text"
-                  name="taskName"
+                  name="name"
                   placeholder="Task Name"
                   as={TextField}
                   fullWidth
-                  error={errors.taskName && touched.taskName ? true : false}
-                  helperText={
-                    errors.taskName && touched.taskName ? errors.taskName : ""
-                  }
+                  error={errors.name && touched.name ? true : false}
+                  helperText={errors.name && touched.name ? errors.name : ""}
                 />
               </Box>
               <Box className="mt-2">
                 <Field
-                  name="taskDescription"
+                  name="description"
                   placeholder="Task Description (Optional)"
                   as={TextareaAutosize}
                   className="size-full"

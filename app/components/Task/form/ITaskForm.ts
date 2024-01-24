@@ -1,6 +1,7 @@
 export interface ITaskForm {
-  taskName: string;
-  taskDescription: string;
+  id: string | undefined;
+  name: string;
+  description: string;
   schedule: string;
   dueDate: string;
   timeIntervalData: {
@@ -12,7 +13,6 @@ export interface ITaskForm {
     status: boolean;
   }[];
   priority: boolean;
-  taskListName: string;
+  taskList: string;
   tags: string;
-  edit: boolean;
 }

@@ -1,5 +1,4 @@
 import { Dialog } from "@/app/lib/MUI-core-v4";
-import ITaskList from "@/app/services/Interfaces/ITaskList";
 import { ITaskForm } from "./form/ITaskForm";
 import TaskForm from "./form/TaskForm";
 

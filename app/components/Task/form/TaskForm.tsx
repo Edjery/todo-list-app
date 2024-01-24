@@ -8,7 +8,6 @@ import {
 import { areArrayObjectsEqual } from "@/app/helpers/areArrayObjectsEqual";
 import {
   Box,
-  Button,
   Container,
   DialogContent,
   TextField,
@@ -33,18 +32,7 @@ interface Props {
 }
 
 const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
-  const initialValues: ITaskForm = {
-    id: defaultInitialValues.id,
-    name: defaultInitialValues.name,
-    description: defaultInitialValues.description,
-    schedule: defaultInitialValues.schedule,
-    dueDate: defaultInitialValues.dueDate,
-    timeIntervalData: defaultInitialValues.timeIntervalData,
-    dayIntervalData: defaultInitialValues.dayIntervalData,
-    priority: defaultInitialValues.priority,
-    taskList: defaultInitialValues.taskList,
-    tags: defaultInitialValues.tags,
-  };
+  const initialValues: ITaskForm = { ...defaultInitialValues };
 
   const taskExist = taskId ? taskService.get(taskId) : undefined;
   if (taskExist && taskId) {
@@ -164,17 +152,6 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
     ) {
       initialValues.schedule = "Custom";
     }
-  } else {
-    initialValues.id = defaultInitialValues.id;
-    initialValues.name = defaultInitialValues.name;
-    initialValues.description = defaultInitialValues.description;
-    initialValues.schedule = defaultInitialValues.schedule;
-    initialValues.dueDate = defaultInitialValues.dueDate;
-    initialValues.timeIntervalData = defaultInitialValues.timeIntervalData;
-    initialValues.dayIntervalData = defaultInitialValues.dayIntervalData;
-    initialValues.priority = defaultInitialValues.priority;
-    initialValues.taskList = defaultInitialValues.taskList;
-    initialValues.tags = defaultInitialValues.tags;
   }
 
   return (

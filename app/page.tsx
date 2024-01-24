@@ -62,7 +62,6 @@ export default function Home() {
 
   // handle forms
   const handleFormSubmit = (values: ITaskForm) => {
-    console.log(values.id);
     // TaskList init
     const taskListNames = taskListService.getAll().map((item) => item.name);
     let taskListId = "";

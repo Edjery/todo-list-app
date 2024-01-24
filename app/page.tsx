@@ -196,7 +196,7 @@ export default function Home() {
       // updating task
       taskService.update(values.id, newTask);
     }
-    setTasks(taskService.getAll());
+    setTasks([...taskService.getAll()]);
   };
 
   return (
@@ -217,7 +217,7 @@ export default function Home() {
           tasks={getTaskDataSorted()}
           onStatusUpdate={(taskId: string) => {
             taskService.updateStatus(taskId);
-            setTasks(taskService.getAll());
+            setTasks([...taskService.getAll()]);
           }}
           onEdit={(taskId: string) => {
             setTaskId(taskId);
@@ -225,7 +225,7 @@ export default function Home() {
           }}
           onDelete={(taskId: string) => {
             taskService.remove(taskId);
-            setTasks(taskService.getAll());
+            setTasks([...taskService.getAll()]);
           }}
         />
         <AddTaskMiniButton onClick={handleTaskDataCreate} />

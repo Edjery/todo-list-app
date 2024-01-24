@@ -76,7 +76,7 @@ const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
                 items,
                 values.timeIntervalData
               );
-              setFieldValue("timeInterval", newTimeInterval);
+              setFieldValue("timeIntervalData", newTimeInterval);
             }}
           />
           <TaskCheckboxGroup
@@ -87,7 +87,7 @@ const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
                 items,
                 values.dayIntervalData
               );
-              setFieldValue("dayInterval", newDayInterval);
+              setFieldValue("dayIntervalData", newDayInterval);
             }}
           />
         </>

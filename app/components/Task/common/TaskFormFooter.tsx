@@ -9,7 +9,7 @@ import {
 } from "@/app/lib/MUI-core-v4";
 import taskListService from "@/app/services/TaskListSevice";
 import { Field, FormikErrors } from "formik";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ITaskForm } from "../form/ITaskForm";
 
 interface Props {
@@ -29,11 +29,10 @@ const TaskFormFooter = ({
   isSubmitting,
   onClose,
 }: Props) => {
-  const taskList = taskListService.getAll();
   const [taskListChoice, setTaskListChoice] = useState<string | unknown>(
     values.taskList
   );
-  const submitButton = values.id ? "Add Task" : "Edit Task";
+  const submitButtonText = values.id === undefined ? "Add Task" : "Edit Task";
 
   return (
     <Box component="div" className="flex justify-between m-5">
@@ -48,7 +47,7 @@ const TaskFormFooter = ({
               {taskListChoice === defaultTaskListChoice && (
                 <Field
                   type="text"
-                  name="taskListName"
+                  name="taskList"
                   placeholder="list name"
                   as={TextField}
                 />
@@ -58,9 +57,9 @@ const TaskFormFooter = ({
             <Box className="mr-5">
               <FormControl variant="outlined">
                 <Select
-                  value={taskListChoice}
+                  value={taskListChoice || defaultTaskListChoice}
                   onChange={(event: ChangeEvent<{ value: unknown }>) => {
-                    setFieldValue("taskListName", event.target.value);
+                    setFieldValue("taskList", event.target.value);
                     setTaskListChoice(event.target.value);
                   }}
                 >
@@ -70,7 +69,7 @@ const TaskFormFooter = ({
                   >
                     {defaultTaskListChoice}
                   </MenuItem>
-                  {taskList.map((taskListItem) => (
+                  {taskListService.getAll().map((taskListItem) => (
                     <MenuItem key={taskListItem.id} value={taskListItem.name}>
                       {taskListItem.name}
                     </MenuItem>
@@ -87,7 +86,7 @@ const TaskFormFooter = ({
           color="primary"
           disabled={isSubmitting}
         >
-          {submitButton}
+          {submitButtonText}
         </Button>
       </Box>
     </Box>

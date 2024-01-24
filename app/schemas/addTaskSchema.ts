@@ -1,16 +1,26 @@
 import * as yup from "yup";
 
-const addTaskSchema = yup.object({
-  taskName: yup.string().required("Required"),
-  taskDescription: yup.string(),
+const taskFormSchema = yup.object({
+  id: yup.string().nullable(),
+  name: yup.string().required("Name is required"),
+  description: yup.string(),
   schedule: yup.string(),
   dueDate: yup.string(),
-  intervals: yup.string(),
-  days: yup.string(),
-  priority: yup.string(),
+  timeIntervalData: yup.array().of(
+    yup.object({
+      choice: yup.string(),
+      status: yup.boolean(),
+    })
+  ),
+  dayIntervalData: yup.array().of(
+    yup.object({
+      choice: yup.string(),
+      status: yup.boolean(),
+    })
+  ),
+  priority: yup.boolean(),
   taskList: yup.string(),
   tags: yup.string(),
-  edit: yup.boolean(),
 });
 
-export default addTaskSchema;
+export default taskFormSchema;

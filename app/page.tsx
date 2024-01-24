@@ -84,7 +84,7 @@ export default function Home() {
       taskListId = newTaskList.id;
     }
 
-    // distributing task values
+    // initializing task values
     const newTask: ITask = {
       id: values.id || createId(),
       dateCreated: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
@@ -95,7 +95,7 @@ export default function Home() {
       status: false,
       taskListId: taskListId,
     };
-    // distributing timeInterval values
+    // initializing timeInterval values
     const newTimeInterval: ITimeInterval = {
       id: createId(),
       daily: values.timeIntervalData[0].status,
@@ -104,7 +104,7 @@ export default function Home() {
       yearly: values.timeIntervalData[3].status,
       taskId: newTask.id,
     };
-    // distributing dayInterval values
+    // initializing dayInterval values
     const newDayInterval: IDayInterval = {
       id: createId(),
       sunday: values.dayIntervalData[0].status,
@@ -116,7 +116,7 @@ export default function Home() {
       saturday: values.dayIntervalData[6].status,
       taskId: newTask.id,
     };
-    // distributing newTag values
+    // initializing newTag values
     const newTag: ITag = {
       id: createId(),
       name: values.tags,

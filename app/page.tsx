@@ -11,21 +11,13 @@ import TaskFormDialog from "./components/Task/TaskFormDialog";
 import TaskList from "./components/Task/TaskList";
 import PopupAlert from "./components/Task/common/PopupAlert";
 import { ITaskForm } from "./components/Task/form/ITaskForm";
-import {
-  defaultInitialValues,
-  defaultScheduleValue,
-  defaultTaskListChoice,
-  defaultTimeInterval,
-  defualtDayInterval,
-  sortList,
-} from "./data/dataMatrix";
-
+import { defaultInitialValues, sortList } from "./data/dataMatrix";
+import dayIntervalService from "./services/DayIntervalService";
 import IDayInterval from "./services/Interfaces/IDayInterval";
 import ITag from "./services/Interfaces/ITag";
 import ITask from "./services/Interfaces/ITask";
 import ITaskList from "./services/Interfaces/ITaskList";
 import ITimeInterval from "./services/Interfaces/ITimeInterval";
-import dayIntervalService from "./services/DayIntervalService";
 import tagService from "./services/TagService";
 import taskListService from "./services/TaskListSevice";
 import taskService from "./services/TaskService";
@@ -266,212 +258,6 @@ export default function Home() {
     }
   };
 
-  // Function to compare two arrays of objects
-  const areArrayObjectsEqual = (
-    firstArray: {
-      choice: string;
-      status: boolean;
-    }[],
-    secondArray: {
-      choice: string;
-      status: boolean;
-    }[]
-  ): boolean => {
-    if (firstArray.length !== secondArray.length) {
-      return false;
-    }
-
-    for (let i = 0; i < firstArray.length; i++) {
-      if (!isObjectEqual(firstArray[i], secondArray[i])) {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
-  // Function to compare two objects
-  const isObjectEqual = (
-    firstObject: {
-      choice: string;
-      status: boolean;
-    },
-    secondObject: {
-      choice: string;
-      status: boolean;
-    }
-  ): boolean => {
-    const firstKeys = Object.keys(firstObject) as Array<
-      keyof typeof firstObject
-    >;
-    const secondKeys = Object.keys(secondObject) as Array<
-      keyof typeof secondObject
-    >;
-
-    if (firstKeys.length !== secondKeys.length) {
-      return false;
-    }
-
-    for (const key of firstKeys) {
-      if (firstObject[key] !== secondObject[key]) {
-        return false;
-      }
-    }
-
-    return true;
-  };
-
-  const initForm = (): ITaskForm => {
-    const initialValues: ITaskForm = {
-      taskName: defaultInitialValues.taskName,
-      taskDescription: defaultInitialValues.taskDescription,
-      schedule: defaultInitialValues.schedule,
-      dueDate: defaultInitialValues.dueDate,
-      timeIntervalData: defaultInitialValues.timeIntervalData,
-      dayIntervalData: defaultInitialValues.dayIntervalData,
-      priority: defaultInitialValues.priority,
-      taskListName: defaultInitialValues.taskListName,
-      tags: defaultInitialValues.tags,
-      edit: defaultInitialValues.edit,
-    };
-
-    const taskExist = taskId ? taskService.get(taskId) : undefined;
-    if (taskExist && taskId) {
-      const { name, description, dueDate, priority, taskListId } = taskExist;
-      const initialTaskList = taskListService.get(taskListId);
-      const initialTimeInterval = timeIntervalService.getByTaskId(taskId);
-      const initialDayInterval = dayIntervalService.getByTaskId(taskId);
-      const initialTagData = tagService.getByTaskId(taskId);
-
-      initialValues.taskName = name;
-      initialValues.taskDescription = description;
-      initialValues.dueDate = dueDate;
-      initialValues.timeIntervalData = [
-        {
-          choice: "Daily",
-          status:
-            initialTimeInterval?.daily !== undefined
-              ? initialTimeInterval?.daily
-              : false,
-        },
-        {
-          choice: "Weekly",
-          status:
-            initialTimeInterval?.weekly !== undefined
-              ? initialTimeInterval?.weekly
-              : false,
-        },
-        {
-          choice: "Monthly",
-          status:
-            initialTimeInterval?.monthly !== undefined
-              ? initialTimeInterval?.monthly
-              : false,
-        },
-        {
-          choice: "Yearly",
-          status:
-            initialTimeInterval?.yearly !== undefined
-              ? initialTimeInterval?.yearly
-              : false,
-        },
-      ];
-      initialValues.dayIntervalData = [
-        {
-          choice: "Sunday",
-          status:
-            initialDayInterval?.sunday !== undefined
-              ? initialDayInterval?.sunday
-              : false,
-        },
-        {
-          choice: "Monday",
-          status:
-            initialDayInterval?.monday !== undefined
-              ? initialDayInterval?.monday
-              : false,
-        },
-        {
-          choice: "Tuesday",
-          status:
-            initialDayInterval?.tuesday !== undefined
-              ? initialDayInterval?.tuesday
-              : false,
-        },
-        {
-          choice: "Wednesday",
-          status:
-            initialDayInterval?.wednesday !== undefined
-              ? initialDayInterval?.wednesday
-              : false,
-        },
-        {
-          choice: "Thursday",
-          status:
-            initialDayInterval?.thursday !== undefined
-              ? initialDayInterval?.thursday
-              : false,
-        },
-        {
-          choice: "Friday",
-          status:
-            initialDayInterval?.friday !== undefined
-              ? initialDayInterval?.friday
-              : false,
-        },
-        {
-          choice: "Saturday",
-          status:
-            initialDayInterval?.saturday !== undefined
-              ? initialDayInterval?.saturday
-              : false,
-        },
-      ];
-      initialValues.priority = priority;
-      initialValues.taskListName =
-        initialTaskList?.name || defaultTaskListChoice;
-      initialValues.tags = initialTagData?.name || defaultInitialValues.tags;
-      initialValues.edit = true;
-
-      // setting initial schedule
-      const sameTimeInterval = areArrayObjectsEqual(
-        initialValues.timeIntervalData,
-        defaultTimeInterval
-      );
-      const sameDayInterval = areArrayObjectsEqual(
-        initialValues.dayIntervalData,
-        defualtDayInterval
-      );
-      const defaultIntervals = sameTimeInterval && sameDayInterval;
-
-      if (
-        defaultIntervals &&
-        initialValues.taskListName === defaultScheduleValue
-      ) {
-        initialValues.schedule = defaultScheduleValue;
-      } else if (initialValues.dueDate !== "") {
-        initialValues.schedule = "Date";
-      } else if (
-        !defaultIntervals ||
-        initialValues.taskListName !== defaultScheduleValue
-      ) {
-        initialValues.schedule = "Custom";
-      }
-    } else {
-      initialValues.taskName = defaultInitialValues.taskName;
-      initialValues.taskDescription = defaultInitialValues.taskDescription;
-      initialValues.schedule = defaultInitialValues.schedule;
-      initialValues.dueDate = defaultInitialValues.dueDate;
-      initialValues.timeIntervalData = defaultInitialValues.timeIntervalData;
-      initialValues.dayIntervalData = defaultInitialValues.dayIntervalData;
-      initialValues.priority = defaultInitialValues.priority;
-      initialValues.taskListName = defaultInitialValues.taskListName;
-      initialValues.tags = defaultInitialValues.tags;
-      initialValues.edit = defaultInitialValues.edit;
-    }
-    return initialValues;
-  };
-
   return (
     <main>
       <Box>
@@ -495,8 +281,8 @@ export default function Home() {
             setFormOpen(true);
           }}
           onTaskDataDelete={(taskId: string) => {
-            const updatedTaskData = tasks.filter((data) => data.id !== taskId);
-            setTasks(updatedTaskData);
+            taskService.remove(taskId);
+            setTasks(taskService.getAll());
           }}
         />
         <AddTaskMiniButton onClick={handleTaskDataCreate} />
@@ -512,7 +298,7 @@ export default function Home() {
       />
       <TaskFormDialog
         open={formOpen}
-        initForm={initForm}
+        taskId={taskId}
         onFormSubmit={handleFormSubmit}
         onAlertOpen={() => setAlertOpen(true)}
         onClose={() => setFormOpen(false)}

@@ -5,8 +5,7 @@ import TaskForm from "./form/TaskForm";
 
 interface Props {
   open: boolean;
-  initForm: () => ITaskForm;
-
+  taskId: string | undefined;
   onFormSubmit: (values: ITaskForm) => void;
   onAlertOpen: () => void;
   onClose: () => void;
@@ -14,7 +13,7 @@ interface Props {
 
 const TaskFormDialog = ({
   open,
-  initForm,
+  taskId,
   onFormSubmit,
   onAlertOpen,
   onClose,
@@ -22,7 +21,7 @@ const TaskFormDialog = ({
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg">
       <TaskForm
-        initForm={initForm}
+        taskId={taskId}
         onFormSubmit={onFormSubmit}
         onAlertOpen={onAlertOpen}
         onClose={onClose}

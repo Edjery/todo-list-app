@@ -13,6 +13,7 @@
     "@material-ui/icons": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.61",
     "@paralleldrive/cuid2": "^2.2.2",
+    "@prisma/client": "^5.9.1",
     "dayjs": "^1.11.10",
     "formik": "^2.4.5",
     "next": "14.0.4",

@@ -1,6 +1,6 @@
 "use client";
 
-import { Box } from "@/app/lib/MUI-core-v4";
+import { Box, Button } from "@/app/lib/MUI-core-v4";
 import { createId } from "@paralleldrive/cuid2";
 import dayjs from "dayjs";
 import { useState } from "react";
@@ -198,8 +198,15 @@ export default function Home() {
     setTasks([...taskService.getAll()]);
   };
 
+  const handleCall = async () => {
+    await fetch("api/taskList")
+      .then((response) => response.json())
+      .then((json) => console.log(json));
+  };
+
   return (
     <main>
+      <Button onClick={handleCall}>Call</Button>
       <Box>
         <TaskHeader
           onSearchOpen={() => setSearchOpen(true)}

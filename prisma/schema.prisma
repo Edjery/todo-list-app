@@ -9,3 +9,59 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+// TaskList model
+model TaskList {
+  id    Int     @id @default(autoincrement())
+  name  String  @db.VarChar(50)
+  tasks Task[]
+}
+
+// Task model
+model Task {
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(100)
+  description  String?        @db.VarChar(250)
+  dueAt        DateTime?
+  priority     Boolean
+  status       Boolean
+  createdAt    DateTime
+  taskListId   Int
+  taskList     TaskList       @relation(fields: [taskListId], references: [id])
+  timeInterval TimeInterval[]
+  dayInterval  DayInterval[]
+  tags         Tag[]
+}
+
+// TimeInterval model
+model TimeInterval {
+  id       Int   @id @default(autoincrement())
+  daily    Boolean
+  weekly   Boolean
+  monthly  Boolean
+  yearly   Boolean
+  taskId   Int
+  task     Task  @relation(fields: [taskId], references: [id])
+}
+
+// DayInterval model
+model DayInterval {
+  id       Int   @id @default(autoincrement())
+  sunday   Boolean
+  monday   Boolean
+  tuesday  Boolean
+  wednesday Boolean
+  thursday Boolean
+  friday   Boolean
+  saturday Boolean
+  taskId   Int
+  task     Task  @relation(fields: [taskId], references: [id])
+}
+
+// Tag model
+model Tag {
+  id     Int   @id @default(autoincrement())
+  name   String?
+  taskId Int
+  task   Task  @relation(fields: [taskId], references: [id])
+}

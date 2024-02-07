@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { taskListSchema } from "../schemas";
 
 export async function GET() {
-  // TODO insert prisma here later
+  const users = await prisma;
 
   return NextResponse.json("Hello");
 }

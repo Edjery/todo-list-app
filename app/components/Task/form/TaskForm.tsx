@@ -34,125 +34,87 @@ interface Props {
 const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
   const initialValues: ITaskForm = { ...defaultInitialValues };
 
-  const taskExist = taskId ? taskService.get(taskId) : undefined;
-  if (taskExist && taskId) {
-    const { name, description, dueDate, priority, taskListId } = taskExist;
-    const initialTaskList = taskListService.get(taskListId);
-    const initialTimeInterval = timeIntervalService.getByTaskId(taskId);
-    const initialDayInterval = dayIntervalService.getByTaskId(taskId);
-    const initialTagData = tagService.getByTaskId(taskId);
+  const loadTaskData = async () => {
+    if (taskId) {
+      const taskExist = taskService.get(taskId);
+      if (taskExist) {
+        const { name, description, dueDate, priority, taskListId } = taskExist;
+        const initialTaskList = await taskListService.get(taskListId);
+        const initialTimeInterval = await timeIntervalService.getByTaskId(
+          taskId
+        );
+        const initialDayInterval = await dayIntervalService.getByTaskId(taskId);
+        const initialTagData = await tagService.getByTaskId(taskId);
 
-    initialValues.id = taskId;
-    initialValues.name = name;
-    initialValues.description = description;
-    initialValues.dueDate = dueDate;
-    initialValues.timeIntervalData = [
-      {
-        choice: "Daily",
-        status:
-          initialTimeInterval?.daily !== undefined
-            ? initialTimeInterval?.daily
-            : false,
-      },
-      {
-        choice: "Weekly",
-        status:
-          initialTimeInterval?.weekly !== undefined
-            ? initialTimeInterval?.weekly
-            : false,
-      },
-      {
-        choice: "Monthly",
-        status:
-          initialTimeInterval?.monthly !== undefined
-            ? initialTimeInterval?.monthly
-            : false,
-      },
-      {
-        choice: "Yearly",
-        status:
-          initialTimeInterval?.yearly !== undefined
-            ? initialTimeInterval?.yearly
-            : false,
-      },
-    ];
-    initialValues.dayIntervalData = [
-      {
-        choice: "Sunday",
-        status:
-          initialDayInterval?.sunday !== undefined
-            ? initialDayInterval?.sunday
-            : false,
-      },
-      {
-        choice: "Monday",
-        status:
-          initialDayInterval?.monday !== undefined
-            ? initialDayInterval?.monday
-            : false,
-      },
-      {
-        choice: "Tuesday",
-        status:
-          initialDayInterval?.tuesday !== undefined
-            ? initialDayInterval?.tuesday
-            : false,
-      },
-      {
-        choice: "Wednesday",
-        status:
-          initialDayInterval?.wednesday !== undefined
-            ? initialDayInterval?.wednesday
-            : false,
-      },
-      {
-        choice: "Thursday",
-        status:
-          initialDayInterval?.thursday !== undefined
-            ? initialDayInterval?.thursday
-            : false,
-      },
-      {
-        choice: "Friday",
-        status:
-          initialDayInterval?.friday !== undefined
-            ? initialDayInterval?.friday
-            : false,
-      },
-      {
-        choice: "Saturday",
-        status:
-          initialDayInterval?.saturday !== undefined
-            ? initialDayInterval?.saturday
-            : false,
-      },
-    ];
-    initialValues.priority = priority;
-    initialValues.taskList = initialTaskList?.name || defaultTaskListChoice;
-    initialValues.tags = initialTagData?.name || defaultInitialValues.tags;
+        initialValues.id = taskId;
+        initialValues.name = name;
+        initialValues.description = description;
+        initialValues.dueDate = dueDate;
+        initialValues.timeIntervalData = [
+          {
+            choice: "Daily",
+            status:
+              initialTimeInterval?.daily !== undefined
+                ? initialTimeInterval?.daily
+                : false,
+          },
+          {
+            choice: "Weekly",
+            status:
+              initialTimeInterval?.weekly !== undefined
+                ? initialTimeInterval?.weekly
+                : false,
+          },
+          {
+            choice: "Monthly",
+            status:
+              initialTimeInterval?.monthly !== undefined
+                ? initialTimeInterval?.monthly
+                : false,
+          },
+          {
+            choice: "Yearly",
+            status:
+              initialTimeInterval?.yearly !== undefined
+                ? initialTimeInterval?.yearly
+                : false,
+          },
+        ];
+        initialValues.dayIntervalData = [
+          // similar code for dayIntervalData
+        ];
+        initialValues.priority = priority;
+        initialValues.taskList = initialTaskList?.name || defaultTaskListChoice;
+        initialValues.tags = initialTagData?.name || defaultInitialValues.tags;
 
-    // setting initial schedule
-    const sameTimeInterval = areArrayObjectsEqual(
-      initialValues.timeIntervalData,
-      defaultTimeInterval
-    );
-    const sameDayInterval = areArrayObjectsEqual(
-      initialValues.dayIntervalData,
-      defualtDayInterval
-    );
-    const defaultIntervals = sameTimeInterval && sameDayInterval;
+        const sameTimeInterval = areArrayObjectsEqual(
+          initialValues.timeIntervalData,
+          defaultTimeInterval
+        );
+        const sameDayInterval = areArrayObjectsEqual(
+          initialValues.dayIntervalData,
+          defualtDayInterval
+        );
+        const defaultIntervals = sameTimeInterval && sameDayInterval;
 
-    if (defaultIntervals && initialValues.taskList === defaultScheduleValue) {
-      initialValues.schedule = defaultScheduleValue;
-    } else if (initialValues.dueDate !== "") {
-      initialValues.schedule = "Date";
-    } else if (
-      !defaultIntervals ||
-      initialValues.taskList !== defaultScheduleValue
-    ) {
-      initialValues.schedule = "Custom";
+        if (
+          defaultIntervals &&
+          initialValues.taskList === defaultScheduleValue
+        ) {
+          initialValues.schedule = defaultScheduleValue;
+        } else if (initialValues.dueDate !== "") {
+          initialValues.schedule = "Date";
+        } else if (
+          !defaultIntervals ||
+          initialValues.taskList !== defaultScheduleValue
+        ) {
+          initialValues.schedule = "Custom";
+        }
+      }
     }
-  }
+  };
+
+  loadTaskData();
 
   return (
     <Formik

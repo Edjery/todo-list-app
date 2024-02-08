@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button } from "@/app/lib/MUI-core-v4";
+import { Box } from "@/app/lib/MUI-core-v4";
 import { createId } from "@paralleldrive/cuid2";
 import dayjs from "dayjs";
 import { useState } from "react";
@@ -61,22 +61,27 @@ export default function Home() {
   };
 
   // handle forms
-  const handleFormSubmit = (values: ITaskForm) => {
+  const handleFormSubmit = async (values: ITaskForm) => {
     // TaskList init
-    const taskListNames = taskListService.getAll().map((item) => item.name);
+    const taskLists = await taskListService.getAll();
+    const taskListNames = taskLists.map((item) => item.name);
     let taskListId = "";
     values.taskList = values.schedule === "Today" ? "Today" : values.taskList;
     values.taskList = values.schedule === "Date" ? "Unsorted" : values.taskList;
+    values.taskList =
+      values.taskList === defaultInitialValues.taskList
+        ? defaultInitialValues.taskList + " 1"
+        : values.taskList;
 
     // find task list if exist
     if (taskListNames.includes(values.taskList)) {
-      const taskListValue = taskListService.getByName(values.taskList);
+      const taskListValue = await taskListService.getByName(values.taskList);
       if (taskListValue) taskListId = taskListValue.id;
       else console.error("Tasklist has a missing ID!");
     }
     // create task list if not exist
     else {
-      const newTaskList: ITaskList = taskListService.create({
+      const newTaskList: ITaskList = await taskListService.create({
         id: createId(),
         name: values.taskList,
       });
@@ -198,15 +203,8 @@ export default function Home() {
     setTasks([...taskService.getAll()]);
   };
 
-  const handleCall = async () => {
-    await fetch("api/taskList")
-      .then((response) => response.json())
-      .then((json) => console.log(json));
-  };
-
   return (
     <main>
-      <Button onClick={handleCall}>Call</Button>
       <Box>
         <TaskHeader
           onSearchOpen={() => setSearchOpen(true)}
@@ -225,11 +223,11 @@ export default function Home() {
             taskService.updateStatus(taskId);
             setTasks([...taskService.getAll()]);
           }}
-          onEdit={(taskId: string) => {
+          onTaskEdit={(taskId: string) => {
             setTaskId(taskId);
             setFormOpen(true);
           }}
-          onDelete={(taskId: string) => {
+          onTaskDelete={(taskId: string) => {
             taskService.remove(taskId);
             setTasks([...taskService.getAll()]);
           }}

@@ -7,9 +7,10 @@ import {
   Select,
   TextField,
 } from "@/app/lib/MUI-core-v4";
+import ITaskList from "@/app/services/Interfaces/ITaskList";
 import taskListService from "@/app/services/TaskListSevice";
 import { Field, FormikErrors } from "formik";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ITaskForm } from "../form/ITaskForm";
 
 interface Props {
@@ -32,6 +33,20 @@ const TaskFormFooter = ({
   const [taskListChoice, setTaskListChoice] = useState<string | unknown>(
     values.taskList
   );
+  const [taskListItems, setTaskListItems] = useState<ITaskList[]>([]);
+
+  useEffect(() => {
+    const fetchTaskListItems = async () => {
+      try {
+        const items = await taskListService.getAll();
+        setTaskListItems(items);
+      } catch (error) {
+        console.error("Error fetching task list items:", error);
+      }
+    };
+    fetchTaskListItems();
+  }, []);
+
   const submitButtonText = values.id === undefined ? "Add Task" : "Edit Task";
 
   return (
@@ -69,7 +84,7 @@ const TaskFormFooter = ({
                   >
                     {defaultTaskListChoice}
                   </MenuItem>
-                  {taskListService.getAll().map((taskListItem) => (
+                  {taskListItems.map((taskListItem: ITaskList) => (
                     <MenuItem key={taskListItem.id} value={taskListItem.name}>
                       {taskListItem.name}
                     </MenuItem>

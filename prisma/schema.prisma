@@ -12,8 +12,8 @@ datasource db {
 
 // TaskList model
 model TaskList {
-  id    Int     @id @default(autoincrement())
-  name  String  @db.VarChar(50)
+  id    Int    @id @default(autoincrement())
+  name  String @unique @db.VarChar(50)
   tasks Task[]
 }
 
@@ -22,10 +22,10 @@ model Task {
   id           Int            @id @default(autoincrement())
   name         String         @db.VarChar(100)
   description  String?        @db.VarChar(250)
-  dueAt        DateTime?
+  dueAt        String?
   priority     Boolean
   status       Boolean
-  createdAt    DateTime
+  createdAt    DateTime       @default(now())
   taskListId   Int
   taskList     TaskList       @relation(fields: [taskListId], references: [id])
   timeInterval TimeInterval[]
@@ -35,33 +35,33 @@ model Task {
 
 // TimeInterval model
 model TimeInterval {
-  id       Int   @id @default(autoincrement())
-  daily    Boolean
-  weekly   Boolean
-  monthly  Boolean
-  yearly   Boolean
-  taskId   Int
-  task     Task  @relation(fields: [taskId], references: [id])
+  id      Int     @id @default(autoincrement())
+  daily   Boolean
+  weekly  Boolean
+  monthly Boolean
+  yearly  Boolean
+  taskId  Int
+  task    Task    @relation(fields: [taskId], references: [id])
 }
 
 // DayInterval model
 model DayInterval {
-  id       Int   @id @default(autoincrement())
-  sunday   Boolean
-  monday   Boolean
-  tuesday  Boolean
+  id        Int     @id @default(autoincrement())
+  sunday    Boolean
+  monday    Boolean
+  tuesday   Boolean
   wednesday Boolean
-  thursday Boolean
-  friday   Boolean
-  saturday Boolean
-  taskId   Int
-  task     Task  @relation(fields: [taskId], references: [id])
+  thursday  Boolean
+  friday    Boolean
+  saturday  Boolean
+  taskId    Int
+  task      Task    @relation(fields: [taskId], references: [id])
 }
 
 // Tag model
 model Tag {
-  id     Int   @id @default(autoincrement())
-  name   String?
+  id     Int    @id @default(autoincrement())
+  name   String
   taskId Int
-  task   Task  @relation(fields: [taskId], references: [id])
+  task   Task   @relation(fields: [taskId], references: [id])
 }

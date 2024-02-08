@@ -13,11 +13,11 @@ export const taskListSchema = yup
 export const taskSchema = yup
   .object()
   .shape({
-    name: yup.string().required().max(100),
-    description: yup.string().max(250),
-    dueAt: yup.date(),
-    priority: yup.boolean(),
-    status: yup.boolean(),
+    name: yup.string().required(),
+    description: yup.string().nullable().default(null),
+    dueAt: yup.string().nullable().default(null),
+    priority: yup.boolean().default(false),
+    status: yup.boolean().default(false),
     taskListId: yup.number().required(),
   })
   .noUnknown()
@@ -27,10 +27,10 @@ export const taskSchema = yup
 export const timeIntervalSchema = yup
   .object()
   .shape({
-    daily: yup.boolean(),
-    weekly: yup.boolean(),
-    monthly: yup.boolean(),
-    yearly: yup.boolean(),
+    daily: yup.boolean().default(false),
+    weekly: yup.boolean().default(false),
+    monthly: yup.boolean().default(false),
+    yearly: yup.boolean().default(false),
     taskId: yup.number().required(),
   })
   .noUnknown()
@@ -40,13 +40,13 @@ export const timeIntervalSchema = yup
 export const dayIntervalSchema = yup
   .object()
   .shape({
-    sunday: yup.boolean(),
-    monday: yup.boolean(),
-    tuesday: yup.boolean(),
-    wednesday: yup.boolean(),
-    thursday: yup.boolean(),
-    friday: yup.boolean(),
-    saturday: yup.boolean(),
+    sunday: yup.boolean().default(false),
+    monday: yup.boolean().default(false),
+    tuesday: yup.boolean().default(false),
+    wednesday: yup.boolean().default(false),
+    thursday: yup.boolean().default(false),
+    friday: yup.boolean().default(false),
+    saturday: yup.boolean().default(false),
     taskId: yup.number().required(),
   })
   .noUnknown()
@@ -56,7 +56,7 @@ export const dayIntervalSchema = yup
 export const tagSchema = yup
   .object()
   .shape({
-    name: yup.string(),
+    name: yup.string().required(),
     taskId: yup.number().required(),
   })
   .noUnknown()

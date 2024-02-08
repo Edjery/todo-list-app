@@ -1,26 +1,34 @@
 "use server";
 
+import prisma from "@/prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
 import { dayIntervalSchema } from "../schemas";
 
 export async function GET() {
-  // TODO insert prisma here later
+  const data = await prisma.dayInterval.findMany();
 
-  return NextResponse.json("Hello");
+  return NextResponse.json(data);
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    await dayIntervalSchema.validate(body, { abortEarly: false });
+    const validatedData = await dayIntervalSchema.validate(body, {
+      abortEarly: false,
+    });
 
-    // TODO insert prisma here later
+    const newDayInterval = await prisma.dayInterval.create({
+      data: validatedData,
+    });
 
-    return NextResponse.json(body, { status: 200 });
+    return NextResponse.json(newDayInterval, { status: 200 });
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       return NextResponse.json(error.errors, { status: 400 });
+    } else if (error instanceof PrismaClientKnownRequestError) {
+      return NextResponse.json(error.meta, { status: 400 });
     } else {
       console.error(error);
       return NextResponse.json(

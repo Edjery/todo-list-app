@@ -27,7 +27,7 @@ model Task {
   status       Boolean
   createdAt    DateTime       @default(now())
   taskListId   Int
-  taskList     TaskList       @relation(fields: [taskListId], references: [id])
+  taskList     TaskList       @relation(fields: [taskListId], references: [id], onDelete: Cascade)
   timeInterval TimeInterval[]
   dayInterval  DayInterval[]
   tags         Tag[]
@@ -41,7 +41,7 @@ model TimeInterval {
   monthly Boolean
   yearly  Boolean
   taskId  Int
-  task    Task    @relation(fields: [taskId], references: [id])
+  task    Task    @relation(fields: [taskId], references: [id], onDelete: Cascade)
 }
 
 // DayInterval model
@@ -55,7 +55,7 @@ model DayInterval {
   friday    Boolean
   saturday  Boolean
   taskId    Int
-  task      Task    @relation(fields: [taskId], references: [id])
+  task      Task    @relation(fields: [taskId], references: [id], onDelete: Cascade)
 }
 
 // Tag model
@@ -63,5 +63,5 @@ model Tag {
   id     Int    @id @default(autoincrement())
   name   String
   taskId Int
-  task   Task   @relation(fields: [taskId], references: [id])
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
 }

@@ -3,20 +3,20 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
-import { taskListSchema } from "../../schemas";
+import { dayIntervalSchema } from "../../schemas";
 
-const errorMessage = { error: "Task list not found" };
+const errorMessage = { error: "Day interval not found" };
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const taskList = await prisma.taskList.findUnique({
+  const dayInterval = await prisma.dayInterval.findUnique({
     where: { id: parseInt(params.id) },
   });
 
-  if (!taskList) return NextResponse.json(errorMessage, { status: 404 });
-  return NextResponse.json(taskList);
+  if (!dayInterval) return NextResponse.json(errorMessage, { status: 404 });
+  return NextResponse.json(dayInterval);
 }
 
 export async function PUT(
@@ -25,22 +25,22 @@ export async function PUT(
 ) {
   try {
     const body = await request.json();
-    const validatedData = await taskListSchema.validate(body, {
+    const validatedData = await dayIntervalSchema.validate(body, {
       abortEarly: false,
     });
 
-    const taskList = await prisma.taskList.findUnique({
+    const dayInterval = await prisma.dayInterval.findUnique({
       where: { id: parseInt(params.id) },
     });
 
-    if (!taskList) return NextResponse.json(errorMessage, { status: 404 });
+    if (!dayInterval) return NextResponse.json(errorMessage, { status: 404 });
 
-    const updatedTaskList = await prisma.taskList.update({
-      where: { id: taskList.id },
+    const updatedDayInterval = await prisma.dayInterval.update({
+      where: { id: dayInterval.id },
       data: validatedData,
     });
 
-    return NextResponse.json(updatedTaskList, { status: 200 });
+    return NextResponse.json(updatedDayInterval, { status: 200 });
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       return NextResponse.json(error.errors, { status: 400 });
@@ -58,14 +58,14 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const taskList = await prisma.taskList.findUnique({
+  const dayInterval = await prisma.dayInterval.findUnique({
     where: { id: parseInt(params.id) },
   });
 
-  if (!taskList) return NextResponse.json(errorMessage, { status: 404 });
+  if (!dayInterval) return NextResponse.json(errorMessage, { status: 404 });
 
-  const deletedData = await prisma.taskList.delete({
-    where: { id: taskList.id },
+  const deletedData = await prisma.dayInterval.delete({
+    where: { id: dayInterval.id },
   });
 
   return NextResponse.json({

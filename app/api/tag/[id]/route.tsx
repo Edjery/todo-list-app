@@ -3,20 +3,20 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import * as yup from "yup";
-import { taskListSchema } from "../../schemas";
+import { tagSchema } from "../../schemas";
 
-const errorMessage = { error: "Task list not found" };
+const errorMessage = { error: "Tag not found" };
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const taskList = await prisma.taskList.findUnique({
+  const tag = await prisma.tag.findUnique({
     where: { id: parseInt(params.id) },
   });
 
-  if (!taskList) return NextResponse.json(errorMessage, { status: 404 });
-  return NextResponse.json(taskList);
+  if (!tag) return NextResponse.json(errorMessage, { status: 404 });
+  return NextResponse.json(tag);
 }
 
 export async function PUT(
@@ -25,22 +25,22 @@ export async function PUT(
 ) {
   try {
     const body = await request.json();
-    const validatedData = await taskListSchema.validate(body, {
+    const validatedData = await tagSchema.validate(body, {
       abortEarly: false,
     });
 
-    const taskList = await prisma.taskList.findUnique({
+    const tag = await prisma.tag.findUnique({
       where: { id: parseInt(params.id) },
     });
 
-    if (!taskList) return NextResponse.json(errorMessage, { status: 404 });
+    if (!tag) return NextResponse.json(errorMessage, { status: 404 });
 
-    const updatedTaskList = await prisma.taskList.update({
-      where: { id: taskList.id },
+    const updatedTag = await prisma.tag.update({
+      where: { id: tag.id },
       data: validatedData,
     });
 
-    return NextResponse.json(updatedTaskList, { status: 200 });
+    return NextResponse.json(updatedTag, { status: 200 });
   } catch (error) {
     if (error instanceof yup.ValidationError) {
       return NextResponse.json(error.errors, { status: 400 });
@@ -58,14 +58,14 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const taskList = await prisma.taskList.findUnique({
+  const tag = await prisma.tag.findUnique({
     where: { id: parseInt(params.id) },
   });
 
-  if (!taskList) return NextResponse.json(errorMessage, { status: 404 });
+  if (!tag) return NextResponse.json(errorMessage, { status: 404 });
 
-  const deletedData = await prisma.taskList.delete({
-    where: { id: taskList.id },
+  const deletedData = await prisma.tag.delete({
+    where: { id: tag.id },
   });
 
   return NextResponse.json({

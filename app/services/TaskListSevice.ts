@@ -40,9 +40,9 @@ class TaskListService {
       const response = await axiosInstance.post(endpoint, {
         name: newTaskList.name,
       });
-      const createdTaskList: ITaskList = response.data;
+      const newData: ITaskList = response.data;
       await this._loadData();
-      return createdTaskList;
+      return newData;
     } catch (error) {
       console.error("Error in creating data:", error);
       throw error;
@@ -50,7 +50,7 @@ class TaskListService {
   }
 
   async update(
-    taskListId: string,
+    taskListId: number,
     newTaskList: ITaskList
   ): Promise<ITaskList | null> {
     try {
@@ -59,9 +59,9 @@ class TaskListService {
         newTaskList
       );
       if ((response.status = 200)) {
-        const updatedTaskList: ITaskList = response.data;
+        const updatedData: ITaskList = response.data;
         await this._loadData();
-        return updatedTaskList;
+        return updatedData;
       } else {
         console.error("Error: No data with that ID");
         return null;

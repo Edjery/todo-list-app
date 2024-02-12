@@ -1,46 +1,90 @@
 import ITag from "./Interfaces/ITag";
+import axiosInstance from "./apiClient";
+
+const endpoint = "/tag";
 
 class TagService {
   tags: ITag[];
 
   constructor() {
-    this.tags = [
-      { id: "0", name: "mail", taskId: "0" },
-      { id: "1", name: "message", taskId: "1" },
-    ];
+    this.tags = [];
+    this._loadData();
   }
 
-  getAll(): ITag[] {
+  private async _loadData() {
+    try {
+      const response = await axiosInstance.get(endpoint);
+      this.tags = response.data;
+    } catch (error) {
+      console.error("Error in loading data:", error);
+    }
+  }
+
+  async getAll(): Promise<ITag[]> {
+    await this._loadData();
     return this.tags;
   }
 
-  get(tagId: string): ITag | undefined {
+  async get(tagId: string): Promise<ITag | undefined> {
+    await this._loadData();
     return this.tags.find((tag) => tag.id === tagId);
   }
 
-  getByTaskId(taskId: string): ITag | undefined {
+  async getByTaskId(taskId: string): Promise<ITag | undefined> {
+    await this._loadData();
     return this.tags.find((tag) => tag.taskId === taskId);
   }
 
-  create(newTag: ITag): ITag {
-    this.tags.push(newTag);
-    return newTag;
-  }
-
-  update(tagId: string, updatedTag: ITag): ITag | null {
-    const index = this.tags.findIndex((tag) => tag.id === tagId);
-    if (index !== -1) {
-      this.tags[index] = { ...this.tags[index], ...updatedTag };
-      return this.tags[index];
+  async create(newTag: ITag): Promise<ITag> {
+    try {
+      const response = await axiosInstance.post(endpoint, {
+        name: newTag.name,
+        taskId: parseInt(newTag.taskId),
+      });
+      const newData: ITag = response.data;
+      await this._loadData();
+      return newData;
+    } catch (error) {
+      console.error("Error in creating data:", error);
+      throw error;
     }
-    return null; // Tag not found
   }
 
-  remove(tagId: string) {
-    const index = this.tags.findIndex((tag) => tag.id === tagId);
-    if (index !== -1) {
-      const removedTagList = this.tags.splice(index, 1)[0];
-      return removedTagList; // Successfully removed
+  async update(tagId: string, newTag: ITag): Promise<ITag | null> {
+    try {
+      const response = await axiosInstance.put(`${endpoint}/${tagId}`, {
+        name: newTag.name,
+        taskId: parseInt(newTag.taskId),
+      });
+      if ((response.status = 200)) {
+        const updatedData: ITag = response.data;
+        await this._loadData();
+        return updatedData;
+      } else {
+        console.error("Error: No data with that ID");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error in updating data:", error);
+      throw error; // Propagate the error
+    }
+  }
+
+  async remove(tagId: string) {
+    try {
+      const response = await axiosInstance.delete(`${endpoint}/${tagId}`);
+
+      if ((response.status = 200)) {
+        const deletedTaskList: ITag = response.data;
+        await this._loadData();
+        return deletedTaskList;
+      } else {
+        console.error("Error: No data with that ID");
+        return null;
+      }
+    } catch (error) {
+      console.error(error);
+      throw error; // Propagate the error
     }
   }
 }

@@ -18,7 +18,6 @@ export async function POST(request: NextRequest) {
     const validatedData = await tagSchema.validate(body, {
       abortEarly: false,
     });
-
     const newTag = await prisma.tag.create({
       data: validatedData,
     });

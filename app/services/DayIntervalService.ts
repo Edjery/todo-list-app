@@ -1,69 +1,111 @@
 import IDayInterval from "./Interfaces/IDayInterval";
+import axiosInstance from "./apiClient";
+
+const endpoint = "/dayinterval";
 
 class DayIntervalService {
   dayIntervals: IDayInterval[];
 
   constructor() {
-    this.dayIntervals = [
-      {
-        id: "0",
-        sunday: false,
-        monday: true,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
-        taskId: "0",
-      },
-    ];
+    this.dayIntervals = [];
+    this._loadData();
   }
 
-  getAll(): IDayInterval[] {
+  private async _loadData() {
+    try {
+      const response = await axiosInstance.get(endpoint);
+      this.dayIntervals = response.data;
+    } catch (error) {
+      console.error("Error in loading data:", error);
+    }
+  }
+
+  async getAll(): Promise<IDayInterval[]> {
+    await this._loadData();
     return this.dayIntervals;
   }
 
-  get(dayIntervalId: string): IDayInterval | undefined {
+  async get(dayIntervalId: string): Promise<IDayInterval | undefined> {
+    await this._loadData();
     return this.dayIntervals.find(
       (dayInterval) => dayInterval.id === dayIntervalId
     );
   }
 
-  getByTaskId(taskId: string): IDayInterval | undefined {
+  async getByTaskId(taskId: string): Promise<IDayInterval | undefined> {
+    await this._loadData();
     return this.dayIntervals.find(
       (dayInterval) => dayInterval.taskId === taskId
     );
   }
 
-  create(newDayInterval: IDayInterval): IDayInterval {
-    this.dayIntervals.push(newDayInterval);
-    return newDayInterval;
-  }
-
-  update(
-    dayIntervalId: string,
-    updatedDayInterval: IDayInterval
-  ): IDayInterval | null {
-    const index = this.dayIntervals.findIndex(
-      (dayInterval) => dayInterval.id === dayIntervalId
-    );
-    if (index !== -1) {
-      this.dayIntervals[index] = {
-        ...this.dayIntervals[index],
-        ...updatedDayInterval,
-      };
-      return this.dayIntervals[index];
+  async create(newDayInterval: IDayInterval): Promise<IDayInterval> {
+    try {
+      const response = await axiosInstance.post(endpoint, {
+        sunday: newDayInterval.sunday,
+        monday: newDayInterval.monday,
+        tuesday: newDayInterval.tuesday,
+        wednesday: newDayInterval.wednesday,
+        thursday: newDayInterval.thursday,
+        friday: newDayInterval.friday,
+        saturday: newDayInterval.saturday,
+        taskId: parseInt(newDayInterval.taskId),
+      });
+      const newData: IDayInterval = response.data;
+      await this._loadData();
+      return newData;
+    } catch (error) {
+      console.error("Error in creating data:", error);
+      throw error;
     }
-    return null; // 404 Not found
   }
 
-  remove(dayIntervalId: string) {
-    const index = this.dayIntervals.findIndex(
-      (dayInterval) => dayInterval.id === dayIntervalId
-    );
-    if (index !== -1) {
-      const removedDayInterval = this.dayIntervals.splice(index, 1)[0];
-      return removedDayInterval; // Successfully removed
+  async update(
+    dayIntervalId: string,
+    newDayInterval: IDayInterval
+  ): Promise<IDayInterval | null> {
+    try {
+      const response = await axiosInstance.put(`${endpoint}/${dayIntervalId}`, {
+        sunday: newDayInterval.sunday,
+        monday: newDayInterval.monday,
+        tuesday: newDayInterval.tuesday,
+        wednesday: newDayInterval.wednesday,
+        thursday: newDayInterval.thursday,
+        friday: newDayInterval.friday,
+        saturday: newDayInterval.saturday,
+        taskId: parseInt(newDayInterval.taskId),
+      });
+      if ((response.status = 200)) {
+        const updatedData: IDayInterval = response.data;
+        await this._loadData();
+        return updatedData;
+      } else {
+        console.error("Error: No data with that ID");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error in updating data:", error);
+      throw error; // Propagate the error
+    }
+  }
+
+  async remove(dayIntervalId: string) {
+    try {
+      const response = await axiosInstance.delete(
+        `${endpoint}/${dayIntervalId}`
+      );
+
+      if ((response.status = 200)) {
+        const deletedTaskList: IDayInterval = response.data;
+        await this._loadData();
+        return deletedTaskList;
+      } else {
+        console.error("Error: No data with that ID");
+        return null;
+      }
+    } catch (error) {
+      console.error(error);
+      throw error; // Propagate the error
     }
   }
 }

@@ -56,7 +56,7 @@ export const dayIntervalSchema = yup
 export const tagSchema = yup
   .object()
   .shape({
-    name: yup.string().required(),
+    name: yup.string().default(""),
     taskId: yup.number().required(),
   })
   .noUnknown()

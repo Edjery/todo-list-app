@@ -1,66 +1,108 @@
 import ITimeInterval from "./Interfaces/ITimeInterval";
+import axiosInstance from "./apiClient";
+
+const endpoint = "/timeinterval";
 
 class TimeIntervalService {
   timeIntervals: ITimeInterval[];
 
   constructor() {
-    this.timeIntervals = [
-      {
-        id: "0",
-        daily: true,
-        weekly: false,
-        monthly: false,
-        yearly: false,
-        taskId: "0",
-      },
-    ];
+    this.timeIntervals = [];
+    this._loadData();
   }
 
-  getAll(): ITimeInterval[] {
+  private async _loadData() {
+    try {
+      const response = await axiosInstance.get(endpoint);
+      this.timeIntervals = response.data;
+    } catch (error) {
+      console.error("Error in loading data:", error);
+    }
+  }
+
+  async getAll(): Promise<ITimeInterval[]> {
+    await this._loadData();
     return this.timeIntervals;
   }
 
-  get(timeIntervalId: string): ITimeInterval | undefined {
+  async get(timeIntervalId: string): Promise<ITimeInterval | undefined> {
+    await this._loadData();
     return this.timeIntervals.find(
       (timeInterval) => timeInterval.id === timeIntervalId
     );
   }
 
-  getByTaskId(taskId: string): ITimeInterval | undefined {
+  async getByTaskId(taskId: string): Promise<ITimeInterval | undefined> {
+    await this._loadData();
     return this.timeIntervals.find(
       (timeInterval) => timeInterval.taskId === taskId
     );
   }
 
-  create(newTimeInterval: ITimeInterval): ITimeInterval {
-    this.timeIntervals.push(newTimeInterval);
-    return newTimeInterval;
-  }
-
-  update(
-    timeIntervalId: string,
-    updatedTimeInterval: ITimeInterval
-  ): ITimeInterval | null {
-    const index = this.timeIntervals.findIndex(
-      (timeInterval) => timeInterval.id === timeIntervalId
-    );
-    if (index !== -1) {
-      this.timeIntervals[index] = {
-        ...this.timeIntervals[index],
-        ...updatedTimeInterval,
-      };
-      return this.timeIntervals[index];
+  async create(newTimeInterval: ITimeInterval): Promise<ITimeInterval> {
+    try {
+      const response = await axiosInstance.post(endpoint, {
+        daily: newTimeInterval.daily,
+        weekly: newTimeInterval.weekly,
+        monthly: newTimeInterval.monthly,
+        yearly: newTimeInterval.yearly,
+        taskId: parseInt(newTimeInterval.taskId),
+      });
+      const newData: ITimeInterval = response.data;
+      await this._loadData();
+      return newData;
+    } catch (error) {
+      console.error("Error in creating data:", error);
+      throw error;
     }
-    return null; // 404 Not found
   }
 
-  remove(timeIntervalId: string) {
-    const index = this.timeIntervals.findIndex(
-      (timeInterval) => timeInterval.id === timeIntervalId
-    );
-    if (index !== -1) {
-      const removedTimeInterval = this.timeIntervals.splice(index, 1)[0];
-      return removedTimeInterval; // Successfully removed
+  async update(
+    timeIntervalId: string,
+    newTimeInterval: ITimeInterval
+  ): Promise<ITimeInterval | null> {
+    try {
+      const response = await axiosInstance.put(
+        `${endpoint}/${timeIntervalId}`,
+        {
+          daily: newTimeInterval.daily,
+          weekly: newTimeInterval.weekly,
+          monthly: newTimeInterval.monthly,
+          yearly: newTimeInterval.yearly,
+          taskId: parseInt(newTimeInterval.taskId),
+        }
+      );
+      if ((response.status = 200)) {
+        const updatedData: ITimeInterval = response.data;
+        await this._loadData();
+        return updatedData;
+      } else {
+        console.error("Error: No data with that ID");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error in updating data:", error);
+      throw error; // Propagate the error
+    }
+  }
+
+  async remove(timeIntervalId: string) {
+    try {
+      const response = await axiosInstance.delete(
+        `${endpoint}/${timeIntervalId}`
+      );
+
+      if ((response.status = 200)) {
+        const deletedTaskList: ITimeInterval = response.data;
+        await this._loadData();
+        return deletedTaskList;
+      } else {
+        console.error("Error: No data with that ID");
+        return null;
+      }
+    } catch (error) {
+      console.error(error);
+      throw error; // Propagate the error
     }
   }
 }

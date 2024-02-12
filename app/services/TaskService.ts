@@ -1,104 +1,125 @@
 import ITask from "./Interfaces/ITask";
+import axiosInstance from "./apiClient";
+
+const endpoint = "/task";
 
 class TaskService {
   tasks: ITask[];
 
   constructor() {
-    this.tasks = [
-      {
-        id: "0",
-        dateCreated: "2024-01-05",
-        name: "Check Email",
-        description: "check the response from aq.com",
-        dueDate: "",
-        priority: true,
-        status: false,
-        taskListId: "0",
-      },
-      {
-        id: "1",
-        dateCreated: "2024-01-16",
-        name: "Check Message",
-        description: "check the response from tuplok",
-        dueDate: "2024-01-16",
-        priority: true,
-        status: false,
-        taskListId: "2",
-      },
-      {
-        id: "2",
-        dateCreated: "2024-01-19T08:37:36",
-        name: "Wash dish",
-        description: "",
-        dueDate: "2024-01-16",
-        priority: true,
-        status: false,
-        taskListId: "2",
-      },
-      {
-        id: "3",
-        dateCreated: "2024-01-19T08:38:36",
-        name: "Cook soup",
-        description: "",
-        dueDate: "2024-01-16",
-        priority: true,
-        status: false,
-        taskListId: "2",
-      },
-      {
-        id: "4",
-        dateCreated: "2024-01-19T08:39:36",
-        name: "Back Massage at 4pm",
-        description: "",
-        dueDate: "2024-01-16",
-        priority: true,
-        status: false,
-        taskListId: "2",
-      },
-    ];
+    this.tasks = [];
+    this._loadData();
   }
 
-  getAll(): ITask[] {
+  private async _loadData() {
+    try {
+      const response = await axiosInstance.get<ITask[]>(endpoint);
+      this.tasks = response.data;
+    } catch (error) {
+      console.error("Error in loading data:", error);
+    }
+  }
+
+  async getAll(): Promise<ITask[]> {
+    await this._loadData();
     return this.tasks;
   }
 
-  get(taskId: string): ITask | undefined {
+  async get(taskId: string): Promise<ITask | undefined> {
+    await this._loadData();
     return this.tasks.find((task) => task.id === taskId);
   }
 
-  create(newTask: ITask): ITask {
-    this.tasks.push(newTask);
-    return newTask;
-  }
-
-  update(taskId: string, updatedTask: ITask): ITask | null {
-    const index = this.tasks.findIndex((task) => task.id === taskId);
-    if (index !== -1) {
-      this.tasks[index] = { ...this.tasks[index], ...updatedTask };
-      return this.tasks[index];
+  async create(newTask: ITask): Promise<ITask> {
+    try {
+      const response = await axiosInstance.post(endpoint, {
+        name: newTask.name,
+        description: newTask.description,
+        dueAt: newTask.dueDate,
+        priority: newTask.priority,
+        status: newTask.status,
+        taskListId: newTask.taskListId,
+      });
+      const newData: ITask = response.data;
+      await this._loadData();
+      return newData;
+    } catch (error) {
+      console.error("Error in creating data:", error);
+      throw error;
     }
-    return null; // Task not found
   }
 
-  updateStatus(taskId: string): ITask | null {
-    const index = this.tasks.findIndex((task) => task.id === taskId);
-    if (index !== -1) {
-      const currentStatus = this.tasks[index].status;
-      this.tasks[index] = { ...this.tasks[index], status: !currentStatus };
-      return this.tasks[index];
+  async update(taskId: string, newTask: ITask): Promise<ITask | null> {
+    try {
+      const response = await axiosInstance.put(`${endpoint}/${taskId}`, {
+        name: newTask.name,
+        description: newTask.description,
+        dueAt: newTask.dueDate,
+        priority: newTask.priority,
+        status: newTask.status,
+        taskListId: newTask.taskListId,
+      });
+      if ((response.status = 200)) {
+        const updatedData: ITask = response.data;
+        await this._loadData();
+        return updatedData;
+      } else {
+        console.error("Error: No data with that ID");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error in updating data:", error);
+      throw error; // Propagate the error
     }
-    return null; // Task not found
+  } // TODO
+
+  async updateStatus(taskId: string): Promise<ITask | null> {
+    const task = this.tasks.find((task) => task.id === taskId);
+
+    if (task) {
+      try {
+        const response = await axiosInstance.put(`${endpoint}/${taskId}`, {
+          name: task.name,
+          description: task.description,
+          dueAt: task.dueDate,
+          priority: task.priority,
+          status: !task.status,
+          taskListId: task.taskListId,
+        });
+        if ((response.status = 200)) {
+          const updatedData: ITask = response.data;
+          await this._loadData();
+          return updatedData;
+        } else {
+          console.error("Error: No data with that ID");
+          return null;
+        }
+      } catch (error) {
+        console.error("Error in updating data:", error);
+        throw error; // Propagate the error
+      }
+    }
+    return null;
   }
 
-  remove(taskId: string) {
-    const index = this.tasks.findIndex((task) => task.id === taskId);
-    if (index !== -1) {
-      const removedTaskList = this.tasks.splice(index, 1)[0];
-      return removedTaskList; // Successfully removed
+  async remove(taskId: string) {
+    try {
+      const response = await axiosInstance.delete(`${endpoint}/${taskId}`);
+
+      if ((response.status = 200)) {
+        const deletedTaskList: ITask = response.data;
+        await this._loadData();
+        return deletedTaskList;
+      } else {
+        console.error("Error: No data with that ID");
+        return null;
+      }
+    } catch (error) {
+      console.error(error);
+      throw error; // Propagate the error
     }
   }
 }
 
 const taskService = new TaskService();
-
 export default taskService;

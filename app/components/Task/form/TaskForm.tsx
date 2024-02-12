@@ -36,7 +36,7 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
 
   const loadTaskData = async () => {
     if (taskId) {
-      const taskExist = taskService.get(taskId);
+      const taskExist = await taskService.get(taskId);
       if (taskExist) {
         const { name, description, dueDate, priority, taskListId } = taskExist;
         const initialTaskList = await taskListService.get(taskListId);
@@ -81,7 +81,55 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
           },
         ];
         initialValues.dayIntervalData = [
-          // similar code for dayIntervalData
+          {
+            choice: "Sunday",
+            status:
+              initialDayInterval?.sunday !== undefined
+                ? initialDayInterval?.sunday
+                : false,
+          },
+          {
+            choice: "Monday",
+            status:
+              initialDayInterval?.monday !== undefined
+                ? initialDayInterval?.monday
+                : false,
+          },
+          {
+            choice: "Tuesday",
+            status:
+              initialDayInterval?.tuesday !== undefined
+                ? initialDayInterval?.tuesday
+                : false,
+          },
+          {
+            choice: "Wednesday",
+            status:
+              initialDayInterval?.wednesday !== undefined
+                ? initialDayInterval?.wednesday
+                : false,
+          },
+          {
+            choice: "Thursday",
+            status:
+              initialDayInterval?.thursday !== undefined
+                ? initialDayInterval?.thursday
+                : false,
+          },
+          {
+            choice: "Friday",
+            status:
+              initialDayInterval?.friday !== undefined
+                ? initialDayInterval?.friday
+                : false,
+          },
+          {
+            choice: "Saturday",
+            status:
+              initialDayInterval?.saturday !== undefined
+                ? initialDayInterval?.saturday
+                : false,
+          },
         ];
         initialValues.priority = priority;
         initialValues.taskList = initialTaskList?.name || defaultTaskListChoice;
@@ -115,6 +163,7 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
   };
 
   loadTaskData();
+  console.log("initialValues", initialValues);
 
   return (
     <Formik

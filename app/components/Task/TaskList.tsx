@@ -27,16 +27,16 @@ const TaskList = ({
   const [taskId, setTaskId] = useState("");
 
   useEffect(() => {
-    const fetchTaskLists = async () => {
+    const fetchData = async () => {
       try {
         const lists = await taskListService.getAll();
         setTaskLists(lists);
       } catch (error) {
-        console.error("Error fetching task lists:", error);
+        console.error("Error fetching data:", error);
       }
     };
-    fetchTaskLists();
-  }, [taskListService.taskLists]);
+    fetchData();
+  }, [taskLists]);
 
   const handleDelete = async (id: number) => {
     await taskListService.remove(id);

@@ -1,10 +1,10 @@
 import { Dialog } from "@/app/lib/MUI-core-v4";
-import { ITaskForm } from "./form/ITaskForm";
+import ITaskForm from "./form/ITaskForm";
 import TaskForm from "./form/TaskForm";
 
 interface Props {
   open: boolean;
-  taskId: string | undefined;
+  taskId: number | undefined;
   onFormSubmit: (values: ITaskForm) => void;
   onAlertOpen: () => void;
   onClose: () => void;

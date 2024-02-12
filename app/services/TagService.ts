@@ -20,18 +20,15 @@ class TagService {
     }
   }
 
-  async getAll(): Promise<ITag[]> {
-    await this._loadData();
+  getAll(): ITag[] {
     return this.tags;
   }
 
-  async get(tagId: string): Promise<ITag | undefined> {
-    await this._loadData();
+  get(tagId: number): ITag | undefined {
     return this.tags.find((tag) => tag.id === tagId);
   }
 
-  async getByTaskId(taskId: string): Promise<ITag | undefined> {
-    await this._loadData();
+  getByTaskId(taskId: number): ITag | undefined {
     return this.tags.find((tag) => tag.taskId === taskId);
   }
 
@@ -39,7 +36,7 @@ class TagService {
     try {
       const response = await axiosInstance.post(endpoint, {
         name: newTag.name,
-        taskId: parseInt(newTag.taskId),
+        taskId: newTag.taskId,
       });
       const newData: ITag = response.data;
       await this._loadData();
@@ -50,11 +47,11 @@ class TagService {
     }
   }
 
-  async update(tagId: string, newTag: ITag): Promise<ITag | null> {
+  async update(tagId: number, newTag: ITag): Promise<ITag | null> {
     try {
       const response = await axiosInstance.put(`${endpoint}/${tagId}`, {
         name: newTag.name,
-        taskId: parseInt(newTag.taskId),
+        taskId: newTag.taskId,
       });
       if ((response.status = 200)) {
         const updatedData: ITag = response.data;
@@ -66,11 +63,11 @@ class TagService {
       }
     } catch (error) {
       console.error("Error in updating data:", error);
-      throw error; // Propagate the error
+      throw error;
     }
   }
 
-  async remove(tagId: string) {
+  async remove(tagId: number) {
     try {
       const response = await axiosInstance.delete(`${endpoint}/${tagId}`);
 
@@ -84,7 +81,7 @@ class TagService {
       }
     } catch (error) {
       console.error(error);
-      throw error; // Propagate the error
+      throw error;
     }
   }
 }

@@ -4,7 +4,7 @@ import { ToggleButton, ToggleButtonGroup } from "@/app/lib/MUI-lab-v4";
 import { FormikErrors } from "formik";
 import React, { ChangeEvent, useState } from "react";
 import ToggleableButton from "../../common/ToggleableButton";
-import { ITaskForm } from "../form/ITaskForm";
+import ITaskForm from "../form/ITaskForm";
 import TaskCheckboxGroup from "./TaskCheckboxGroup";
 
 const handleButtonChanges = (

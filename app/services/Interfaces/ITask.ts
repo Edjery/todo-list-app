@@ -1,12 +1,12 @@
 interface ITask {
-  id: string;
+  id: number;
   dateCreated: string;
   name: string;
   description: string;
   dueDate: string;
   priority: boolean;
   status: boolean;
-  taskListId: string;
+  taskListId: number;
 }
 
 export default ITask;

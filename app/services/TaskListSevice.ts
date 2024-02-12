@@ -13,26 +13,23 @@ class TaskListService {
 
   private async _loadData() {
     try {
-      const response = await axiosInstance.get(endpoint);
+      const response = await axiosInstance.get<ITaskList[]>(endpoint);
       this.taskLists = response.data;
     } catch (error) {
       console.error("Error in loading data:", error);
     }
   }
 
-  async getAll(): Promise<ITaskList[]> {
-    await this._loadData();
+  getAll(): ITaskList[] {
     return this.taskLists;
   }
 
-  async get(taskListId: string): Promise<ITaskList | undefined> {
-    await this._loadData();
-    return this.taskLists.find((taskList) => taskList.id === taskListId);
+  get(id: number): ITaskList | undefined {
+    return this.taskLists.find((taskList) => taskList.id === id);
   }
 
-  async getByName(taskListName: string): Promise<ITaskList | undefined> {
-    await this._loadData();
-    return this.taskLists.find((taskList) => taskList.name === taskListName);
+  getByName(name: string): ITaskList | undefined {
+    return this.taskLists.find((taskList) => taskList.name === name);
   }
 
   async create(newTaskList: ITaskList): Promise<ITaskList> {
@@ -49,15 +46,11 @@ class TaskListService {
     }
   }
 
-  async update(
-    taskListId: number,
-    newTaskList: ITaskList
-  ): Promise<ITaskList | null> {
+  async update(id: number, newTaskList: ITaskList): Promise<ITaskList | null> {
     try {
-      const response = await axiosInstance.put(
-        `${endpoint}/${taskListId}`,
-        newTaskList
-      );
+      const response = await axiosInstance.put(`${endpoint}/${id}`, {
+        name: newTaskList.name,
+      });
       if ((response.status = 200)) {
         const updatedData: ITaskList = response.data;
         await this._loadData();
@@ -68,13 +61,13 @@ class TaskListService {
       }
     } catch (error) {
       console.error("Error in updating data:", error);
-      throw error; // Propagate the error
+      throw error;
     }
   }
 
-  async remove(taskListId: number): Promise<ITaskList | null> {
+  async remove(id: number): Promise<ITaskList | null> {
     try {
-      const response = await axiosInstance.delete(`${endpoint}/${taskListId}`);
+      const response = await axiosInstance.delete(`${endpoint}/${id}`);
 
       if ((response.status = 200)) {
         const deletedTaskList: ITaskList = response.data;
@@ -86,7 +79,7 @@ class TaskListService {
       }
     } catch (error) {
       console.error(error);
-      throw error; // Propagate the error
+      throw error;
     }
   }
 }

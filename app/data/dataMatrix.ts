@@ -1,4 +1,4 @@
-import { ITaskForm } from "../components/Task/form/ITaskForm";
+import ITaskForm from "../components/Task/form/ITaskForm";
 
 export const sortList = ["Default", "Date Created", "Name"];
 

@@ -22,10 +22,10 @@ import timeIntervalService from "@/app/services/TimeIntervalService";
 import { Field, Form, Formik } from "formik";
 import TaskButtonGroup from "../common/TaskButtonGroup";
 import TaskFormFooter from "../common/TaskFormFooter";
-import { ITaskForm } from "./ITaskForm";
+import ITaskForm from "./ITaskForm";
 
 interface Props {
-  taskId: string | undefined;
+  taskId: number | undefined;
   onFormSubmit: (values: ITaskForm) => void;
   onAlertOpen: () => void;
   onClose: () => void;
@@ -36,7 +36,7 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
 
   const loadTaskData = async () => {
     if (taskId) {
-      const taskExist = await taskService.get(taskId);
+      const taskExist = taskService.get(taskId);
       if (taskExist) {
         const { name, description, dueDate, priority, taskListId } = taskExist;
         const initialTaskList = await taskListService.get(taskListId);

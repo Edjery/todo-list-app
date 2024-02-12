@@ -20,20 +20,17 @@ class TimeIntervalService {
     }
   }
 
-  async getAll(): Promise<ITimeInterval[]> {
-    await this._loadData();
+  getAll(): ITimeInterval[] {
     return this.timeIntervals;
   }
 
-  async get(timeIntervalId: string): Promise<ITimeInterval | undefined> {
-    await this._loadData();
+  get(timeIntervalId: number): ITimeInterval | undefined {
     return this.timeIntervals.find(
       (timeInterval) => timeInterval.id === timeIntervalId
     );
   }
 
-  async getByTaskId(taskId: string): Promise<ITimeInterval | undefined> {
-    await this._loadData();
+  getByTaskId(taskId: number): ITimeInterval | undefined {
     return this.timeIntervals.find(
       (timeInterval) => timeInterval.taskId === taskId
     );
@@ -46,7 +43,7 @@ class TimeIntervalService {
         weekly: newTimeInterval.weekly,
         monthly: newTimeInterval.monthly,
         yearly: newTimeInterval.yearly,
-        taskId: parseInt(newTimeInterval.taskId),
+        taskId: newTimeInterval.taskId,
       });
       const newData: ITimeInterval = response.data;
       await this._loadData();
@@ -58,7 +55,7 @@ class TimeIntervalService {
   }
 
   async update(
-    timeIntervalId: string,
+    timeIntervalId: number,
     newTimeInterval: ITimeInterval
   ): Promise<ITimeInterval | null> {
     try {
@@ -69,7 +66,7 @@ class TimeIntervalService {
           weekly: newTimeInterval.weekly,
           monthly: newTimeInterval.monthly,
           yearly: newTimeInterval.yearly,
-          taskId: parseInt(newTimeInterval.taskId),
+          taskId: newTimeInterval.taskId,
         }
       );
       if ((response.status = 200)) {
@@ -82,11 +79,11 @@ class TimeIntervalService {
       }
     } catch (error) {
       console.error("Error in updating data:", error);
-      throw error; // Propagate the error
+      throw error;
     }
   }
 
-  async remove(timeIntervalId: string) {
+  async remove(timeIntervalId: number) {
     try {
       const response = await axiosInstance.delete(
         `${endpoint}/${timeIntervalId}`
@@ -102,7 +99,7 @@ class TimeIntervalService {
       }
     } catch (error) {
       console.error(error);
-      throw error; // Propagate the error
+      throw error;
     }
   }
 }

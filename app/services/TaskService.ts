@@ -20,14 +20,12 @@ class TaskService {
     }
   }
 
-  async getAll(): Promise<ITask[]> {
-    await this._loadData();
+  getAll(): ITask[] {
     return this.tasks;
   }
 
-  async get(taskId: string): Promise<ITask | undefined> {
-    await this._loadData();
-    return this.tasks.find((task) => task.id === taskId);
+  get(id: number): ITask | undefined {
+    return this.tasks.find((task) => task.id === id);
   }
 
   async create(newTask: ITask): Promise<ITask> {
@@ -49,9 +47,9 @@ class TaskService {
     }
   }
 
-  async update(taskId: string, newTask: ITask): Promise<ITask | null> {
+  async update(id: number, newTask: ITask): Promise<ITask | null> {
     try {
-      const response = await axiosInstance.put(`${endpoint}/${taskId}`, {
+      const response = await axiosInstance.put(`${endpoint}/${id}`, {
         name: newTask.name,
         description: newTask.description,
         dueAt: newTask.dueDate,
@@ -69,16 +67,16 @@ class TaskService {
       }
     } catch (error) {
       console.error("Error in updating data:", error);
-      throw error; // Propagate the error
+      throw error;
     }
-  } // TODO
+  }
 
-  async updateStatus(taskId: string): Promise<ITask | null> {
-    const task = this.tasks.find((task) => task.id === taskId);
+  async updateStatus(id: number): Promise<ITask | null> {
+    const task = this.get(id);
 
     if (task) {
       try {
-        const response = await axiosInstance.put(`${endpoint}/${taskId}`, {
+        const response = await axiosInstance.put(`${endpoint}/${id}`, {
           name: task.name,
           description: task.description,
           dueAt: task.dueDate,
@@ -96,15 +94,15 @@ class TaskService {
         }
       } catch (error) {
         console.error("Error in updating data:", error);
-        throw error; // Propagate the error
+        throw error;
       }
     }
     return null;
   }
 
-  async remove(taskId: string) {
+  async remove(id: number): Promise<ITask | null> {
     try {
-      const response = await axiosInstance.delete(`${endpoint}/${taskId}`);
+      const response = await axiosInstance.delete(`${endpoint}/${id}`);
 
       if ((response.status = 200)) {
         const deletedTaskList: ITask = response.data;
@@ -116,7 +114,7 @@ class TaskService {
       }
     } catch (error) {
       console.error(error);
-      throw error; // Propagate the error
+      throw error;
     }
   }
 }

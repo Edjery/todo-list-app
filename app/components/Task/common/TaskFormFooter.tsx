@@ -11,7 +11,7 @@ import ITaskList from "@/app/services/Interfaces/ITaskList";
 import taskListService from "@/app/services/TaskListSevice";
 import { Field, FormikErrors } from "formik";
 import { ChangeEvent, useEffect, useState } from "react";
-import { ITaskForm } from "../form/ITaskForm";
+import ITaskForm from "../form/ITaskForm";
 
 interface Props {
   values: ITaskForm;

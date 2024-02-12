@@ -1,5 +1,5 @@
-export interface ITaskForm {
-  id: string | undefined;
+interface ITaskForm {
+  id: number | undefined;
   name: string;
   description: string;
   schedule: string;
@@ -16,3 +16,4 @@ export interface ITaskForm {
   taskList: string;
   tags: string;
 }
+export default ITaskForm;

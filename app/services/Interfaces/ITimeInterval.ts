@@ -1,10 +1,10 @@
 interface ITimeInterval {
-  id: string;
+  id: number;
   daily: boolean;
   weekly: boolean;
   monthly: boolean;
   yearly: boolean;
-  taskId: string;
+  taskId: number;
 }
 
 export default ITimeInterval;

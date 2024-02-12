@@ -1,7 +1,6 @@
 "use client";
 
 import { Box } from "@/app/lib/MUI-core-v4";
-import { createId } from "@paralleldrive/cuid2";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import AddTaskMiniButton from "./components/AddTaskMiniButton";
@@ -10,7 +9,7 @@ import TaskHeader from "./components/Header/TaskHeader";
 import TaskFormDialog from "./components/Task/TaskFormDialog";
 import TaskList from "./components/Task/TaskList";
 import PopupAlert from "./components/Task/common/PopupAlert";
-import { ITaskForm } from "./components/Task/form/ITaskForm";
+import ITaskForm from "./components/Task/form/ITaskForm";
 import { defaultInitialValues, sortList } from "./data/dataMatrix";
 import dayIntervalService from "./services/DayIntervalService";
 import IDayInterval from "./services/Interfaces/IDayInterval";
@@ -25,7 +24,7 @@ import timeIntervalService from "./services/TimeIntervalService";
 
 export default function Home() {
   const [tasks, setTasks] = useState<ITask[]>([]);
-  const [taskId, setTaskId] = useState<string | undefined>(undefined);
+  const [taskId, setTaskId] = useState<number | undefined>(undefined);
   const [formOpen, setFormOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [sortValue, setSortValue] = useState<string>(sortList[0]);
@@ -77,24 +76,24 @@ export default function Home() {
     // TaskList init
     const taskLists = await taskListService.getAll();
     const taskListNames = taskLists.map((item) => item.name);
-    let taskListId = "";
+    let taskListId = 0;
     values.taskList = values.schedule === "Today" ? "Today" : values.taskList;
     values.taskList = values.schedule === "Date" ? "Unsorted" : values.taskList;
     values.taskList =
       values.taskList === defaultInitialValues.taskList
-        ? defaultInitialValues.taskList + " 1"
+        ? defaultInitialValues.taskList + "ahan"
         : values.taskList;
 
     // find task list if exist
     if (taskListNames.includes(values.taskList)) {
-      const taskListValue = await taskListService.getByName(values.taskList);
+      const taskListValue = taskListService.getByName(values.taskList);
       if (taskListValue) taskListId = taskListValue.id;
       else console.error("Tasklist has a missing ID!");
     }
     // create task list if not exist
     else {
       const newTaskList: ITaskList = await taskListService.create({
-        id: createId(),
+        id: 0, // this is not actually used
         name: values.taskList,
       });
       taskListId = newTaskList.id;
@@ -102,7 +101,7 @@ export default function Home() {
 
     // initializing task values
     const newTask: ITask = {
-      id: values.id || createId(),
+      id: values.id || 0,
       dateCreated: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
       name: values.name,
       description: values.description,
@@ -113,7 +112,7 @@ export default function Home() {
     };
     // initializing timeInterval values
     const newTimeInterval: ITimeInterval = {
-      id: createId(),
+      id: 0,
       daily: values.timeIntervalData[0].status,
       weekly: values.timeIntervalData[1].status,
       monthly: values.timeIntervalData[2].status,
@@ -122,7 +121,7 @@ export default function Home() {
     };
     // initializing dayInterval values
     const newDayInterval: IDayInterval = {
-      id: createId(),
+      id: 0,
       sunday: values.dayIntervalData[0].status,
       monday: values.dayIntervalData[1].status,
       tuesday: values.dayIntervalData[2].status,
@@ -134,7 +133,7 @@ export default function Home() {
     };
     // initializing newTag values
     const newTag: ITag = {
-      id: createId(),
+      id: 0,
       name: values.tags,
       taskId: newTask.id,
     };
@@ -238,15 +237,15 @@ export default function Home() {
         />
         <TaskList
           tasks={getTaskDataSorted()}
-          onStatusUpdate={async (taskId: string) => {
+          onStatusUpdate={async (taskId: number) => {
             taskService.updateStatus(taskId);
             setTasks([...(await taskService.getAll())]);
           }}
-          onTaskEdit={(taskId: string) => {
+          onTaskEdit={(taskId: number) => {
             setTaskId(taskId);
             setFormOpen(true);
           }}
-          onTaskDelete={async (taskId: string) => {
+          onTaskDelete={async (taskId: number) => {
             taskService.remove(taskId);
             setTasks([...(await taskService.getAll())]);
           }}

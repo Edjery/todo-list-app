@@ -1,17 +1,16 @@
 import ITask from "@/app/services/Interfaces/ITask";
-import ITaskList from "@/app/services/Interfaces/ITaskList";
 import taskListService from "@/app/services/TaskListSevice";
 import CloseIcon from "@material-ui/icons/Close";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Box, Button, Container, Typography } from "../../lib/MUI-core-v4";
 import ConfirmationAlert from "./common/ConfirmationAlert";
 import TaskItem from "./common/TaskItem";
 
 interface Props {
   tasks: ITask[];
-  onStatusUpdate: (taskId: string) => void;
-  onTaskEdit: (taskId: string) => void;
-  onTaskDelete: (taskId: string) => void;
+  onStatusUpdate: (taskId: number) => void;
+  onTaskEdit: (taskId: number) => void;
+  onTaskDelete: (taskId: number) => void;
 }
 
 const TaskList = ({
@@ -20,23 +19,11 @@ const TaskList = ({
   onTaskEdit,
   onTaskDelete,
 }: Props) => {
-  const [taskLists, setTaskLists] = useState<ITaskList[]>([]);
+  const taskLists = taskListService.getAll();
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
   const [openTaskDeleteModal, setOpenTaskDeleteModal] = useState(false);
-  const [taskId, setTaskId] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const lists = await taskListService.getAll();
-        setTaskLists(lists);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, [taskLists]);
+  const [taskId, setTaskId] = useState(0);
 
   const handleDelete = async (id: number) => {
     await taskListService.remove(id);
@@ -50,7 +37,7 @@ const TaskList = ({
             <Typography variant="h6">{listName.name}</Typography>
             <Button
               onClick={() => {
-                setId(parseInt(listName.id));
+                setId(listName.id);
                 setOpen(true);
               }}
             >

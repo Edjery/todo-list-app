@@ -20,20 +20,17 @@ class DayIntervalService {
     }
   }
 
-  async getAll(): Promise<IDayInterval[]> {
-    await this._loadData();
+  getAll(): IDayInterval[] {
     return this.dayIntervals;
   }
 
-  async get(dayIntervalId: string): Promise<IDayInterval | undefined> {
-    await this._loadData();
+  get(dayIntervalId: number): IDayInterval | undefined {
     return this.dayIntervals.find(
       (dayInterval) => dayInterval.id === dayIntervalId
     );
   }
 
-  async getByTaskId(taskId: string): Promise<IDayInterval | undefined> {
-    await this._loadData();
+  getByTaskId(taskId: number): IDayInterval | undefined {
     return this.dayIntervals.find(
       (dayInterval) => dayInterval.taskId === taskId
     );
@@ -49,7 +46,7 @@ class DayIntervalService {
         thursday: newDayInterval.thursday,
         friday: newDayInterval.friday,
         saturday: newDayInterval.saturday,
-        taskId: parseInt(newDayInterval.taskId),
+        taskId: newDayInterval.taskId,
       });
       const newData: IDayInterval = response.data;
       await this._loadData();
@@ -61,7 +58,7 @@ class DayIntervalService {
   }
 
   async update(
-    dayIntervalId: string,
+    dayIntervalId: number,
     newDayInterval: IDayInterval
   ): Promise<IDayInterval | null> {
     try {
@@ -73,7 +70,7 @@ class DayIntervalService {
         thursday: newDayInterval.thursday,
         friday: newDayInterval.friday,
         saturday: newDayInterval.saturday,
-        taskId: parseInt(newDayInterval.taskId),
+        taskId: newDayInterval.taskId,
       });
       if ((response.status = 200)) {
         const updatedData: IDayInterval = response.data;
@@ -85,11 +82,11 @@ class DayIntervalService {
       }
     } catch (error) {
       console.error("Error in updating data:", error);
-      throw error; // Propagate the error
+      throw error;
     }
   }
 
-  async remove(dayIntervalId: string) {
+  async remove(dayIntervalId: number) {
     try {
       const response = await axiosInstance.delete(
         `${endpoint}/${dayIntervalId}`
@@ -105,7 +102,7 @@ class DayIntervalService {
       }
     } catch (error) {
       console.error(error);
-      throw error; // Propagate the error
+      throw error;
     }
   }
 }

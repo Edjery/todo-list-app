@@ -1,5 +1,5 @@
 interface IDayInterval {
-  id: string;
+  id: number;
   sunday: boolean;
   monday: boolean;
   tuesday: boolean;
@@ -7,7 +7,7 @@ interface IDayInterval {
   thursday: boolean;
   friday: boolean;
   saturday: boolean;
-  taskId: string;
+  taskId: number;
 }
 
 export default IDayInterval;

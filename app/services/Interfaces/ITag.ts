@@ -1,7 +1,7 @@
 interface ITag {
-  id: string;
+  id: number;
   name: string;
-  taskId: string;
+  taskId: number;
 }
 
 export default ITag;

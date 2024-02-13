@@ -1,45 +1,45 @@
 import ITag from "./Interfaces/ITag";
 import axiosInstance from "./apiClient";
 
-const endpoint = "/tag";
+const API_ENDPOINT = "/tag";
 
 class TagService {
-  tags: ITag[];
+  private tags: ITag[] = [];
 
   constructor() {
-    this.tags = [];
     this._loadData();
   }
 
   private async _loadData() {
     try {
-      const response = await axiosInstance.get(endpoint);
+      const response = await axiosInstance.get<ITag[]>(API_ENDPOINT);
       this.tags = response.data;
     } catch (error) {
       console.error("Error in loading data:", error);
     }
   }
 
-  getAll(): ITag[] {
-    return this.tags;
+  async getAll(): Promise<ITag[]> {
+    const response = await axiosInstance.get<ITag[]>(API_ENDPOINT);
+    return response.data;
   }
 
   get(tagId: number): ITag | undefined {
     return this.tags.find((tag) => tag.id === tagId);
   }
 
-  getByTaskId(taskId: number): ITag | undefined {
-    return this.tags.find((tag) => tag.taskId === taskId);
+  getByTaskId(id: number): ITag | undefined {
+    return this.tags.find((item) => item.taskId === id);
   }
 
   async create(newTag: ITag): Promise<ITag> {
     try {
-      const response = await axiosInstance.post(endpoint, {
+      const response = await axiosInstance.post<ITag>(API_ENDPOINT, {
         name: newTag.name,
         taskId: newTag.taskId,
       });
       const newData: ITag = response.data;
-      await this._loadData();
+      this.tags.push(newData);
       return newData;
     } catch (error) {
       console.error("Error in creating data:", error);
@@ -47,15 +47,18 @@ class TagService {
     }
   }
 
-  async update(tagId: number, newTag: ITag): Promise<ITag | null> {
+  async update(id: number, newTag: ITag): Promise<ITag | null> {
     try {
-      const response = await axiosInstance.put(`${endpoint}/${tagId}`, {
+      const response = await axiosInstance.put<ITag>(`${API_ENDPOINT}/${id}`, {
         name: newTag.name,
         taskId: newTag.taskId,
       });
       if ((response.status = 200)) {
-        const updatedData: ITag = response.data;
-        await this._loadData();
+        const updatedData = response.data;
+        const index = this.tags.findIndex((item) => item.id === id);
+        if (index !== -1) {
+          this.tags[index] = { ...updatedData };
+        }
         return updatedData;
       } else {
         console.error("Error: No data with that ID");
@@ -67,13 +70,13 @@ class TagService {
     }
   }
 
-  async remove(tagId: number) {
+  async remove(id: number): Promise<ITag | null> {
     try {
-      const response = await axiosInstance.delete(`${endpoint}/${tagId}`);
+      const response = await axiosInstance.delete(`${API_ENDPOINT}/${id}`);
 
       if ((response.status = 200)) {
-        const deletedTaskList: ITag = response.data;
-        await this._loadData();
+        const deletedTaskList = response.data;
+        this.tags = this.tags.filter((item) => item.id !== id);
         return deletedTaskList;
       } else {
         console.error("Error: No data with that ID");

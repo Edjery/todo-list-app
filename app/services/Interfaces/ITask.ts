@@ -3,7 +3,7 @@ interface ITask {
   dateCreated: string;
   name: string;
   description: string;
-  dueDate: string;
+  dueAt: string;
   priority: boolean;
   status: boolean;
   taskListId: number;

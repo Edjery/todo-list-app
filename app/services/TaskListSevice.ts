@@ -1,44 +1,45 @@
 import ITaskList from "./Interfaces/ITaskList";
 import axiosInstance from "./apiClient";
 
-const endpoint = "/tasklist";
+const API_ENDPOINT = "/tasklist";
 
 class TaskListService {
-  taskLists: ITaskList[];
+  private taskLists: ITaskList[] = [];
 
   constructor() {
-    this.taskLists = [];
-    this._loadData();
+    this.loadData();
   }
 
-  private async _loadData() {
+  private async loadData(): Promise<void> {
     try {
-      const response = await axiosInstance.get<ITaskList[]>(endpoint);
+      const response = await axiosInstance.get<ITaskList[]>(API_ENDPOINT);
       this.taskLists = response.data;
     } catch (error) {
       console.error("Error in loading data:", error);
+      throw error;
     }
   }
 
-  getAll(): ITaskList[] {
-    return this.taskLists;
+  async getAll(): Promise<ITaskList[]> {
+    const response = await axiosInstance.get<ITaskList[]>(API_ENDPOINT);
+    return response.data;
   }
 
   get(id: number): ITaskList | undefined {
-    return this.taskLists.find((taskList) => taskList.id === id);
+    return this.taskLists.find((item) => item.id === id);
   }
 
   getByName(name: string): ITaskList | undefined {
-    return this.taskLists.find((taskList) => taskList.name === name);
+    return this.taskLists.find((item) => item.name === name);
   }
 
   async create(newTaskList: ITaskList): Promise<ITaskList> {
     try {
-      const response = await axiosInstance.post(endpoint, {
+      const response = await axiosInstance.post<ITaskList>(API_ENDPOINT, {
         name: newTaskList.name,
       });
-      const newData: ITaskList = response.data;
-      await this._loadData();
+      const newData = response.data;
+      this.taskLists.push(newData);
       return newData;
     } catch (error) {
       console.error("Error in creating data:", error);
@@ -48,12 +49,18 @@ class TaskListService {
 
   async update(id: number, newTaskList: ITaskList): Promise<ITaskList | null> {
     try {
-      const response = await axiosInstance.put(`${endpoint}/${id}`, {
-        name: newTaskList.name,
-      });
+      const response = await axiosInstance.put<ITaskList>(
+        `${API_ENDPOINT}/${id}`,
+        {
+          name: newTaskList.name,
+        }
+      );
       if ((response.status = 200)) {
-        const updatedData: ITaskList = response.data;
-        await this._loadData();
+        const updatedData = response.data;
+        const index = this.taskLists.findIndex((item) => item.id === id);
+        if (index !== -1) {
+          this.taskLists[index] = { ...updatedData };
+        }
         return updatedData;
       } else {
         console.error("Error: No data with that ID");
@@ -67,18 +74,19 @@ class TaskListService {
 
   async remove(id: number): Promise<ITaskList | null> {
     try {
-      const response = await axiosInstance.delete(`${endpoint}/${id}`);
-
+      const response = await axiosInstance.delete<ITaskList>(
+        `${API_ENDPOINT}/${id}`
+      );
       if ((response.status = 200)) {
-        const deletedTaskList: ITaskList = response.data;
-        await this._loadData();
-        return deletedTaskList;
+        const deletedData = response.data;
+        this.taskLists = this.taskLists.filter((item) => item.id !== id);
+        return deletedData;
       } else {
         console.error("Error: No data with that ID");
         return null;
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error in deleting data:", error);
       throw error;
     }
   }

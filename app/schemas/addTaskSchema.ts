@@ -5,7 +5,7 @@ const taskFormSchema = yup.object({
   name: yup.string().required("Name is required"),
   description: yup.string(),
   schedule: yup.string(),
-  dueDate: yup.string(),
+  dueAt: yup.string(),
   timeIntervalData: yup.array().of(
     yup.object({
       choice: yup.string(),

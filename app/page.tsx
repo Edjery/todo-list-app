@@ -1,6 +1,6 @@
 "use client";
 
-import { Box } from "@/app/lib/MUI-core-v4";
+import { Box, Container, Typography } from "@/app/lib/MUI-core-v4";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import AddTaskMiniButton from "./components/AddTaskMiniButton";
@@ -24,6 +24,7 @@ import timeIntervalService from "./services/TimeIntervalService";
 
 export default function Home() {
   const [tasks, setTasks] = useState<ITask[]>([]);
+  const [loading, setLoading] = useState(true);
   const [taskId, setTaskId] = useState<number | undefined>(undefined);
   const [formOpen, setFormOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
@@ -34,15 +35,28 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const tasks = await taskService.getAll();
-        setTasks(tasks);
+        setLoading(false);
+        setTasks(await taskService.getAll());
+        console.log("Data has been successfully fetched");
       } catch (error) {
-        console.error("Error fetching data:", error);
+        setLoading(false);
+        console.error("Error loading data:", error);
+        throw error;
       }
     };
-    fetchData();
-  }, [taskService.tasks]);
 
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Container maxWidth="sm" className="mt-10">
+        <Box className="mt-5">
+          <Typography>Loading...</Typography>
+        </Box>
+      </Container>
+    );
+  }
   const filteredTaskData = tasks.filter((data) =>
     data.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -105,7 +119,7 @@ export default function Home() {
       dateCreated: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
       name: values.name,
       description: values.description,
-      dueDate: values.dueDate,
+      dueAt: values.dueAt,
       priority: values.priority,
       status: false,
       taskListId: taskListId,
@@ -149,6 +163,8 @@ export default function Home() {
       timeIntervalService.create(newTimeInterval);
       dayIntervalService.create(newDayInterval);
       tagService.create(newTag);
+
+      setTasks([...tasks, createdTask]);
     }
     // editing task
     else {
@@ -190,7 +206,7 @@ export default function Home() {
           dayIntervalService.update(dayIntervalToBeUpdated.id, newDayInterval);
         }
         // resetting date
-        newTask.dueDate = defaultInitialValues.dueDate;
+        newTask.dueAt = defaultInitialValues.dueAt;
       }
       // deleting intervals if not custom
       else {
@@ -199,10 +215,10 @@ export default function Home() {
         if (dayIntervalToBeUpdated)
           dayIntervalService.remove(dayIntervalToBeUpdated.id);
         // resetting date if needed
-        newTask.dueDate =
+        newTask.dueAt =
           values.schedule === "Today"
-            ? defaultInitialValues.dueDate
-            : newTask.dueDate;
+            ? defaultInitialValues.dueAt
+            : newTask.dueAt;
       }
 
       const tagToBeUpdated = await tagService.getByTaskId(values.id);
@@ -215,10 +231,15 @@ export default function Home() {
         tagService.update(tagToBeUpdated.id, newTag);
       }
 
-      // updating task
+      // updating task locally
+      const updatedTasks = tasks.map((task) =>
+        task.id === values.id ? newTask : task
+      );
+      setTasks(updatedTasks);
+
+      // updating task outsidilly
       taskService.update(values.id, newTask);
     }
-    setTasks([...(await taskService.getAll())]);
   };
 
   return (
@@ -239,7 +260,6 @@ export default function Home() {
           tasks={getTaskDataSorted()}
           onStatusUpdate={async (taskId: number) => {
             taskService.updateStatus(taskId);
-            setTasks([...(await taskService.getAll())]);
           }}
           onTaskEdit={(taskId: number) => {
             setTaskId(taskId);
@@ -247,7 +267,7 @@ export default function Home() {
           }}
           onTaskDelete={async (taskId: number) => {
             taskService.remove(taskId);
-            setTasks([...(await taskService.getAll())]);
+            setTasks(tasks.filter((task) => task.id !== taskId));
           }}
         />
         <AddTaskMiniButton onClick={handleTaskDataCreate} />

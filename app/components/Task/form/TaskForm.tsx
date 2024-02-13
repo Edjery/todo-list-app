@@ -38,18 +38,19 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
     if (taskId) {
       const taskExist = taskService.get(taskId);
       if (taskExist) {
-        const { name, description, dueDate, priority, taskListId } = taskExist;
-        const initialTaskList = await taskListService.get(taskListId);
-        const initialTimeInterval = await timeIntervalService.getByTaskId(
-          taskId
-        );
-        const initialDayInterval = await dayIntervalService.getByTaskId(taskId);
-        const initialTagData = await tagService.getByTaskId(taskId);
+        const { name, description, dueAt, priority, taskListId } = taskExist;
+        const initialTaskList = taskListService.get(taskListId);
+        const initialTimeInterval = timeIntervalService.getByTaskId(taskId);
+        const initialDayInterval = dayIntervalService.getByTaskId(taskId);
+        const initialTagData = tagService.getByTaskId(taskId);
 
         initialValues.id = taskId;
         initialValues.name = name;
         initialValues.description = description;
-        initialValues.dueDate = dueDate;
+        initialValues.dueAt = dueAt === "" ? "" : dueAt;
+
+        initialValues.timeIntervalData = defualtDayInterval;
+
         initialValues.timeIntervalData = [
           {
             choice: "Daily",
@@ -150,20 +151,40 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
           initialValues.taskList === defaultScheduleValue
         ) {
           initialValues.schedule = defaultScheduleValue;
-        } else if (initialValues.dueDate !== "") {
+        } else if (initialValues.dueAt !== "") {
           initialValues.schedule = "Date";
-        } else if (
-          !defaultIntervals ||
-          initialValues.taskList !== defaultScheduleValue
-        ) {
+        } else if (initialValues.taskList !== defaultScheduleValue) {
           initialValues.schedule = "Custom";
         }
       }
+    } else {
+      initialValues.id = defaultInitialValues.id;
+      initialValues.name = defaultInitialValues.name;
+      initialValues.description = defaultInitialValues.description;
+      initialValues.schedule = defaultInitialValues.schedule;
+      initialValues.dueAt = defaultInitialValues.dueAt;
+      initialValues.timeIntervalData = [
+        { choice: "Daily", status: false },
+        { choice: "Weekly", status: false },
+        { choice: "Monthly", status: false },
+        { choice: "Yearly", status: false },
+      ];
+      initialValues.dayIntervalData = [
+        { choice: "Sunday", status: false },
+        { choice: "Monday", status: false },
+        { choice: "Tuesday", status: false },
+        { choice: "Wednesday", status: false },
+        { choice: "Thursday", status: false },
+        { choice: "Friday", status: false },
+        { choice: "Saturday", status: false },
+      ];
+      initialValues.priority = defaultInitialValues.priority;
+      initialValues.taskList = defaultInitialValues.taskList;
+      initialValues.tags = defaultInitialValues.tags;
     }
   };
 
   loadTaskData();
-  console.log("initialValues", initialValues);
 
   return (
     <Formik

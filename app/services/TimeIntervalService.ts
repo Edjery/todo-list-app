@@ -1,52 +1,49 @@
 import ITimeInterval from "./Interfaces/ITimeInterval";
 import axiosInstance from "./apiClient";
 
-const endpoint = "/timeinterval";
+const API_ENDPOINT = "/timeinterval";
 
 class TimeIntervalService {
-  timeIntervals: ITimeInterval[];
+  private timeIntervals: ITimeInterval[] = [];
 
   constructor() {
-    this.timeIntervals = [];
-    this._loadData();
+    this.loadData();
   }
 
-  private async _loadData() {
+  private async loadData() {
     try {
-      const response = await axiosInstance.get(endpoint);
+      const response = await axiosInstance.get<ITimeInterval[]>(API_ENDPOINT);
       this.timeIntervals = response.data;
     } catch (error) {
       console.error("Error in loading data:", error);
+      throw error;
     }
   }
 
-  getAll(): ITimeInterval[] {
-    return this.timeIntervals;
+  async getAll(): Promise<ITimeInterval[]> {
+    const response = await axiosInstance.get<ITimeInterval[]>(API_ENDPOINT);
+    return response.data;
   }
 
-  get(timeIntervalId: number): ITimeInterval | undefined {
-    return this.timeIntervals.find(
-      (timeInterval) => timeInterval.id === timeIntervalId
-    );
+  get(id: number): ITimeInterval | undefined {
+    return this.timeIntervals.find((item) => item.id === id);
   }
 
-  getByTaskId(taskId: number): ITimeInterval | undefined {
-    return this.timeIntervals.find(
-      (timeInterval) => timeInterval.taskId === taskId
-    );
+  getByTaskId(id: number): ITimeInterval | undefined {
+    return this.timeIntervals.find((item) => item.taskId === id);
   }
 
   async create(newTimeInterval: ITimeInterval): Promise<ITimeInterval> {
     try {
-      const response = await axiosInstance.post(endpoint, {
+      const response = await axiosInstance.post<ITimeInterval>(API_ENDPOINT, {
         daily: newTimeInterval.daily,
         weekly: newTimeInterval.weekly,
         monthly: newTimeInterval.monthly,
         yearly: newTimeInterval.yearly,
         taskId: newTimeInterval.taskId,
       });
-      const newData: ITimeInterval = response.data;
-      await this._loadData();
+      const newData = response.data;
+      this.timeIntervals.push(newData);
       return newData;
     } catch (error) {
       console.error("Error in creating data:", error);
@@ -55,12 +52,12 @@ class TimeIntervalService {
   }
 
   async update(
-    timeIntervalId: number,
+    id: number,
     newTimeInterval: ITimeInterval
   ): Promise<ITimeInterval | null> {
     try {
-      const response = await axiosInstance.put(
-        `${endpoint}/${timeIntervalId}`,
+      const response = await axiosInstance.put<ITimeInterval>(
+        `${API_ENDPOINT}/${id}`,
         {
           daily: newTimeInterval.daily,
           weekly: newTimeInterval.weekly,
@@ -70,8 +67,11 @@ class TimeIntervalService {
         }
       );
       if ((response.status = 200)) {
-        const updatedData: ITimeInterval = response.data;
-        await this._loadData();
+        const updatedData = response.data;
+        const index = this.timeIntervals.findIndex((item) => item.id === id);
+        if (index !== -1) {
+          this.timeIntervals[index] = { ...updatedData };
+        }
         return updatedData;
       } else {
         console.error("Error: No data with that ID");
@@ -83,15 +83,17 @@ class TimeIntervalService {
     }
   }
 
-  async remove(timeIntervalId: number) {
+  async remove(id: number): Promise<ITimeInterval | null> {
     try {
-      const response = await axiosInstance.delete(
-        `${endpoint}/${timeIntervalId}`
+      const response = await axiosInstance.delete<ITimeInterval>(
+        `${API_ENDPOINT}/${id}`
       );
 
       if ((response.status = 200)) {
-        const deletedTaskList: ITimeInterval = response.data;
-        await this._loadData();
+        const deletedTaskList = response.data;
+        this.timeIntervals = this.timeIntervals.filter(
+          (item) => item.id !== id
+        );
         return deletedTaskList;
       } else {
         console.error("Error: No data with that ID");

@@ -3,7 +3,7 @@ interface ITaskForm {
   name: string;
   description: string;
   schedule: string;
-  dueDate: string;
+  dueAt: string;
   timeIntervalData: {
     choice: string;
     status: boolean;

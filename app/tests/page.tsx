@@ -1,41 +1,47 @@
 "use client";
 
-import ITaskList from "@/app/services/Interfaces/ITaskList";
-import taskListService from "@/app/services/TaskListSevice";
 import { useEffect, useState } from "react";
-import { Box, Container, Typography } from "../lib/MUI-core-v4";
-import taskService from "../services/TaskService";
+import ITask from "../services/Interfaces/ITask";
+import axiosInstance from "../services/apiClient";
 
-const TaskList = () => {
-  //   const [data, setData] = useState<ITaskList[]>([]);
-  const [data, setData] = useState<ITaskList | null>();
+const YourComponent = () => {
+  const [data, setData] = useState<ITask[]>([]);
+  const [loading, setLoading] = useState(true); // State to track loading status
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedData = await taskListService.remove(25);
-        setData(fetchedData);
-        console.log(fetchedData);
+        const response = await axiosInstance.get<ITask[]>("/task");
+        setLoading(false); // Set loading to false after data is fetched
+        setData(response.data);
+        console.log("Data has been successfully fetched");
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error loading data:", error);
+        setLoading(false); // Set loading to false in case of error
+        throw error;
       }
     };
-    fetchData();
-  }, [data]);
 
+    fetchData();
+  }, []);
+
+  // Render loading screen if data is loading
+  if (loading) {
+    return (
+      <div className="loading-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  // Render your component content once data is loaded
   return (
-    <Container maxWidth="sm" className="mt-10">
-      {/* {data.map((key) => (
-        <Box key={key.id} className="mt-5">
-          <Box className="flex justify-between items-center">
-            <Typography variant="h6">{key.name}</Typography>
-          </Box>
-        </Box>
-      ))} */}
-      <Typography>
-        {data?.name === undefined ? undefined : data.name}
-      </Typography>
-    </Container>
+    <div className="your-component">
+      {data.map((item) => (
+        <p key={item.id}>{item.name}</p>
+      ))}
+    </div>
   );
 };
 
-export default TaskList;
+export default YourComponent;

@@ -1,6 +1,6 @@
 import ITaskForm from "../components/Task/form/ITaskForm";
 
-export const sortList = ["Default", "Date Created", "Name"];
+export const sortList = ["Date Created", "Name"];
 
 export const defaultScheduleValue = "Today";
 export const defaultTaskListChoice = "New List";
@@ -27,7 +27,7 @@ export const defaultInitialValues: ITaskForm = {
   name: "",
   description: "",
   schedule: defaultScheduleValue,
-  dueDate: "",
+  dueAt: "",
   timeIntervalData: defaultTimeInterval,
   dayIntervalData: defualtDayInterval,
   priority: defaultPriorityValue,

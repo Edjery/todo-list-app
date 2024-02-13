@@ -1,7 +1,10 @@
+"use client";
+
 import ITask from "@/app/services/Interfaces/ITask";
+import ITaskList from "@/app/services/Interfaces/ITaskList";
 import taskListService from "@/app/services/TaskListSevice";
 import CloseIcon from "@material-ui/icons/Close";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Container, Typography } from "../../lib/MUI-core-v4";
 import ConfirmationAlert from "./common/ConfirmationAlert";
 import TaskItem from "./common/TaskItem";
@@ -19,14 +22,42 @@ const TaskList = ({
   onTaskEdit,
   onTaskDelete,
 }: Props) => {
-  const taskLists = taskListService.getAll();
+  const [taskLists, setTaskLists] = useState<ITaskList[]>([]);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
   const [openTaskDeleteModal, setOpenTaskDeleteModal] = useState(false);
   const [taskId, setTaskId] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(false);
+        setTaskLists(await taskListService.getAll());
+        console.log("Data has been successfully fetched");
+      } catch (error) {
+        setLoading(false);
+        console.error("Error loading data:", error);
+        throw error;
+      }
+    };
+
+    fetchData();
+  }, [tasks]);
+
+  if (loading) {
+    return (
+      <Container maxWidth="sm" className="mt-10">
+        <Box className="mt-5">
+          <Typography>Loading...</Typography>
+        </Box>
+      </Container>
+    );
+  }
 
   const handleDelete = async (id: number) => {
     await taskListService.remove(id);
+    setTaskLists(await taskListService.getAll());
   };
 
   return (

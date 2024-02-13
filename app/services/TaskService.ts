@@ -1,27 +1,28 @@
 import ITask from "./Interfaces/ITask";
 import axiosInstance from "./apiClient";
 
-const endpoint = "/task";
+const API_ENDPOINT = "/task";
 
 class TaskService {
-  tasks: ITask[];
+  private tasks: ITask[] = [];
 
   constructor() {
-    this.tasks = [];
-    this._loadData();
+    this.loadData();
   }
 
-  private async _loadData() {
+  private async loadData(): Promise<void> {
     try {
-      const response = await axiosInstance.get<ITask[]>(endpoint);
+      const response = await axiosInstance.get<ITask[]>(API_ENDPOINT);
       this.tasks = response.data;
     } catch (error) {
       console.error("Error in loading data:", error);
+      throw error;
     }
   }
 
-  getAll(): ITask[] {
-    return this.tasks;
+  async getAll(): Promise<ITask[]> {
+    const response = await axiosInstance.get<ITask[]>(API_ENDPOINT);
+    return response.data;
   }
 
   get(id: number): ITask | undefined {
@@ -30,16 +31,16 @@ class TaskService {
 
   async create(newTask: ITask): Promise<ITask> {
     try {
-      const response = await axiosInstance.post(endpoint, {
+      const response = await axiosInstance.post<ITask>(API_ENDPOINT, {
         name: newTask.name,
         description: newTask.description,
-        dueAt: newTask.dueDate,
+        dueAt: newTask.dueAt,
         priority: newTask.priority,
         status: newTask.status,
         taskListId: newTask.taskListId,
       });
-      const newData: ITask = response.data;
-      await this._loadData();
+      const newData = response.data;
+      this.tasks.push(newData);
       return newData;
     } catch (error) {
       console.error("Error in creating data:", error);
@@ -49,17 +50,20 @@ class TaskService {
 
   async update(id: number, newTask: ITask): Promise<ITask | null> {
     try {
-      const response = await axiosInstance.put(`${endpoint}/${id}`, {
+      const response = await axiosInstance.put<ITask>(`${API_ENDPOINT}/${id}`, {
         name: newTask.name,
         description: newTask.description,
-        dueAt: newTask.dueDate,
+        dueAt: newTask.dueAt,
         priority: newTask.priority,
         status: newTask.status,
         taskListId: newTask.taskListId,
       });
       if ((response.status = 200)) {
-        const updatedData: ITask = response.data;
-        await this._loadData();
+        const updatedData = response.data;
+        const index = this.tasks.findIndex((item) => item.id === id);
+        if (index !== -1) {
+          this.tasks[index] = { ...updatedData };
+        }
         return updatedData;
       } else {
         console.error("Error: No data with that ID");
@@ -73,47 +77,27 @@ class TaskService {
 
   async updateStatus(id: number): Promise<ITask | null> {
     const task = this.get(id);
+    if (!task) throw new Error("Data not found");
 
-    if (task) {
-      try {
-        const response = await axiosInstance.put(`${endpoint}/${id}`, {
-          name: task.name,
-          description: task.description,
-          dueAt: task.dueDate,
-          priority: task.priority,
-          status: !task.status,
-          taskListId: task.taskListId,
-        });
-        if ((response.status = 200)) {
-          const updatedData: ITask = response.data;
-          await this._loadData();
-          return updatedData;
-        } else {
-          console.error("Error: No data with that ID");
-          return null;
-        }
-      } catch (error) {
-        console.error("Error in updating data:", error);
-        throw error;
-      }
-    }
-    return null;
+    const updatedTask = { ...task, status: !task.status };
+    return this.update(id, updatedTask);
   }
 
   async remove(id: number): Promise<ITask | null> {
     try {
-      const response = await axiosInstance.delete(`${endpoint}/${id}`);
-
+      const response = await axiosInstance.delete<ITask>(
+        `${API_ENDPOINT}/${id}`
+      );
       if ((response.status = 200)) {
-        const deletedTaskList: ITask = response.data;
-        await this._loadData();
-        return deletedTaskList;
+        const deletedData = response.data;
+        this.tasks = this.tasks.filter((task) => task.id !== id);
+        return deletedData;
       } else {
         console.error("Error: No data with that ID");
         return null;
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error in deleting data:", error);
       throw error;
     }
   }

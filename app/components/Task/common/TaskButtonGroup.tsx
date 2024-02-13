@@ -34,7 +34,7 @@ interface Props {
 }
 
 const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
-  const [input, setInput] = useState<string>(values.dueDate);
+  const [input, setInput] = useState<string>(values.dueAt);
 
   return (
     <>
@@ -52,9 +52,7 @@ const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
           }}
         >
           <ToggleButton value="Today">Just Today</ToggleButton>
-
           <ToggleButton value="Custom">Custom Schedule</ToggleButton>
-
           <ToggleButton value="Date">Due Date</ToggleButton>
         </ToggleButtonGroup>
         <ToggleableButton
@@ -100,7 +98,7 @@ const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
             onChange={(event: ChangeEvent<HTMLInputElement>): void => {
               const value = event.target.value;
               setInput(value);
-              setFieldValue("dueDate", value);
+              setFieldValue("dueAt", value);
             }}
             value={input}
           />

@@ -30,21 +30,26 @@ const TaskFormFooter = ({
   isSubmitting,
   onClose,
 }: Props) => {
-  const [taskListChoice, setTaskListChoice] = useState<string | unknown>(
-    values.taskList
-  );
-  const [taskListItems, setTaskListItems] = useState<ITaskList[]>([]);
+  const [taskList, setTaskList] = useState<ITaskList[]>([]);
+  const [taskListChoice, setTaskListChoice] = useState<string | unknown>("");
 
   useEffect(() => {
-    const fetchTaskListItems = async () => {
+    const fetchData = async () => {
       try {
-        const items = await taskListService.getAll();
-        setTaskListItems(items);
+        const fetchedTaskList = await taskListService.getAll();
+        setTaskList(fetchedTaskList);
+
+        const initialTaskListChoice =
+          fetchedTaskList.find((item) => item.name === values.taskList)?.name ||
+          defaultTaskListChoice;
+        setTaskListChoice(initialTaskListChoice);
+        console.log("Data has been successfully fetched");
       } catch (error) {
-        console.error("Error fetching task list items:", error);
+        console.error("Error loading data:", error);
+        throw error;
       }
     };
-    fetchTaskListItems();
+    fetchData();
   }, []);
 
   const submitButtonText = values.id === undefined ? "Add Task" : "Edit Task";
@@ -84,8 +89,8 @@ const TaskFormFooter = ({
                   >
                     {defaultTaskListChoice}
                   </MenuItem>
-                  {taskListItems.map((taskListItem: ITaskList) => (
-                    <MenuItem key={taskListItem.id} value={taskListItem.name}>
+                  {taskList.map((taskListItem: ITaskList) => (
+                    <MenuItem key={taskListItem.name} value={taskListItem.name}>
                       {taskListItem.name}
                     </MenuItem>
                   ))}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Container, Typography } from "@/app/lib/MUI-core-v4";
+import { Box, Container } from "@/app/lib/MUI-core-v4";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import AddTaskMiniButton from "./components/AddTaskMiniButton";
@@ -11,6 +11,7 @@ import TaskList from "./components/Task/TaskList";
 import PopupAlert from "./components/Task/common/PopupAlert";
 import ITaskForm from "./components/Task/form/ITaskForm";
 import { defaultInitialValues, sortList } from "./data/dataMatrix";
+import { Skeleton } from "./lib/MUI-lab-v4";
 import dayIntervalService from "./services/DayIntervalService";
 import IDayInterval from "./services/Interfaces/IDayInterval";
 import ITag from "./services/Interfaces/ITag";
@@ -21,7 +22,6 @@ import tagService from "./services/TagService";
 import taskListService from "./services/TaskListSevice";
 import taskService from "./services/TaskService";
 import timeIntervalService from "./services/TimeIntervalService";
-import { Skeleton } from "./lib/MUI-lab-v4";
 
 export default function Home() {
   const [tasks, setTasks] = useState<ITask[]>([]);
@@ -98,7 +98,7 @@ export default function Home() {
       id: values.id || 0, // not used in the service
       name: values.name,
       description: values.description,
-      dueAt: values.dueAt,
+      dueAt: values.dueAt || dayjs().format("YYYY-MM-DD"),
       priority: values.priority,
       status: false,
       createdAt: dayjs().format("YYYY-MM-DDTHH:mm:ss"), // not used in the service
@@ -106,7 +106,7 @@ export default function Home() {
     };
     // initializing timeInterval values
     const newTimeInterval: ITimeInterval = {
-      id: 0,
+      id: 0, // not used in the service
       daily: values.timeIntervalData[0].status,
       weekly: values.timeIntervalData[1].status,
       monthly: values.timeIntervalData[2].status,
@@ -115,7 +115,7 @@ export default function Home() {
     };
     // initializing dayInterval values
     const newDayInterval: IDayInterval = {
-      id: 0,
+      id: 0, // not used in the service
       sunday: values.dayIntervalData[0].status,
       monday: values.dayIntervalData[1].status,
       tuesday: values.dayIntervalData[2].status,
@@ -127,7 +127,7 @@ export default function Home() {
     };
     // initializing newTag values
     const newTag: ITag = {
-      id: 0,
+      id: 0, // not used in the service
       name: values.tags,
       taskId: newTask.id,
     };
@@ -186,27 +186,44 @@ export default function Home() {
         // resetting date
         newTask.dueAt = defaultInitialValues.dueAt;
       }
-      // deleting intervals if not custom
+      // defaulting intervals if not custom
       else {
         if (timeIntervalToBeUpdated)
-          timeIntervalService.remove(timeIntervalToBeUpdated.id);
+          timeIntervalService.update(timeIntervalToBeUpdated.id, {
+            id: 0, // not used in the service
+            daily: false,
+            weekly: false,
+            monthly: false,
+            yearly: false,
+            taskId: newTask.id,
+          });
         if (dayIntervalToBeUpdated)
-          dayIntervalService.remove(dayIntervalToBeUpdated.id);
+          dayIntervalService.update(dayIntervalToBeUpdated.id, {
+            id: 0, // not used in the service
+            sunday: false,
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: false,
+            taskId: newTask.id,
+          });
+
         // resetting date if needed
-        newTask.dueAt =
-          values.schedule === "Today"
-            ? defaultInitialValues.dueAt
-            : newTask.dueAt;
+        if (values.schedule === "Today") {
+          newTask.dueAt = defaultInitialValues.dueAt;
+        }
       }
 
-      const tagToBeUpdated = await tagService.getByTaskId(values.id);
+      const tagToBeUpdated = tagService.getByTaskId(values.id);
       // creating tags
       if (!tagToBeUpdated) tagService.create(newTag);
       // updating tags
       else {
         newTag.id = tagToBeUpdated.id;
         newTag.taskId = tagToBeUpdated.taskId;
-        tagService.update(tagToBeUpdated.id, newTag);
+        tagService.update(newTag.id, newTag);
       }
 
       // updating task locally
@@ -215,7 +232,7 @@ export default function Home() {
       );
       setTasks(updatedTasks);
 
-      // updating task outsidilly
+      // updating task in db
       taskService.update(values.id, newTask);
     }
   };

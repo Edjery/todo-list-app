@@ -3,7 +3,7 @@ import {
   defaultScheduleValue,
   defaultTaskListChoice,
   defaultTimeInterval,
-  defualtDayInterval,
+  defaultDayInterval,
 } from "@/app/data/dataMatrix";
 import { areArrayObjectsEqual } from "@/app/helpers/areArrayObjectsEqual";
 import {
@@ -49,7 +49,7 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
         initialValues.description = description;
         initialValues.dueAt = dueAt === "" ? "" : dueAt;
 
-        initialValues.timeIntervalData = defualtDayInterval;
+        initialValues.timeIntervalData = defaultDayInterval;
 
         initialValues.timeIntervalData = [
           {
@@ -142,7 +142,7 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
         );
         const sameDayInterval = areArrayObjectsEqual(
           initialValues.dayIntervalData,
-          defualtDayInterval
+          defaultDayInterval
         );
         const defaultIntervals = sameTimeInterval && sameDayInterval;
 

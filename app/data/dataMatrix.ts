@@ -12,7 +12,7 @@ export const defaultTimeInterval = [
   { choice: "Monthly", status: false },
   { choice: "Yearly", status: false },
 ];
-export const defualtDayInterval = [
+export const defaultDayInterval = [
   { choice: "Sunday", status: false },
   { choice: "Monday", status: false },
   { choice: "Tuesday", status: false },
@@ -29,7 +29,7 @@ export const defaultInitialValues: ITaskForm = {
   schedule: defaultScheduleValue,
   dueAt: "",
   timeIntervalData: defaultTimeInterval,
-  dayIntervalData: defualtDayInterval,
+  dayIntervalData: defaultDayInterval,
   priority: defaultPriorityValue,
   taskList: defaultTaskListChoice,
   tags: "",

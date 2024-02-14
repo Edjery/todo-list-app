@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Box, Button, Container, Typography } from "../../lib/MUI-core-v4";
 import ConfirmationAlert from "./common/ConfirmationAlert";
 import TaskItem from "./common/TaskItem";
+import { Skeleton } from "@material-ui/lab";
 
 interface Props {
   tasks: ITask[];
@@ -23,11 +24,11 @@ const TaskList = ({
   onTaskDelete,
 }: Props) => {
   const [taskLists, setTaskLists] = useState<ITaskList[]>([]);
-  const [open, setOpen] = useState(false);
-  const [id, setId] = useState(0);
-  const [openTaskDeleteModal, setOpenTaskDeleteModal] = useState(false);
-  const [taskId, setTaskId] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [id, setId] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [taskId, setTaskId] = useState(0);
+  const [openTaskDeleteModal, setOpenTaskDeleteModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,13 +49,21 @@ const TaskList = ({
   if (loading) {
     return (
       <Container maxWidth="sm" className="mt-10">
-        <Box className="mt-5">
-          <Typography>Loading...</Typography>
-        </Box>
+        {[...Array(3)].map((_, index) => (
+          <Box key={index} className="mt-5">
+            <Box className="flex justify-between items-center">
+              <Skeleton height={100} width={750} />
+            </Box>
+            {[...Array(5)].map((_, index) => (
+              <Box key={index} component="div" className="flex justify-between">
+                <Skeleton height={50} width={750} animation="wave" />
+              </Box>
+            ))}
+          </Box>
+        ))}
       </Container>
     );
   }
-
   const handleDelete = async (id: number) => {
     await taskListService.remove(id);
     setTaskLists(await taskListService.getAll());

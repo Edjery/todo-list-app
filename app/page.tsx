@@ -21,16 +21,17 @@ import tagService from "./services/TagService";
 import taskListService from "./services/TaskListSevice";
 import taskService from "./services/TaskService";
 import timeIntervalService from "./services/TimeIntervalService";
+import { Skeleton } from "./lib/MUI-lab-v4";
 
 export default function Home() {
   const [tasks, setTasks] = useState<ITask[]>([]);
-  const [loading, setLoading] = useState(true);
   const [taskId, setTaskId] = useState<number | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
+  const [sortValue, setSortValue] = useState<string>(sortList[0]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [formOpen, setFormOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
-  const [sortValue, setSortValue] = useState<string>(sortList[0]);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,13 +51,14 @@ export default function Home() {
 
   if (loading) {
     return (
-      <Container maxWidth="sm" className="mt-10">
-        <Box className="mt-5">
-          <Typography>Loading...</Typography>
+      <Container maxWidth="md">
+        <Box className="mt-6">
+          <Skeleton height={100} width={910} />
         </Box>
       </Container>
     );
   }
+
   const filteredTaskData = tasks.filter((data) =>
     data.name.toLowerCase().includes(searchTerm.toLowerCase())
   );

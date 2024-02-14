@@ -37,6 +37,7 @@ class TaskService {
         dueAt: newTask.dueAt,
         priority: newTask.priority,
         status: newTask.status,
+        timeInterval: newTask.timeInterval,
         taskListId: newTask.taskListId,
       });
       const newData = response.data;
@@ -56,6 +57,7 @@ class TaskService {
         dueAt: newTask.dueAt,
         priority: newTask.priority,
         status: newTask.status,
+        timeInterval: newTask.timeInterval,
         taskListId: newTask.taskListId,
       });
       if ((response.status = 200)) {

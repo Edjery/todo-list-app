@@ -1,57 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Checkbox,
   FormControl,
   FormControlLabel,
 } from "../../../lib/MUI-core-v4";
+import ObjectStatus from "./interface/IObjectStatus";
 
 interface Props {
-  value: {
-    choice: string;
-    status: boolean;
-  }[];
-  list: string[];
-  onChange: (checkedItems: string[]) => void;
+  list: ObjectStatus[];
+  setValue: (value: ObjectStatus[]) => void;
 }
 
-const TaskCheckboxGroup = ({ value, list, onChange }: Props) => {
-  const objectsWithTrueStatus = value.filter((item) => item.status === true);
-  const choicesWithTrueStatus = objectsWithTrueStatus.map(
-    (item) => item.choice
-  );
-  const [items, setItems] = useState<string[]>(choicesWithTrueStatus);
+const TaskCheckboxGroup = ({ list, setValue }: Props) => {
+  const [items, setItems] = useState<ObjectStatus[]>(list);
 
-  const handleCheckboxChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    const { checked, name } = event.target;
-    let updatedItems: string[];
+  useEffect(() => {
+    setItems(list);
+  }, [list]);
 
-    if (checked) {
-      updatedItems = [...items, name];
-    } else {
-      updatedItems = items.filter((item) => item !== name);
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+    const index = items.findIndex((item) => item.name === name);
+    if (index !== -1) {
+      const updatedItems = [...items];
+      updatedItems[index] = { ...updatedItems[index], status: checked };
+      setItems(updatedItems);
+      setValue(updatedItems);
     }
-
-    setItems(updatedItems);
-    onChange(updatedItems);
   };
 
   return (
     <Box component="div" className="flex justify-center mt-3">
-      {list.map((listItem) => (
-        <Box key={listItem}>
+      {items.map((item) => (
+        <Box key={item.name}>
           <FormControl>
             <FormControlLabel
-              label={listItem}
+              label={item.name}
               control={
                 <Checkbox
-                  name={listItem}
+                  name={item.name}
                   color="primary"
+                  checked={item.status}
                   onChange={handleCheckboxChange}
-                  checked={items.includes(listItem)}
-                  value={items.includes(listItem)}
                 />
               }
             />

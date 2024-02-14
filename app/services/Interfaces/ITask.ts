@@ -6,6 +6,7 @@ interface ITask {
   priority: boolean;
   status: boolean;
   createdAt: string;
+  timeInterval: string;
   taskListId: number;
 }
 

@@ -18,20 +18,8 @@ export const taskSchema = yup
     dueAt: yup.string().nullable().default(null),
     priority: yup.boolean().default(false),
     status: yup.boolean().default(false),
+    timeInterval: yup.string().nullable().default(null),
     taskListId: yup.number().required(),
-  })
-  .noUnknown()
-  .strict(true);
-
-// Validation schema for TimeInterval
-export const timeIntervalSchema = yup
-  .object()
-  .shape({
-    daily: yup.boolean().default(false),
-    weekly: yup.boolean().default(false),
-    monthly: yup.boolean().default(false),
-    yearly: yup.boolean().default(false),
-    taskId: yup.number().required(),
   })
   .noUnknown()
   .strict(true);

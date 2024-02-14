@@ -6,12 +6,7 @@ const taskFormSchema = yup.object({
   description: yup.string(),
   schedule: yup.string(),
   dueAt: yup.string(),
-  timeIntervalData: yup.array().of(
-    yup.object({
-      choice: yup.string(),
-      status: yup.boolean(),
-    })
-  ),
+  timeIntervalData: yup.string(),
   dayIntervalData: yup.array().of(
     yup.object({
       choice: yup.string(),

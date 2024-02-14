@@ -1,3 +1,4 @@
+import ObjectStatus from "../components/Task/common/interface/IObjectStatus";
 import ITaskForm from "../components/Task/form/ITaskForm";
 
 export const sortList = ["Date Created", "Name"];
@@ -5,35 +6,6 @@ export const sortList = ["Date Created", "Name"];
 export const defaultScheduleValue = "Today";
 export const defaultTaskListChoice = "New List";
 export const defaultPriorityValue = false;
-
-export const defaultTimeInterval = [
-  { choice: "Daily", status: false },
-  { choice: "Weekly", status: false },
-  { choice: "Monthly", status: false },
-  { choice: "Yearly", status: false },
-];
-export const defaultDayInterval = [
-  { choice: "Sunday", status: false },
-  { choice: "Monday", status: false },
-  { choice: "Tuesday", status: false },
-  { choice: "Wednesday", status: false },
-  { choice: "Thursday", status: false },
-  { choice: "Friday", status: false },
-  { choice: "Saturday", status: false },
-];
-
-export const defaultInitialValues: ITaskForm = {
-  id: undefined,
-  name: "",
-  description: "",
-  schedule: defaultScheduleValue,
-  dueAt: "",
-  timeIntervalData: defaultTimeInterval,
-  dayIntervalData: defaultDayInterval,
-  priority: defaultPriorityValue,
-  taskList: defaultTaskListChoice,
-  tags: "",
-};
 
 export const intervals = ["Daily", "Weekly", "Monthly", "Yearly"];
 export const days = [
@@ -45,3 +17,26 @@ export const days = [
   "Friday",
   "Saturday",
 ];
+
+export const defaultTimeInterval: ObjectStatus[] = intervals.map((item) => ({
+  name: item,
+  status: false,
+}));
+
+export const defaultDayInterval: ObjectStatus[] = days.map((item) => ({
+  name: item,
+  status: false,
+}));
+
+export const defaultInitialValues: ITaskForm = {
+  id: undefined,
+  name: "",
+  description: "",
+  schedule: defaultScheduleValue,
+  dueAt: "",
+  timeInterval: defaultTimeInterval,
+  dayIntervalData: defaultDayInterval,
+  priority: defaultPriorityValue,
+  taskList: defaultTaskListChoice,
+  tags: "",
+};

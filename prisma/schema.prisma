@@ -26,22 +26,11 @@ model Task {
   priority     Boolean
   status       Boolean
   createdAt    DateTime       @default(now())
+  timeInterval String?
   taskListId   Int
   taskList     TaskList       @relation(fields: [taskListId], references: [id], onDelete: Cascade)
-  timeInterval TimeInterval[]
   dayInterval  DayInterval[]
   tags         Tag[]
-}
-
-// TimeInterval model
-model TimeInterval {
-  id      Int     @id @default(autoincrement())
-  daily   Boolean
-  weekly  Boolean
-  monthly Boolean
-  yearly  Boolean
-  taskId  Int
-  task    Task    @relation(fields: [taskId], references: [id], onDelete: Cascade)
 }
 
 // DayInterval model

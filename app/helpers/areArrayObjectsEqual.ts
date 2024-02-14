@@ -1,13 +1,9 @@
+import ObjectStatus from "../components/Task/common/interface/IObjectStatus";
+
 // Function to compare two arrays of objects
 export const areArrayObjectsEqual = (
-  firstArray: {
-    choice: string;
-    status: boolean;
-  }[],
-  secondArray: {
-    choice: string;
-    status: boolean;
-  }[]
+  firstArray: ObjectStatus[],
+  secondArray: ObjectStatus[]
 ): boolean => {
   if (firstArray.length !== secondArray.length) {
     return false;
@@ -24,14 +20,8 @@ export const areArrayObjectsEqual = (
 
 // Function to compare two objects
 export const isObjectEqual = (
-  firstObject: {
-    choice: string;
-    status: boolean;
-  },
-  secondObject: {
-    choice: string;
-    status: boolean;
-  }
+  firstObject: ObjectStatus,
+  secondObject: ObjectStatus
 ): boolean => {
   const firstKeys = Object.keys(firstObject) as Array<keyof typeof firstObject>;
   const secondKeys = Object.keys(secondObject) as Array<

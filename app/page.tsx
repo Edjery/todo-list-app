@@ -17,11 +17,9 @@ import IDayInterval from "./services/Interfaces/IDayInterval";
 import ITag from "./services/Interfaces/ITag";
 import ITask from "./services/Interfaces/ITask";
 import ITaskList from "./services/Interfaces/ITaskList";
-import ITimeInterval from "./services/Interfaces/ITimeInterval";
 import tagService from "./services/TagService";
 import taskListService from "./services/TaskListSevice";
 import taskService from "./services/TaskService";
-import timeIntervalService from "./services/TimeIntervalService";
 
 export default function Home() {
   const [tasks, setTasks] = useState<ITask[]>([]);
@@ -101,17 +99,9 @@ export default function Home() {
       dueAt: values.dueAt,
       priority: values.priority,
       status: false,
+      timeInterval: values.timeInterval,
       createdAt: dayjs().format("YYYY-MM-DDTHH:mm:ss"), // not used in the service
       taskListId: taskListId,
-    };
-    // initializing timeInterval values
-    const newTimeInterval: ITimeInterval = {
-      id: 0, // not used in the service
-      daily: values.timeIntervalData[0].status,
-      weekly: values.timeIntervalData[1].status,
-      monthly: values.timeIntervalData[2].status,
-      yearly: values.timeIntervalData[3].status,
-      taskId: newTask.id,
     };
     // initializing dayInterval values
     const newDayInterval: IDayInterval = {
@@ -137,18 +127,19 @@ export default function Home() {
     } else if (values.schedule === "Date") {
       newTask.dueAt =
         newTask.dueAt === "" ? dayjs().format("YYYY-MM-DD") : newTask.dueAt;
-    }
-    newTask.dueAt = defaultInitialValues.dueAt;
+    } else if (
+      newTask.timeInterval === "Daily" ||
+      newTask.timeInterval === "Weekly"
+    )
+      newTask.dueAt = defaultInitialValues.dueAt;
 
     // creating task
     if (!values.id) {
       const createdTask = await taskService.create(newTask);
 
-      newTimeInterval.taskId = createdTask.id;
       newDayInterval.taskId = createdTask.id;
       newTag.taskId = createdTask.id;
 
-      timeIntervalService.create(newTimeInterval);
       dayIntervalService.create(newDayInterval);
       tagService.create(newTag);
 
@@ -160,26 +151,9 @@ export default function Home() {
       const taskToBeUpdated = taskService.get(values.id);
       if (taskToBeUpdated) newTask.id = taskToBeUpdated.id;
 
-      const timeIntervalToBeUpdated = timeIntervalService.getByTaskId(
-        newTask.id
-      );
       const dayIntervalToBeUpdated = dayIntervalService.getByTaskId(newTask.id);
       // creating/updating intervals if custom
       if (values.schedule === "Custom") {
-        // creating time interval
-        if (!timeIntervalToBeUpdated) {
-          newTimeInterval.taskId = newTask.id;
-          timeIntervalService.create(newTimeInterval);
-        }
-        // updating time interval
-        else {
-          newTimeInterval.id = timeIntervalToBeUpdated.id;
-          newTimeInterval.taskId = values.id;
-          timeIntervalService.update(
-            timeIntervalToBeUpdated.id,
-            newTimeInterval
-          );
-        }
         // creating day interval
         if (!dayIntervalToBeUpdated) {
           newDayInterval.taskId = newTask.id;
@@ -191,20 +165,9 @@ export default function Home() {
           newDayInterval.taskId = values.id;
           dayIntervalService.update(dayIntervalToBeUpdated.id, newDayInterval);
         }
-        // resetting date
-        newTask.dueAt = defaultInitialValues.dueAt;
       }
       // defaulting intervals if not custom
       else {
-        if (timeIntervalToBeUpdated)
-          timeIntervalService.update(timeIntervalToBeUpdated.id, {
-            id: 0, // not used in the service
-            daily: false,
-            weekly: false,
-            monthly: false,
-            yearly: false,
-            taskId: newTask.id,
-          });
         if (dayIntervalToBeUpdated)
           dayIntervalService.update(dayIntervalToBeUpdated.id, {
             id: 0, // not used in the service

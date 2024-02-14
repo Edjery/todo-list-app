@@ -1,45 +1,92 @@
-import { days, intervals } from "@/app/data/dataMatrix";
+import { days } from "@/app/data/dataMatrix";
 import { Box, TextField } from "@/app/lib/MUI-core-v4";
 import { ToggleButton, ToggleButtonGroup } from "@/app/lib/MUI-lab-v4";
-import { FormikErrors } from "formik";
+import dayjs from "dayjs";
 import React, { ChangeEvent, useState } from "react";
 import ToggleableButton from "../../common/ToggleableButton";
 import ITaskForm from "../form/ITaskForm";
 import TaskCheckboxGroup from "./TaskCheckboxGroup";
-
-const handleButtonChanges = (
-  newValue: string[],
-  prevValue: { choice: string; status: boolean }[]
-): {
-  choice: string;
-  status: boolean;
-}[] => {
-  for (let object of prevValue) {
-    if (newValue.includes(object.choice)) {
-      object.status = true;
-    } else {
-      object.status = false;
-    }
-  }
-  return prevValue;
-};
+import TimeIntervalRadioGroup from "./TimeIntervalRadioGroup";
+import ObjectStatus from "./interface/IObjectStatus";
 
 interface Props {
   values: ITaskForm;
   setValue: (
     field: string,
-    fieldValue:
-      | string
-      | boolean
-      | {
-          choice: string;
-          status: boolean;
-        }[]
+    fieldValue: string | boolean | ObjectStatus[]
   ) => void;
 }
 
 const TaskButtonGroup = ({ values, setValue }: Props) => {
   const [input, setInput] = useState<string>(values.dueAt);
+
+  const handleTimeIntervalChange = (items: string) => {
+    setValue("timeInterval", items);
+
+    if (items === "Daily") {
+      const newDayIntervals = days.map((day) => ({
+        name: day,
+        status: true,
+      }));
+
+      setValue("dayIntervalData", newDayIntervals);
+      handleDueDateChange("");
+    } else if (items === "Weekly") {
+      const currentDay = dayjs().format("dddd");
+      const newDayIntervals = days.map((day) => ({
+        name: day,
+        status: day === currentDay,
+      }));
+
+      setValue("dayIntervalData", newDayIntervals);
+      handleDueDateChange("");
+    } else if (items === "Monthly") {
+      const newDayIntervals = days.map((day) => ({
+        name: day,
+        status: false,
+      }));
+
+      setValue("dayIntervalData", newDayIntervals);
+      handleDueDateChange(dayjs().format("YYYY-MM-DD"));
+    } else if (items === "Yearly") {
+      const newDayIntervals = days.map((day) => ({
+        name: day,
+        status: false,
+      }));
+
+      setValue("dayIntervalData", newDayIntervals);
+      handleDueDateChange(dayjs().format("YYYY-MM-DD"));
+    } else {
+      const newDayIntervals = days.map((day) => ({
+        name: day,
+        status: false,
+      }));
+
+      setValue("dayIntervalData", newDayIntervals);
+    }
+  };
+
+  const handleDayIntervalChange = (items: ObjectStatus[]) => {
+    setValue("dayIntervalData", items);
+
+    const trueCounts = items.filter((item) => item.status).length;
+
+    let timeInterval: string;
+    if (trueCounts === items.length) {
+      timeInterval = "Daily";
+    } else if (trueCounts === 1) {
+      timeInterval = "Weekly";
+    } else {
+      timeInterval = "";
+    }
+
+    setValue("timeInterval", timeInterval);
+  };
+
+  const handleDueDateChange = (value: string): void => {
+    setInput(value);
+    setValue("dueAt", value);
+  };
 
   return (
     <>
@@ -51,9 +98,8 @@ const TaskButtonGroup = ({ values, setValue }: Props) => {
             event: React.MouseEvent<HTMLElement>,
             newScheduleValue: string | null
           ) => {
-            if (newScheduleValue !== null) {
+            if (newScheduleValue !== null)
               setValue("schedule", newScheduleValue);
-            }
           }}
         >
           <ToggleButton value="Today">Just Today</ToggleButton>
@@ -63,35 +109,19 @@ const TaskButtonGroup = ({ values, setValue }: Props) => {
         <ToggleableButton
           value={values.priority}
           label={"Priority"}
-          onChange={(item) => {
-            setValue("priority", item);
-          }}
+          onChange={(item) => setValue("priority", item)}
         />
       </Box>
 
       {values.schedule === "Custom" && (
         <>
-          <TaskCheckboxGroup
-            value={values.timeIntervalData}
-            list={intervals}
-            onChange={(items) => {
-              const newTimeInterval = handleButtonChanges(
-                items,
-                values.timeIntervalData
-              );
-              setValue("timeIntervalData", newTimeInterval);
-            }}
+          <TimeIntervalRadioGroup
+            currentInterval={values.timeInterval}
+            setValue={handleTimeIntervalChange}
           />
           <TaskCheckboxGroup
-            value={values.dayIntervalData}
-            list={days}
-            onChange={(items) => {
-              const newDayInterval = handleButtonChanges(
-                items,
-                values.dayIntervalData
-              );
-              setValue("dayIntervalData", newDayInterval);
-            }}
+            list={values.dayIntervalData}
+            setValue={handleDayIntervalChange}
           />
         </>
       )}
@@ -100,11 +130,9 @@ const TaskButtonGroup = ({ values, setValue }: Props) => {
         <Box className="flex justify-center">
           <TextField
             type="date"
-            onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-              const value = event.target.value;
-              setInput(value);
-              setValue("dueAt", value);
-            }}
+            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+              handleDueDateChange(event.target.value)
+            }
             value={input}
           />
         </Box>

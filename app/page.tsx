@@ -59,32 +59,10 @@ export default function Home() {
     );
   }
 
-  const filteredTaskData = tasks.filter((data) =>
-    data.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   // handle tasks
   const handleTaskDataCreate = () => {
     setTaskId(undefined);
     setFormOpen(true);
-  };
-
-  const getTaskDataSorted = () => {
-    const sortedTaskData = filteredTaskData.sort((a, b) => {
-      if (sortValue === "Default") {
-        const dateA = new Date(a.dateCreated);
-        const dateB = new Date(b.dateCreated);
-        return dateB.getTime() - dateA.getTime();
-      } else if (sortValue === "Date Created") {
-        const dateA = new Date(a.dateCreated);
-        const dateB = new Date(b.dateCreated);
-        return dateA.getTime() - dateB.getTime();
-      } else if (sortValue === "Name") {
-        return a.name.localeCompare(b.name);
-      }
-      return 0;
-    });
-    return sortedTaskData;
   };
 
   // handle forms
@@ -117,13 +95,13 @@ export default function Home() {
 
     // initializing task values
     const newTask: ITask = {
-      id: values.id || 0,
-      dateCreated: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
+      id: values.id || 0, // not used in the service
       name: values.name,
       description: values.description,
       dueAt: values.dueAt,
       priority: values.priority,
       status: false,
+      createdAt: dayjs().format("YYYY-MM-DDTHH:mm:ss"), // not used in the service
       taskListId: taskListId,
     };
     // initializing timeInterval values
@@ -171,15 +149,13 @@ export default function Home() {
     // editing task
     else {
       // updating task id
-      const taskToBeUpdated = await taskService.get(values.id);
+      const taskToBeUpdated = taskService.get(values.id);
       if (taskToBeUpdated) newTask.id = taskToBeUpdated.id;
 
-      const timeIntervalToBeUpdated = await timeIntervalService.getByTaskId(
+      const timeIntervalToBeUpdated = timeIntervalService.getByTaskId(
         newTask.id
       );
-      const dayIntervalToBeUpdated = await dayIntervalService.getByTaskId(
-        newTask.id
-      );
+      const dayIntervalToBeUpdated = dayIntervalService.getByTaskId(newTask.id);
       // creating/updating intervals if custom
       if (values.schedule === "Custom") {
         // creating time interval
@@ -244,6 +220,28 @@ export default function Home() {
     }
   };
 
+  const searchedTask = tasks.filter((data) =>
+    data.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const sortData = (task: ITask[]): ITask[] => {
+    const sortedTaskData = task.sort((a, b) => {
+      if (sortValue === "Default") {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+        return dateB.getTime() - dateA.getTime();
+      } else if (sortValue === "Date Created") {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+        return dateA.getTime() - dateB.getTime();
+      } else if (sortValue === "Name") {
+        return a.name.localeCompare(b.name);
+      }
+      return 0;
+    });
+    return sortedTaskData;
+  };
+
   return (
     <main>
       <Box>
@@ -259,7 +257,7 @@ export default function Home() {
           }}
         />
         <TaskList
-          tasks={getTaskDataSorted()}
+          tasks={sortData(searchedTask)}
           onStatusUpdate={async (taskId: number) => {
             await taskService.updateStatus(taskId);
             setTasks(await taskService.getAll());

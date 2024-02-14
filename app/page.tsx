@@ -98,7 +98,7 @@ export default function Home() {
       id: values.id || 0, // not used in the service
       name: values.name,
       description: values.description,
-      dueAt: values.dueAt || dayjs().format("YYYY-MM-DD"),
+      dueAt: values.dueAt,
       priority: values.priority,
       status: false,
       createdAt: dayjs().format("YYYY-MM-DDTHH:mm:ss"), // not used in the service
@@ -131,6 +131,14 @@ export default function Home() {
       name: values.tags,
       taskId: newTask.id,
     };
+
+    // resetting date if needed
+    if (values.schedule === "Today") {
+    } else if (values.schedule === "Date") {
+      newTask.dueAt =
+        newTask.dueAt === "" ? dayjs().format("YYYY-MM-DD") : newTask.dueAt;
+    }
+    newTask.dueAt = defaultInitialValues.dueAt;
 
     // creating task
     if (!values.id) {
@@ -209,11 +217,6 @@ export default function Home() {
             saturday: false,
             taskId: newTask.id,
           });
-
-        // resetting date if needed
-        if (values.schedule === "Today") {
-          newTask.dueAt = defaultInitialValues.dueAt;
-        }
       }
 
       const tagToBeUpdated = tagService.getByTaskId(values.id);

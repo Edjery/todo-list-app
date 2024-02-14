@@ -26,14 +26,19 @@ const handleButtonChanges = (
 
 interface Props {
   values: ITaskForm;
-  setFieldValue: (
+  setValue: (
     field: string,
-    value: any,
-    shouldValidate?: boolean | undefined
-  ) => Promise<void | FormikErrors<ITaskForm>>;
+    fieldValue:
+      | string
+      | boolean
+      | {
+          choice: string;
+          status: boolean;
+        }[]
+  ) => void;
 }
 
-const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
+const TaskButtonGroup = ({ values, setValue }: Props) => {
   const [input, setInput] = useState<string>(values.dueAt);
 
   return (
@@ -47,7 +52,7 @@ const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
             newScheduleValue: string | null
           ) => {
             if (newScheduleValue !== null) {
-              setFieldValue("schedule", newScheduleValue);
+              setValue("schedule", newScheduleValue);
             }
           }}
         >
@@ -59,7 +64,7 @@ const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
           value={values.priority}
           label={"Priority"}
           onChange={(item) => {
-            setFieldValue("priority", item);
+            setValue("priority", item);
           }}
         />
       </Box>
@@ -74,7 +79,7 @@ const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
                 items,
                 values.timeIntervalData
               );
-              setFieldValue("timeIntervalData", newTimeInterval);
+              setValue("timeIntervalData", newTimeInterval);
             }}
           />
           <TaskCheckboxGroup
@@ -85,7 +90,7 @@ const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
                 items,
                 values.dayIntervalData
               );
-              setFieldValue("dayIntervalData", newDayInterval);
+              setValue("dayIntervalData", newDayInterval);
             }}
           />
         </>
@@ -98,7 +103,7 @@ const TaskButtonGroup = ({ values, setFieldValue }: Props) => {
             onChange={(event: ChangeEvent<HTMLInputElement>): void => {
               const value = event.target.value;
               setInput(value);
-              setFieldValue("dueAt", value);
+              setValue("dueAt", value);
             }}
             value={input}
           />

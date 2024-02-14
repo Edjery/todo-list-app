@@ -221,7 +221,12 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
                 />
               </Box>
 
-              <TaskButtonGroup values={values} setFieldValue={setFieldValue} />
+              <TaskButtonGroup
+                values={values}
+                setValue={(field, fieldValue) =>
+                  setFieldValue(field, fieldValue)
+                }
+              />
 
               <Box className="mt-2">
                 <Field

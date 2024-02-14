@@ -259,15 +259,16 @@ export default function Home() {
         <TaskList
           tasks={getTaskDataSorted()}
           onStatusUpdate={async (taskId: number) => {
-            taskService.updateStatus(taskId);
+            await taskService.updateStatus(taskId);
+            setTasks(await taskService.getAll());
           }}
           onTaskEdit={(taskId: number) => {
             setTaskId(taskId);
             setFormOpen(true);
           }}
           onTaskDelete={async (taskId: number) => {
-            taskService.remove(taskId);
-            setTasks(tasks.filter((task) => task.id !== taskId));
+            await taskService.remove(taskId);
+            setTasks(await taskService.getAll());
           }}
         />
         <AddTaskMiniButton onClick={handleTaskDataCreate} />

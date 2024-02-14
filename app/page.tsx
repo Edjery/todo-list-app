@@ -60,7 +60,7 @@ export default function Home() {
   }
 
   // handle tasks
-  const handleTaskDataCreate = () => {
+  const handleForm = () => {
     setTaskId(undefined);
     setFormOpen(true);
   };
@@ -264,7 +264,7 @@ export default function Home() {
       <Box>
         <TaskHeader
           onSearchOpen={() => setSearchOpen(true)}
-          onFormOpen={handleTaskDataCreate}
+          onFormOpen={handleForm}
           sortValue={sortValue}
           onSortChange={(
             event: React.MouseEvent<HTMLElement>,
@@ -288,7 +288,7 @@ export default function Home() {
             setTasks(await taskService.getAll());
           }}
         />
-        <AddTaskMiniButton onClick={handleTaskDataCreate} />
+        <AddTaskMiniButton onClick={handleForm} />
       </Box>
 
       <SearchFormDialog

@@ -20,6 +20,7 @@ import ITaskList from "./services/Interfaces/ITaskList";
 import tagService from "./services/TagService";
 import taskListService from "./services/TaskListSevice";
 import taskService from "./services/TaskService";
+import axios from "axios";
 
 export default function Home() {
   const [tasks, setTasks] = useState<ITask[]>([]);
@@ -112,6 +113,25 @@ export default function Home() {
         <Box className="mt-6">
           <Skeleton height={100} width={910} />
         </Box>
+
+        {[...Array(3)].map((_, index) => (
+          <Box className="mt-10 flex justify-center">
+            <Box key={index} className="mt-5">
+              <Box className="">
+                <Skeleton height={100} width={600} />
+              </Box>
+              {[...Array(5)].map((_, index) => (
+                <Box
+                  key={index}
+                  component="div"
+                  className="flex justify-between"
+                >
+                  <Skeleton height={50} width={600} animation="wave" />
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        ))}
       </Container>
     );
   }

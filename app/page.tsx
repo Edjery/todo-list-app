@@ -34,8 +34,11 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const allTasks = await taskService.getAll();
+        const updatedTasks = await updateTasks(allTasks);
+
+        setTasks(updatedTasks);
         setLoading(false);
-        setTasks(await taskService.getAll());
         console.log("Data has been successfully fetched");
       } catch (error) {
         setLoading(false);
@@ -46,6 +49,62 @@ export default function Home() {
 
     fetchData();
   }, []);
+
+  async function updateTasks(allTasks: ITask[]) {
+    const updatedTasksPromises = allTasks.map(async (task) => {
+      if (
+        task.timeInterval === "Monthly" ||
+        task.timeInterval === "Yearly" ||
+        task.dueAt !== ""
+      ) {
+        const taskList = taskListService.get(task.taskListId);
+        let taskListName = "";
+        if (taskList) taskListName = updateTaskList(task.dueAt, taskList.name);
+
+        const taskListId = await getTaskListId(taskListName, task.taskListId);
+        task.taskListId = taskListId;
+      }
+      return task;
+    });
+    const updatedTasks = await Promise.all(updatedTasksPromises);
+    return updatedTasks;
+  }
+
+  async function getTaskListId(
+    taskListName: string,
+    taskListId: number
+  ): Promise<number> {
+    const taskLists = await taskListService.getAll();
+    const taskListNames = taskLists.map((item) => item.name);
+
+    // find task list if exist
+    if (taskListNames.includes(taskListName)) {
+      const taskListValue = taskListService.getByName(taskListName);
+      if (taskListValue) taskListId = taskListValue.id;
+      else console.error("Tasklist has a missing ID!");
+    }
+    // create task list if not exist
+    else {
+      const newTaskList: ITaskList = await taskListService.create({
+        id: 0, // this is not actually used
+        name: taskListName,
+      });
+      taskListId = newTaskList.id;
+    }
+    return taskListId;
+  }
+
+  function updateTaskList(dueAt: string, taskListName: string) {
+    const dueDate = dayjs(dueAt);
+    const today = dayjs();
+
+    if (dueDate.isSame(today, "day") && dueDate.isValid())
+      taskListName = "Today";
+    else if (!dueDate.isSame(today, "day") && taskListName === "Today")
+      taskListName = "Unsorted";
+
+    return taskListName;
+  }
 
   if (loading) {
     return (
@@ -66,9 +125,6 @@ export default function Home() {
   // handle forms
   const handleFormSubmit = async (values: ITaskForm) => {
     // TaskList init
-    const taskLists = await taskListService.getAll();
-    const taskListNames = taskLists.map((item) => item.name);
-    let taskListId = 0;
     values.taskList = values.schedule === "Today" ? "Today" : values.taskList;
     values.taskList = values.schedule === "Date" ? "Unsorted" : values.taskList;
     values.taskList =
@@ -76,20 +132,17 @@ export default function Home() {
         ? defaultInitialValues.taskList + "ahan"
         : values.taskList;
 
+    if (
+      values.timeInterval === "Monthly" ||
+      values.timeInterval === "Yearly" ||
+      values.dueAt !== ""
+    ) {
+      values.taskList = updateTaskList(values.dueAt, values.taskList);
+    }
+
     // find task list if exist
-    if (taskListNames.includes(values.taskList)) {
-      const taskListValue = taskListService.getByName(values.taskList);
-      if (taskListValue) taskListId = taskListValue.id;
-      else console.error("Tasklist has a missing ID!");
-    }
-    // create task list if not exist
-    else {
-      const newTaskList: ITaskList = await taskListService.create({
-        id: 0, // this is not actually used
-        name: values.taskList,
-      });
-      taskListId = newTaskList.id;
-    }
+    let taskListId = 0;
+    taskListId = await getTaskListId(values.taskList, taskListId);
 
     // initializing task values
     const newTask: ITask = {
@@ -123,11 +176,10 @@ export default function Home() {
     };
 
     // resetting date if needed
-    if (values.schedule === "Today") {
-    } else if (values.schedule === "Date") {
+    if (values.schedule === "Date")
       newTask.dueAt =
         newTask.dueAt === "" ? dayjs().format("YYYY-MM-DD") : newTask.dueAt;
-    } else if (
+    else if (
       newTask.timeInterval === "Daily" ||
       newTask.timeInterval === "Weekly"
     )

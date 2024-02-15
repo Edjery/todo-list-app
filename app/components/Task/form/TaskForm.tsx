@@ -3,7 +3,6 @@ import {
   defaultInitialValues,
   defaultScheduleValue,
   defaultTaskListChoice,
-  defaultTimeInterval,
 } from "@/app/data/dataMatrix";
 import { areArrayObjectsEqual } from "@/app/helpers/areArrayObjectsEqual";
 import {
@@ -124,7 +123,7 @@ const TaskForm = ({ taskId, onAlertOpen, onFormSubmit, onClose }: Props) => {
       initialValues.description = defaultInitialValues.description;
       initialValues.schedule = defaultInitialValues.schedule;
       initialValues.dueAt = defaultInitialValues.dueAt;
-      initialValues.timeInterval = "";
+      initialValues.timeInterval = defaultInitialValues.timeInterval;
       initialValues.dayIntervalData = [
         { name: "Sunday", status: false },
         { name: "Monday", status: false },

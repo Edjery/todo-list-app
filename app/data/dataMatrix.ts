@@ -18,11 +18,6 @@ export const days = [
   "Saturday",
 ];
 
-export const defaultTimeInterval: ObjectStatus[] = intervals.map((item) => ({
-  name: item,
-  status: false,
-}));
-
 export const defaultDayInterval: ObjectStatus[] = days.map((item) => ({
   name: item,
   status: false,
@@ -34,7 +29,7 @@ export const defaultInitialValues: ITaskForm = {
   description: "",
   schedule: defaultScheduleValue,
   dueAt: "",
-  timeInterval: defaultTimeInterval,
+  timeInterval: "",
   dayIntervalData: defaultDayInterval,
   priority: defaultPriorityValue,
   taskList: defaultTaskListChoice,

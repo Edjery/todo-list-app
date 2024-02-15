@@ -20,6 +20,22 @@ interface Props {
 const TaskButtonGroup = ({ values, setValue }: Props) => {
   const [input, setInput] = useState<string>(values.dueAt);
 
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newScheduleValue: string | null
+  ) => {
+    if (newScheduleValue) {
+      setValue("schedule", newScheduleValue);
+      if (newScheduleValue === "Today") {
+        handleDueDateChange(dayjs().format("YYYY-MM-DD"));
+      } else if (newScheduleValue === "Date") {
+        handleDueDateChange(dayjs().format("YYYY-MM-DD"));
+      } else if (newScheduleValue === "Custom") {
+        handleDueDateChange("");
+      }
+    }
+  };
+
   const handleTimeIntervalChange = (items: string) => {
     setValue("timeInterval", items);
 
@@ -94,13 +110,7 @@ const TaskButtonGroup = ({ values, setValue }: Props) => {
         <ToggleButtonGroup
           value={values.schedule}
           exclusive
-          onChange={(
-            event: React.MouseEvent<HTMLElement>,
-            newScheduleValue: string | null
-          ) => {
-            if (newScheduleValue !== null)
-              setValue("schedule", newScheduleValue);
-          }}
+          onChange={handleChange}
         >
           <ToggleButton value="Today">Just Today</ToggleButton>
           <ToggleButton value="Custom">Custom Schedule</ToggleButton>

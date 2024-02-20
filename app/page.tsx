@@ -115,8 +115,8 @@ export default function Home() {
         </Box>
 
         {[...Array(3)].map((_, index) => (
-          <Box className="mt-10 flex justify-center">
-            <Box key={index} className="mt-5">
+          <Box key={index} className="mt-10 flex justify-center">
+            <Box className="mt-5">
               <Box className="">
                 <Skeleton height={100} width={600} />
               </Box>
